@@ -1,0 +1,31 @@
+<style>
+.warmtale-entrancebutton {
+	padding: 10rpx 40rpx;
+	border: 1rpx solid #E44C57;
+	width: 480rpx;
+	height: 150rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+</style>
+
+<template>
+<view class='.warmtale-entrancebutton'>
+	{{text}}
+</view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class EntranceButton extends wepy.component {
+  props = {
+    text: String
+  }
+
+  onLoad() {
+    console.log('-->:', this.text)
+  }
+}
+</script>

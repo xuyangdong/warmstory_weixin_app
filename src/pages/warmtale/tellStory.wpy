@@ -1,0 +1,110 @@
+<style lang='less'>
+.warmtale-tellstory_container{
+    justify-content: flex-start;
+	box-sizing: border-box;
+}
+.warmtale-tellstory_header{
+	background-color: #15A153;
+	height: 238rpx;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	.warmtale-tellstory_headerImg{
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-left: 50rpx;
+
+		& > image {
+			width: 130rpx;
+			height: 130rpx;
+			border-radius: 65rpx;
+		}
+
+		& > view {
+			color: white;
+			height: 130rpx;
+			line-height: 130rpx;
+			margin-left: 30rpx;
+		}
+
+	}
+
+	.warmtale-tellstory_easeListen {
+		background-color: white;
+		width: 276rpx;
+		height: 88rpx;
+		text-align: center;
+		color: #B4B4B4;
+		line-height: 88rpx;
+		border-top-left-radius: 44rpx;
+		border-bottom-left-radius: 44rpx;
+	}
+}
+
+.warmtale-tellstory_body {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0 80rpx;
+
+	.warmtale-tellstory_tab{
+		display: flex;
+		height: 180rpx;
+		justify-content: space-around;
+
+		& > view {
+			width: 50%;
+			line-height: 180rpx;
+			// text-align: center;
+		}
+
+		& > view:nth-child(1) {
+			text-align: right;
+			padding-right: 80rpx;
+		}
+
+		& > view:nth-child(2) {
+			text-align: left;
+			padding-left: 80rpx;
+		}
+	}
+}
+</style>
+
+<template>
+<view class='weui-flex container warmtale-tellstory_container'>
+	<view class='warmtale-tellstory_header'>
+		<view class='warmtale-tellstory_headerImg'>
+			<image src='https://picsum.photos/200/300'/>
+			<view>用户昵称</view>
+		</view>
+		<view class='warmtale-tellstory_easeListen'>
+			随意听听>
+		</view>
+	</view>
+	<scroll-view scroll-y={{true}} class='warmtale-tellstory_body'>
+		<view class='warmtale-tellstory_tab'>
+			<view>今日故事</view>
+			<view>听故事</view>
+		</view>
+		<view>
+			<todaystory />
+		</view>
+	</scroll-view>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import TodayStory from '@/components/tellStory/TodayStory'
+
+export default class TellStory extends wepy.page {
+  components = {
+    todaystory: TodayStory
+  }
+}
+</script>

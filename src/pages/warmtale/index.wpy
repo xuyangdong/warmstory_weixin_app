@@ -1,0 +1,63 @@
+<style lang='less'>
+.warmtale-index_logo {
+    height: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .warmtale-index_img {
+        width: 120rpx;
+        height: 120rpx;
+    }
+}
+.warmtale-index_entrance {
+    flex-direction: column;
+    align-items: center;
+
+    .warmtale-index_title {
+        color: #3F4C56;
+        font-weight: normal;
+        font-size: 65rpx;
+    }
+
+    .warmtale-index_updatetips {
+        color: #808080;
+
+    }
+}
+</style>
+
+<template>
+<view class='weui-flex container'>
+	<view class='weui-flex__item'>
+		<view class='warmtale-index_logo'>
+			<image src='../../resource/img/logo.png' class='warmtale-index_img' />
+		</view>
+		<view class='weui-flex weui-article warmtale-index_entrance'>
+			<view class='weui-flex__item weui-article__h1 warmtale-index_title'>
+				读个小故事小程序
+			</view>
+			<view class='weui-flex__item weui-article__h3 warmtale-index_updatetips'>
+				最后更新：2天之前
+			</view>
+			<view>
+				<entranceButton text='直接查看'/>
+			</view>
+			<view>
+				<entranceButton text='安装'/>
+			</view>
+		</view>
+	</view>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import EntranceButton from '@/components/index/EntranceButton'
+
+export default class Index extends wepy.page {
+  components = {
+    entranceButton: EntranceButton
+  }
+}
+</script>
