@@ -25,6 +25,7 @@ setStore(store)
 export default class extends wepy.app {
   config = {
     pages: [
+      'pages/warmtale/playingStory',
       'pages/warmtale/tellStory',
       'pages/warmtale/index',
       'pages/index'
@@ -37,6 +38,9 @@ export default class extends wepy.app {
     },
     tabBar: {
       'list': [{
+        pagePath: 'pages/warmtale/playingStory',
+        text: '播放故事'
+      }, {
         pagePath: 'pages/warmtale/tellStory',
         text: '读故事'
       }, {
@@ -59,7 +63,10 @@ export default class extends wepy.app {
   }
 
   onLaunch() {
-    this.testAsync()
+    // this.testAsync()
+    this.getUserInfo((info) => {
+      console.log(info)
+    })
   }
 
   sleep(s) {

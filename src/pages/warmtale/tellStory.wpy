@@ -59,7 +59,6 @@
 		& > view {
 			width: 50%;
 			line-height: 180rpx;
-			// text-align: center;
 		}
 
 		& > view:nth-child(1) {
@@ -88,11 +87,16 @@
 	</view>
 	<scroll-view scroll-y={{true}} class='warmtale-tellstory_body'>
 		<view class='warmtale-tellstory_tab'>
-			<view>今日故事</view>
-			<view>听故事</view>
+			<view bindtap='switchTab' data-tabName='todaystory' style="{{ todayStoryStyle }}">今日故事</view>
+			<view bindtap='switchTab' data-tabName='listenstory' style="{{ listenStoryStyle }}">听故事</view>
 		</view>
 		<view>
-			<todaystory />
+            <view wx:if="{{ tabName=='todaystory' }}">
+    			<todaystory/>
+            </view>
+            <view wx:if="{{ tabName=='listenstory' }}">
+                <listenstory/>
+            </view>
 		</view>
 	</scroll-view>
 </view>
@@ -101,10 +105,31 @@
 <script>
 import wepy from 'wepy'
 import TodayStory from '@/components/tellStory/TodayStory'
+import ListenStory from '@/components/tellStory/ListenStory'
 
 export default class TellStory extends wepy.page {
   components = {
-    todaystory: TodayStory
+    todaystory: TodayStory,
+    listenstory: ListenStory
+  }
+
+  data = {
+    tabName: 'listenstory'
+  }
+
+  computed = {
+    todayStoryStyle () {
+      return this.tabName === 'todaystory' ? 'color : #097B00' : 'color : black'
+    },
+    listenStoryStyle () {
+      return this.tabName === 'listenstory' ? 'color : #097B00' : 'color : black'
+    }
+  }
+
+  methods = {
+    switchTab (event) {
+      this.tabName = event.target.dataset.tabname
+    }
   }
 }
 </script>

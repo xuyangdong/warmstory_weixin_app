@@ -1,0 +1,69 @@
+<style lang="less">
+.warmtale-playstory_container {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	height: 100vh;
+	padding: 60rpx;
+	box-sizing: border-box;
+
+	& > image {
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100vh;
+		filter: blur(10rpx);
+		z-index: -1;
+	}
+
+	.warmtale-playstory_topTitle {
+		color: white;
+	}
+
+	.warmtale-playstory_middleCover {
+		width: 325rpx;
+		height: 325rpx;
+		border-radius: 163rpx;
+		border: 4rpx solid #3D9073;
+		& > image {
+			width: 325rpx;
+			height: 325rpx;
+			border-radius: 163rpx;
+		}
+	}
+
+	.warmtale-playstory_bottomPlayer {
+		width: 100%;
+	}
+}
+</style>
+
+<template>
+<view class="warmtale-playstory_container">
+	<view class="warmtale-playstory_topTitle">
+		胖河马的故事
+	</view>
+	<view class="warmtale-playstory_middleCover">
+		<image src="https://picsum.photos/650/650"/>
+	</view>
+	<view class="warmtale-playstory_bottomPlayer">
+		<player />
+	</view>
+	<image src="https://picsum.photos/500/800"/>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import Player from '@/components/widget/playingStory/Player'
+
+export default class PlayingStory extends wepy.page {
+  components = {
+    player: Player
+  }
+}
+</script>

@@ -1,0 +1,60 @@
+<style lang='less'>
+.warmtale-addstoryset_container {
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	border-bottom: 1px solid #ABABAB;
+	width: 100%;
+	padding: 20rpx 10rpx;
+	flex-grow: 1;
+
+	.warmtale-addstoryset_leftpart {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		flex-grow: 1;
+
+		.warmtale-addstoryset_setName {
+			// overflow: hidden;
+			// text-overflow:ellipsis;
+			// white-space: nowrap;
+		}
+
+		& > image {
+			width: 150rpx;
+			height: 156rpx;
+			margin-right: 50rpx;
+		}
+	}
+
+	.warmtale-addstoryset_rightpart {
+		& > image {
+			width: 44rpx;
+			height: 64rpx;
+			transform: rotate( 180deg );
+		}
+	}
+
+}
+</style>
+
+<template>
+<view class="warmtale-addstoryset_container">
+	<view class="warmtale-addstoryset_leftpart">
+		<image src='../../../resource/img/add.png'/>
+		<view class='warmtale-storyset_setName'>
+			添加作品集
+		</view>
+	</view>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class TodayStory extends wepy.component {
+
+}
+</script>
