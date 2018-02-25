@@ -25,6 +25,7 @@
 		box-sizing: border-box;
 		padding: 0 80rpx;
 		padding-bottom: 40rpx;
+		margin-bottom: 33.5px;
 
 		.warmtale-todaystory_storytitle{
 			text-align: center;
@@ -48,6 +49,18 @@
 			}
 		}
 
+		.warmtale-todaystory_record {
+			position: absolute;
+			bottom: -33.5px;
+			left: 0;
+			width: 100%;
+			display: flex;
+			justify-content: center;
+			& > image {
+				width: 67px;
+				height: 67px;
+			}
+		}
 
 	}
 }
@@ -67,6 +80,9 @@
 				<commonbutton>下一个</commonbutton>
 			</view>
 		</view>
+		<view class="warmtale-todaystory_record">
+			<image bindtap="clickRecord" src="../../resource/img/recorder.png"/>
+		</view>
 	</view>
 </view>
 </template>
@@ -78,6 +94,14 @@ import CommonButton from '@/components/common/CommonButton'
 export default class TodayStory extends wepy.component {
   components = {
     commonbutton: CommonButton
+  }
+
+  methods = {
+    clickRecord () {
+      wepy.navigateTo({
+        url: 'record/recordStory'
+      })
+    }
   }
 }
 </script>
