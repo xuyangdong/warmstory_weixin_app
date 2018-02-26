@@ -1,0 +1,145 @@
+<style lang="less">
+.warmtale-recordStoryFinish_container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 28rpx;
+
+  .warmtale-recordStoryFinish_topTips {
+    padding: 32rpx 47rpx;
+    font-size: 32rpx;
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+
+  .warmtale-recordStoryFinish_middleContent {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex-grow: 1;
+    flex-shrink: 0;
+
+    .warmtale-recordStoryFinish_picture {
+      width: 100%;
+      height: 578rpx;
+
+      &>image {
+        width: 100%;
+        height: 578rpx;
+        object-fit: scale-down;
+        border-top-left-radius: 20rpx;
+        border-top-right-radius: 20rpx;
+      }
+    }
+
+    .warmtale-recordStoryFinish_controller {
+      display: flex;
+      flex-direction: column;
+      height: 310rpx;
+      border: 1rpx solid #AEAEAE;
+      border-top: none;
+      border-bottom-left-radius: 20rpx;
+      border-bottom-right-radius: 20rpx;
+      justify-content: center;
+
+      .warmtale-recordStoryFinish_slider {
+        width: 100%;
+      }
+
+      .warmtale-recordStoryFinish_duration {
+        display: flex;
+        justify-content: space-between;
+        align-content: center;
+        width: 100%;
+        padding: 0 45rpx;
+        box-sizing: border-box;
+        color: #CDCDCD;
+      }
+    }
+  }
+
+  .warmtale-recordStoryFinish_bottomController {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex-shrink: 0;
+    padding:0 30rpx;
+    box-sizing: border-box;
+
+    .warmtale-recordStoryFinish_switch {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      margin: 60rpx 0;
+
+      .warmtale-recordStoryFinish_switchLabel {
+        margin-left: 40rpx;
+      }
+    }
+
+    .warmtale-recordStoryFinish_buttonGroup {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 120rpx;
+    }
+  }
+}
+</style>
+
+<template>
+<view class="weui-flex container warmtale-recordStoryFinish_container">
+  <view class="warmtale-recordStoryFinish_topTips">
+    录音已保存至草稿，可以进行美化哦~
+  </view>
+  <view class="warmtale-recordStoryFinish_middleContent">
+    <view class="warmtale-recordStoryFinish_picture">
+      <image src="https://picsum.photos/500/600"/>
+    </view>
+    <view class="warmtale-recordStoryFinish_controller">
+      <view class="warmtale-recordStoryFinish_slider">
+        <slider />
+      </view>
+      <view class="warmtale-recordStoryFinish_duration">
+        <view>00:00</view>
+        <view>00:00</view>
+      </view>
+    </view>
+  </view>
+  <view class="warmtale-recordStoryFinish_bottomController">
+    <view class="warmtale-recordStoryFinish_switch">
+      <switch />
+      <view class="warmtale-recordStoryFinish_switchLabel">自动匹配背景音乐</view>
+    </view>
+    <view class="warmtale-recordStoryFinish_buttonGroup">
+      <commonbuttonPrimary >
+        <view style="font-size:30rpx;">直接上传</view>
+      </commonbuttonPrimary>
+      <commonbuttonGhost type="ghost">
+        <view style="font-size:30rpx;">去美化</view>
+      </commonbuttonGhost>
+    </view>
+  </view>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import CommonButton from '@/components/common/CommonButton2'
+
+export default class RecordStoryFinish extends wepy.page {
+  components = {
+    commonbuttonPrimary: CommonButton,
+    commonbuttonGhost: CommonButton
+  }
+  onReady () {
+    wepy.setNavigationBarTitle({
+      title: '录制完成'
+    })
+    wepy.setNavigationBarColor({
+      backgroundColor: '#ffffff',
+      frontColor: '#000000'
+    })
+  }
+}
+</script>
