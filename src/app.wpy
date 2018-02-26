@@ -66,13 +66,15 @@ export default class extends wepy.app {
     wepy.login({
       success (errMsg, code) {
         console.log(errMsg, code)
-      },
-      complete (errMsg, code) {
-        console.log(errMsg, code)
+        wepy.getUserInfo({
+          withCredentials: true,
+          complete: (...args) => {
+            console.log('withCredentials args', args)
+          }
+        })
       }
     })
     this.getUserInfo((info) => {
-      console.log(info)
     })
   }
 

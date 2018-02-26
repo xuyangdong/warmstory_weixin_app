@@ -31,10 +31,8 @@ export default class CommonButton2 extends wepy.component {
 
   computed = {
     buttonWrapperStyle: () => {
-      console.log('type:', this.type)
       switch (this.type) {
         case 'ghost':
-          console.log('ghost')
           return `background-color : white;color : #218B1A;`
         default:
           return `background-color : #218B1A;color : white;`
