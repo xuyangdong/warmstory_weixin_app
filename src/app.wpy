@@ -37,18 +37,6 @@ export default class extends wepy.app {
       navigationBarBackgroundColor: '#15A153',
       navigationBarTitleText: '读个小故事',
       navigationBarTextStyle: 'white'
-    },
-    tabBar: {
-      'list': [{
-        pagePath: 'pages/warmtale/tellStory',
-        text: '读故事'
-      }, {
-        pagePath: 'pages/index',
-        text: '首页'
-      }, {
-        pagePath: 'pages/warmtale/index',
-        text: '小故事'
-      }]
     }
   }
 
