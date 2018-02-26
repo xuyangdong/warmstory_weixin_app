@@ -46,6 +46,7 @@
 			& > view:nth-child(3) {
 				margin-top: 40rpx;
 				align-self: flex-end;
+        z-index: 2;
 			}
 		}
 
@@ -76,7 +77,7 @@
 		<view class='warmtale-todaystory_storyintro'>
 			<view>故事简介：</view>
 			<view class=''>两只兔子在草丛中蹦蹦跳跳，发现了一个神奇的洞穴的冒险故事</view>
-			<view>
+			<view bindtap="clickNextStory">
 				<commonbutton>下一个</commonbutton>
 			</view>
 		</view>
@@ -101,6 +102,9 @@ export default class TodayStory extends wepy.component {
       wepy.navigateTo({
         url: 'record/recordStory'
       })
+    },
+    clickNextStory () {
+      console.log('click')
     }
   }
 }
