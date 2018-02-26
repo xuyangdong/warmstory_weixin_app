@@ -10,6 +10,8 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+    flex-grow: 0;
+    flex-shrink: 0;
 
 	.warmtale-tellstory_headerImg{
 		display: flex;
@@ -81,7 +83,7 @@
 			<image src='https://picsum.photos/200/300'/>
 			<view>用户昵称</view>
 		</view>
-		<view class='warmtale-tellstory_easeListen'>
+		<view class='warmtale-tellstory_easeListen' bindtap="clickEaseListen">
 			随意听听>
 		</view>
 	</view>
@@ -114,7 +116,7 @@ export default class TellStory extends wepy.page {
   }
 
   data = {
-    tabName: 'listenstory'
+    tabName: 'todaystory'
   }
 
   computed = {
@@ -129,6 +131,11 @@ export default class TellStory extends wepy.page {
   methods = {
     switchTab (event) {
       this.tabName = event.target.dataset.tabname
+    },
+    clickEaseListen () {
+      wepy.navigateTo({
+        url: 'playingStory'
+      })
     }
   }
 }

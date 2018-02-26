@@ -1,0 +1,43 @@
+<style lang="less">
+.warmtale-commonbutton2_container {
+  border: 2rpx solid #218B1A;
+  padding: 40rpx 100rpx;
+  height: 114rpx;
+  line-height: 34rpx;
+  font-size: 34rpx;
+  border-radius: 57rpx;
+  box-sizing: border-box;
+  background-color: #218B1A;
+  color: white;
+}
+</style>
+
+<template>
+<view class="warmtale-commonbutton2_container" style="{{ buttonWrapperStyle }}">
+  <slot></slot>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class CommonButton2 extends wepy.component {
+  props = {
+    type: {
+      type: String,
+      default: 'primary'
+    }
+  }
+
+  computed = {
+    buttonWrapperStyle: () => {
+      switch (this.type) {
+        case 'ghost':
+          return `background-color : white;color : #218B1A;`
+        default:
+          return `background-color : #218B1A;color : white;`
+      }
+    }
+  }
+}
+</script>

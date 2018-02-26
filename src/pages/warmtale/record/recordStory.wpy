@@ -1,0 +1,163 @@
+<style lang="less">
+.warmtale-recordStory_container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .warmtale-recordStory_topProgressBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  .warmtale-recordStory_centerContent {
+    padding: 0 35rpx;
+    box-sizing: border-box;
+    width: 100%;
+    margin-bottom: 40rpx;
+    flex-shrink: 0;
+    flex-grow: 1;
+
+    .warmtale-recordStory_progressInfo {
+      width: 100%;
+      display: flex;
+      padding: 20rpx 0;
+    }
+
+    .warmtale-recordStory_content {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      margin: 20rpx 0 50rpx;
+      border: 6rpx solid #C2EDD8;
+
+      .warmtale-recordStory_picture {
+        height: 416rpx;
+
+        &>image {
+          width: 100%;
+          height: 416rpx;
+          object-fit: scale-down;
+        }
+      }
+
+      .warmtale-recordStory_article {
+        background-color: #78AB1C;
+        color: white;
+        padding: 30rpx;
+        box-sizing: border-box;
+        width: 100%;
+        height: 416rpx;
+      }
+    }
+
+    .warmtale-recordStory_control {
+      display: flex;
+      justify-content: space-between;
+      align-content: center;
+      &>image {
+        height: 50rpx;
+        width: 50rpx;
+      }
+    }
+  }
+
+  .warmtale-recordStory_bottomRecordButton {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    margin-bottom: 25rpx;
+    flex-shrink: 0;
+
+    &>image {
+      width: 100rpx;
+      height: 100rpx;
+      margin: 25rpx 50rpx;
+    }
+  }
+}
+</style>
+
+<template>
+<view class="weui-flex container warmtale-recordStory_container">
+  <view class="warmtale-recordStory_topProgressBar">
+    <progressbar :percent="percent"/>
+  </view>
+  <view class="warmtale-recordStory_centerContent">
+    <view class="warmtale-recordStory_progressInfo">
+      {{ percentFormat }}
+    </view>
+    <view class="warmtale-recordStory_content">
+      <view class="warmtale-recordStory_picture">
+        <image src="https://picsum.photos/500/600" />
+      </view>
+      <scroll-view class="warmtale-recordStory_article" scroll-y="{{ true }}">
+        该上床睡觉。小龙递给龙妈妈一本故事书。
+        龙妈妈开始读故事：“塞德里克是条龙，脾气暴躁身体红。他从来没有，一次都没有睡过觉”。
+        该上床睡觉。小龙递给龙妈妈一本故事书。
+        龙妈妈开始读故事：“塞德里克是条龙，脾气暴躁身体红。他从来没有，一次都没有睡过觉”。
+        该上床睡觉。小龙递给龙妈妈一本故事书。
+        龙妈妈开始读故事：“塞德里克是条龙，脾气暴躁身体红。他从来没有，一次都没有睡过觉”。
+      </scroll-view>
+    </view>
+    <view class="warmtale-recordStory_control">
+      <image src="../../../resource/img/first-prograph.png"/>
+      <image src="../../../resource/img/pre-prograph.png"/>
+      <image src="../../../resource/img/next-prograph.png"/>
+      <image src="../../../resource/img/last-prograph.png"/>
+    </view>
+  </view>
+  <view class="warmtale-recordStory_bottomRecordButton">
+    <commonbutton>
+      重录
+    </commonbutton>
+    <image src="../../../resource/img/recorder.png" />
+    <commonbutton>
+      <view bindtap="clickFinishButton">完成</view>
+    </commonbutton>
+  </view>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import ProgressBar from '@/components/common/ProgressBar'
+import CommonButton from '@/components/common/CommonButton'
+
+export default class RecordStory extends wepy.page {
+  data = {
+    percent: 0.7
+  }
+
+  computed = {
+    percentFormat: () => {
+      return `${this.percent * 100}%`
+    }
+  }
+
+  components = {
+    progressbar: ProgressBar,
+    commonbutton: CommonButton
+  }
+
+  methods = {
+    clickFinishButton: () => {
+      console.log('asfasdf')
+      wepy.navigateTo({
+        url: 'recordStoryFinish'
+      })
+    }
+  }
+
+  onReady () {
+    wepy.setNavigationBarTitle({
+      title: '再来一次'
+    })
+    wepy.setNavigationBarColor({
+      backgroundColor: '#ffffff',
+      frontColor: '#000000'
+    })
+  }
+}
+</script>

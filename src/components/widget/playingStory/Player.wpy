@@ -43,6 +43,20 @@
 	}
 
 	.warmtale-player_controlPart {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding:0 100rpx;
+
+		&>image {
+			width: 100rpx;
+			height: 100rpx;
+
+			&:nth-child(1) {
+				transform: rotate(180deg);
+			}
+		}
+
 
 	}
 }
@@ -53,23 +67,80 @@
 	<view class="warmtale-player_displayPart">
 		<view class="warmtale-player_progressWrapper">
 			<view class="warmtale-player_progressBase"></view>
-			<view class="warmtale-player_progress"></view>
+			<view class="warmtale-player_progress" style="{{ progressStyle }}"></view>
 		</view>
 		<view class="warmtale-player_playDuration">
-			<view class="warmtale-player_leftDuration">00:18</view>
-			<view class="warmtale-player_rightDuration">03:18</view>
+			<view class="warmtale-player_leftDuration">{{ currentTimeFormat }}</view>
+			<view class="warmtale-player_rightDuration">{{ durationFormat }}</view>
 		</view>
 	</view>
 	<view class="warmtale-player_controlPart">
-
+		<image src="../../../resource/img/next.png"/>
+		<image src="../../../resource/img/play.png" bindtap="clickPlayButton"/>
+		<image src="../../../resource/img/next.png"/>
 	</view>
 </view>
 </template>
 
 <script>
+/**
+todo:
+1\把progress 部分替换成progressBar组件
+2\把player controller 部分替换成PlayerController组件
+*/
 import wepy from 'wepy'
+import moment from 'moment'
+import _ from 'lodash'
 
 export default class Player extends wepy.component {
+  data = {
+    audioUrl: '',
+    duration: 1.0,
+    currentTime: 0.0
+  }
 
+  computed = {
+    durationFormat: () => {
+      return moment(parseFloat(this.duration.toFixed(3)) * 1000).format('mm:ss')
+    },
+    currentTimeFormat: () => {
+      return moment(parseFloat(this.currentTime.toFixed(3)) * 1000).format('mm:ss')
+    },
+    progressStyle: () => {
+      let percent = (this.currentTime / this.duration) * 100
+      return `width : ${percent}%;`
+    }
+  }
+
+  methods = {
+    clickPlayButton () {
+      let audioManager = wepy.getBackgroundAudioManager()
+      audioManager.onTimeUpdate(() => {
+        _.throttle(() => {
+          this.currentTime = audioManager.currentTime
+          this.duration = audioManager.duration
+          this.$apply()
+        }, 1000)()
+      })
+      if (typeof audioManager.paused === 'undefined' && this.audioUrl) {
+        // 没有设置音频源
+        wepy.playBackgroundAudio({
+          dataUrl: this.audioUrl
+        })
+      } else {
+        // 设置了音频源，
+        if (audioManager.paused) {
+          audioManager.play()
+        } else {
+          audioManager.pause()
+        }
+      }
+    }
+  }
+
+  onLoad () {
+    this.audioUrl = 'http://warmtale-backend-bucket.oss-cn-beijing.aliyuncs.com/app/works/3120/1514791743206.mp3'
+    // 加载数据，不可在此初始化音频url，会导致直接播放，
+  }
 }
 </script>

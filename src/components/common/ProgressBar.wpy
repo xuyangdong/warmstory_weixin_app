@@ -1,0 +1,46 @@
+// 重构使用
+<style lang="less">
+.warmtale-progressbar_container {
+  position: relative;
+  width: 100%;
+
+  .warmtale-progressbar_progressBase {
+    width: 100%;
+    height: 4rpx;
+    background-color: rgba(148,141,141,0.53);
+  }
+
+  .warmtale-progressbar_progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #18A151;
+    height: 4rpx;
+    width: 50%;
+  }
+}
+</style>
+
+<template>
+<view class="warmtale-progressbar_container">
+  <view class="warmtale-progressbar_progressBase"></view>
+  <view class="warmtale-progressbar_progress" style="{{ progress }}"></view>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class ProgressBar extends wepy.component {
+  props = {
+    percent: 0.5
+  }
+
+  computed = {
+    progress: () => {
+      console.log('asdfasdf', this.percent)
+      return `width : ${this.percent * 100}%`
+    }
+  }
+}
+</script>
