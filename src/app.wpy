@@ -15,9 +15,11 @@ import wepy from 'wepy'
 import 'wepy-async-function'
 
 import {
-  setStore
+  setStore,
+  getStore
 } from 'wepy-redux'
 import configStore from './store'
+import { getUserInfo } from '@/store/actions/user'
 
 const store = configStore()
 setStore(store)
@@ -51,13 +53,16 @@ export default class extends wepy.app {
 
   onLaunch() {
     // this.testAsync()
+
+    let store = getStore()
     wepy.login({
       success (errMsg, code) {
         console.log(errMsg, code)
         wepy.getUserInfo({
           withCredentials: true,
           complete: (...args) => {
-            console.log('withCredentials args', args)
+            // console.log('withCredentials args', args)
+            store.dispatch(getUserInfo())
           }
         })
       }
@@ -77,6 +82,10 @@ export default class extends wepy.app {
   async testAsync() {
     const data = await this.sleep(3)
     console.log(data)
+  }
+
+  login(cb) {
+
   }
 
   getUserInfo(cb) {

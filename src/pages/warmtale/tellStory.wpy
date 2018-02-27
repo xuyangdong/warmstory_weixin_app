@@ -80,8 +80,8 @@
 <view class='weui-flex container warmtale-tellstory_container'>
 	<view class='warmtale-tellstory_header'>
 		<view class='warmtale-tellstory_headerImg'>
-			<image src='https://picsum.photos/200/300'/>
-			<view>用户昵称</view>
+			<image src="{{ userInfo.headImgUrl }}"/>
+			<view>{{ userInfo.nickname }}</view>
 		</view>
 		<view class='warmtale-tellstory_easeListen' bindtap="clickEaseListen">
 			随意听听>
@@ -108,7 +108,11 @@
 import wepy from 'wepy'
 import TodayStory from '@/components/tellStory/TodayStory'
 import ListenStory from '@/components/tellStory/ListenStory'
+import { connect } from 'wepy-redux'
 
+@connect({
+  userInfo: state => state.user
+})
 export default class TellStory extends wepy.page {
   components = {
     todaystory: TodayStory,
