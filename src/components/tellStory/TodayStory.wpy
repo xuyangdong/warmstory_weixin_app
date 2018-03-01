@@ -102,15 +102,10 @@
     }
     onLoad() {
       let store = wepy.getStore()
-      wepy.login({
-        success(errMsg, code) {
-          console.log(errMsg, code)
-          wepy.getTodayStory({
-            withCredentials: true,
-            complete: (...args) => {
-              store.dispatch(this.getTodayStory())
-            }
-          })
+      this.getTodayStory({
+        withCredentials: true,
+        complete: (...args) => {
+          store.dispatch(this.getTodayStory())
         }
       })
       this.getTodayStory((info) => {})
@@ -120,7 +115,7 @@
       if (this.globalData.todayStory) {
         return this.globalData.todayStory
       }
-      wepy.getTodayStory({
+      this.getTodayStory({
         success(res) {
           that.globalData.todayStory = res.todayStory
           cb && cb(res.todayStory)
