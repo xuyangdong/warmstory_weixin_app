@@ -1,111 +1,131 @@
 <style lang='less'>
-.warmtale-todaystory_container{
-	position: relative;
-	display: flex;
-	flex-direction: column;
-
-	.warmtale-todaystory_storycover{
-		height: 548rpx;
-		& > image {
-			width: 100%;
-			height: 548rpx;
-			border-top-left-radius: 50rpx;
-			border-top-right-radius: 50rpx;
-		}
-	}
-
-	.warmtale-todaystory_storyinfo{
-		position: relative;
-		display: flex;
-		flex-direction: column;
-		border: 1px solid #ACACAC;
-		border-top: none;
-		border-bottom-left-radius: 50rpx;
-		border-bottom-right-radius: 50rpx;
-		box-sizing: border-box;
-		padding: 0 80rpx;
-		padding-bottom: 40rpx;
-		margin-bottom: 33.5px;
-
-		.warmtale-todaystory_storytitle{
-			text-align: center;
-			height: 145rpx;
-			line-height: 145rpx;
-		}
-
-		.warmtale-todaystory_storyintro{
-			display: flex;
-			flex-direction: column;
-			align-items: flex-start;
-			& > view:nth-child(2) {
-				color: #ACACAC;
-				font-weight: lighter;
-				font-size: 30rpx;
-			}
-
-			& > view:nth-child(3) {
-				margin-top: 40rpx;
-				align-self: flex-end;
-        z-index: 2;
-			}
-		}
-
-		.warmtale-todaystory_record {
-			position: absolute;
-			bottom: -33.5px;
-			left: 0;
-			width: 100%;
-			display: flex;
-			justify-content: center;
-			& > image {
-				width: 67px;
-				height: 67px;
-			}
-		}
-
-	}
-}
+  .warmtale-todaystory_container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    .warmtale-todaystory_storycover {
+      height: 548rpx;
+      &>image {
+        width: 100%;
+        height: 548rpx;
+        border-top-left-radius: 50rpx;
+        border-top-right-radius: 50rpx;
+      }
+    }
+    .warmtale-todaystory_storyinfo {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #ACACAC;
+      border-top: none;
+      border-bottom-left-radius: 50rpx;
+      border-bottom-right-radius: 50rpx;
+      box-sizing: border-box;
+      padding: 0 80rpx;
+      padding-bottom: 40rpx;
+      margin-bottom: 33.5px;
+      .warmtale-todaystory_storytitle {
+        text-align: center;
+        height: 145rpx;
+        line-height: 145rpx;
+      }
+      .warmtale-todaystory_storyintro {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        &>view:nth-child(2) {
+          color: #ACACAC;
+          font-weight: lighter;
+          font-size: 30rpx;
+        }
+        &>view:nth-child(3) {
+          margin-top: 40rpx;
+          align-self: flex-end;
+        }
+      }
+      .warmtale-todaystory_record {
+        position: absolute;
+        bottom: -33.5px;
+        left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        &>image {
+          width: 67px;
+          height: 67px;
+        }
+      }
+    }
+  }
 </style>
 
 <template>
-<view class='warmtale-todaystory_container'>
-	<view class='warmtale-todaystory_storycover'>
-		<image src='https://picsum.photos/460/287'/>
-	</view>
-	<view class='warmtale-todaystory_storyinfo'>
-		<view class='warmtale-todaystory_storytitle'>《两只兔子的故事》</view>
-		<view class='warmtale-todaystory_storyintro'>
-			<view>故事简介：</view>
-			<view class=''>两只兔子在草丛中蹦蹦跳跳，发现了一个神奇的洞穴的冒险故事</view>
-			<view bindtap="clickNextStory">
-				<commonbutton>下一个</commonbutton>
-			</view>
-		</view>
-		<view class="warmtale-todaystory_record">
-			<image bindtap="clickRecord" src="../../resource/img/recorder.png"/>
-		</view>
-	</view>
-</view>
+  <view class='warmtale-todaystory_container'>
+    <view class='warmtale-todaystory_storycover'>
+      <image src="{{todayStory.coverUrl}}" />
+    </view>
+    <view class='warmtale-todaystory_storyinfo'>
+      <view class='warmtale-todaystory_storytitle'>《{{todayStory.title}}》</view>
+      <view class='warmtale-todaystory_storyintro'>
+        <view>故事简介：</view>
+        <view class=''>{{todayStory.readGuide}}</view>
+        <view>
+          <commonbutton>下一个</commonbutton>
+        </view>
+      </view>
+      <view class="warmtale-todaystory_record">
+        <image bindtap="clickRecord" src="../../resource/img/recorder.png" />
+      </view>
+    </view>
+  </view>
 </template>
 
 <script>
-import wepy from 'wepy'
-import CommonButton from '@/components/common/CommonButton'
-
-export default class TodayStory extends wepy.component {
-  components = {
-    commonbutton: CommonButton
-  }
-
-  methods = {
-    clickRecord () {
-      wepy.navigateTo({
-        url: 'record/recordStory'
+  import wepy from 'wepy'
+  import CommonButton from '@/components/common/CommonButton'
+  import {
+    connect
+  } from 'wepy-redux'
+  @connect({
+    todayStory: state => state.todayStory
+  })
+  export default class TodayStory extends wepy.component {
+    components = {
+      commonbutton: CommonButton
+    }
+    methods = {
+      clickRecord() {
+        wepy.navigateTo({
+          url: 'record/recordStory'
+        })
+      }
+    }
+    onLoad() {
+      let store = wepy.getStore()
+      wepy.login({
+        success(errMsg, code) {
+          console.log(errMsg, code)
+          wepy.getTodayStory({
+            withCredentials: true,
+            complete: (...args) => {
+              store.dispatch(this.getTodayStory())
+            }
+          })
+        }
       })
-    },
-    clickNextStory () {
-      console.log('click')
+      this.getTodayStory((info) => {})
+    }
+    getTodayStory(cb) {
+      const that = this
+      if (this.globalData.todayStory) {
+        return this.globalData.todayStory
+      }
+      wepy.getTodayStory({
+        success(res) {
+          that.globalData.todayStory = res.todayStory
+          cb && cb(res.todayStory)
+        }
+      })
     }
   }
-}
 </script>

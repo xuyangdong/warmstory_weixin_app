@@ -20,6 +20,7 @@ import {
 } from 'wepy-redux'
 import configStore from './store'
 import { getUserInfo } from '@/store/actions/user'
+import { getTodayStory } from '@/store/actions/todayStory'
 
 const store = configStore()
 setStore(store)
@@ -43,7 +44,8 @@ export default class extends wepy.app {
   }
 
   globalData = {
-    userInfo: null
+    userInfo: null,
+    todayStory: null
   }
 
   constructor() {

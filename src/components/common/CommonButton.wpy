@@ -1,20 +1,20 @@
 <style>
 .warmtale-ui-button_mini {
-	height: 40rpx;
-	line-height: 40rpx;
-	font-size: 25rpx;
-	border-radius: 20rpx;
-	text-align: center;
-	padding:0 10rpx;
-	border: 1px solid #3D7D3F;
-	width: 50px;
-	color: #3D7D3F;
+    height: 40rpx;
+    line-height: 40rpx;
+    font-size: 25rpx;
+    border-radius: 20rpx;
+    text-align: center;
+    padding:0 10rpx;
+    border: 1px solid #3D7D3F;
+    width: 50px;
+    color: #3D7D3F;
 }
 </style>
 
 <template>
 <view class='warmtale-ui-button_mini'>
-	<slot></slot>
+    <slot></slot>
 </view>
 </template>
 

@@ -1,23 +1,23 @@
 <style lang='less'>
 .warmtale-listenstory_container{
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	border-radius: 50rpx;
-	border-radius: 50rpx;
-	border: 1px solid #ABABAB;
-	padding: 45rpx 65rpx;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 50rpx;
+    border-radius: 50rpx;
+    border: 1px solid #ABABAB;
+    padding: 45rpx 65rpx;
 }
 </style>
 
 <template>
 <view class='warmtale-listenstory_container'>
-	<view>
-		<addstoryset />
-	</view>
-	<view>
-		<storyset/>
-	</view>
+    <view>
+        <addstoryset />
+    </view>
+    <view>
+        <storyset/>
+    </view>
 </view>
 </template>
 

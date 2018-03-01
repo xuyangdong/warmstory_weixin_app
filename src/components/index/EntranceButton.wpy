@@ -1,18 +1,18 @@
 <style>
 .warmtale-entrancebutton {
-	padding: 10rpx 40rpx;
-	border: 1rpx solid #E44C57;
-	width: 480rpx;
-	height: 150rpx;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+    padding: 10rpx 40rpx;
+    border: 1rpx solid #E44C57;
+    width: 480rpx;
+    height: 150rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 </style>
 
 <template>
 <view class='.warmtale-entrancebutton'>
-	{{text}}
+    {{text}}
 </view>
 </template>
 
