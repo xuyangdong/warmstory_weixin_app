@@ -86,8 +86,13 @@
   import {
     connect
   } from 'wepy-redux'
+  import {
+    getTodayStory
+  } from '@/store/actions/todayStory'
   @connect({
     todayStory: state => state.todayStory
+  }, {
+    getTodayStory
   })
   export default class TodayStory extends wepy.component {
     components = {
@@ -101,26 +106,26 @@
       }
     }
     onLoad() {
-      let store = wepy.getStore()
-      this.getTodayStory({
-        withCredentials: true,
-        complete: (...args) => {
-          store.dispatch(this.getTodayStory())
-        }
-      })
-      this.getTodayStory((info) => {})
+      // let store = wepy.getStore()
+      // this.getTodayStory({
+      //   withCredentials: true,
+      //   complete: (...args) => {
+      //     store.dispatch(this.getTodayStory())
+      //   }
+      // })
+      this.methods.getTodayStory((info) => {})
     }
-    getTodayStory(cb) {
-      const that = this
-      if (this.globalData.todayStory) {
-        return this.globalData.todayStory
-      }
-      this.getTodayStory({
-        success(res) {
-          that.globalData.todayStory = res.todayStory
-          cb && cb(res.todayStory)
-        }
-      })
-    }
+    // getTodayStory(cb) {
+    //   const that = this
+    //   if (this.globalData.todayStory) {
+    //     return this.globalData.todayStory
+    //   }
+    //   this.getTodayStory({
+    //     success(res) {
+    //       that.globalData.todayStory = res.todayStory
+    //       cb && cb(res.todayStory)
+    //     }
+    //   })
+    // }
   }
 </script>

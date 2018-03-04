@@ -112,7 +112,7 @@
     <commonbutton>
       重录
     </commonbutton>
-    <image src="../../../resource/img/recorder.png" />
+    <image src="../../../resource/img/recorder.png" bindtap="clickRecord"/>
     <commonbutton>
       <view bindtap="clickFinishButton">完成</view>
     </commonbutton>
@@ -124,10 +124,24 @@
 import wepy from 'wepy'
 import ProgressBar from '@/components/common/ProgressBar'
 import CommonButton from '@/components/common/CommonButton'
+import { connect } from 'wepy-redux'
+import { finishRecord } from '@/store/actions/record'
 
+@connect({
+  record: state => state.record
+}, {
+  finishRecord
+})
 export default class RecordStory extends wepy.page {
+  config = {
+    navigationBarBackgroundColor: '#ffffff',
+    navigationBarTextStyle: 'black',
+    navigationBarTitleText: '再来一次'
+  }
   data = {
-    percent: 0.7
+    percent: 0.7,
+    isRecording: false,
+    isStarted: false
   }
 
   computed = {
@@ -143,21 +157,44 @@ export default class RecordStory extends wepy.page {
 
   methods = {
     clickFinishButton: () => {
-      console.log('asfasdf')
-      wepy.navigateTo({
-        url: 'recordStoryFinish'
+      let recorderManager = wepy.getRecorderManager()
+      recorderManager.stop()
+      // wepy.navigateTo({
+      //   url: 'recordStoryFinish'
+      // })
+    },
+    clickRecord: () => {
+      let recorderManager = wepy.getRecorderManager()
+      recorderManager.onStop(res => {
+        wepy.navigateTo({
+          url: 'recordStoryFinish',
+          success: () => {
+            this.methods.finishRecord(res)
+          }
+        })
       })
+      if (this.isStarted) {
+        // 已经开始录音
+        if (this.isRecording) {
+          // 正在录音
+          recorderManager.pause()
+        } else {
+          recorderManager.resume()
+        }
+      } else {
+        // 还没开始录音
+        recorderManager.start({
+          sampleRate: 44100,
+          numberOfChannels: 1,
+          encodeBitRate: 192000,
+          format: 'aac',
+          frameSize: 50
+        })
+      }
     }
   }
 
   onReady () {
-    wepy.setNavigationBarTitle({
-      title: '再来一次'
-    })
-    wepy.setNavigationBarColor({
-      backgroundColor: '#ffffff',
-      frontColor: '#000000'
-    })
   }
 }
 </script>

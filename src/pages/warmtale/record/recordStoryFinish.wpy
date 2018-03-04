@@ -22,6 +22,23 @@
     .warmtale-recordStoryFinish_picture {
       width: 100%;
       height: 578rpx;
+      position: relative;
+
+      .warmtale-recordStoryFinish_mask {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 578rpx;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        &>image {
+          width: 130rpx;
+          height: 130rpx;
+        }
+      }
 
       &>image {
         width: 100%;
@@ -95,14 +112,17 @@
   <view class="warmtale-recordStoryFinish_middleContent">
     <view class="warmtale-recordStoryFinish_picture">
       <image src="https://picsum.photos/500/600"/>
+      <view class="warmtale-recordStoryFinish_mask">
+        <image src="../../../resource/img/play.png" bindtap="clickPlayButton"/>
+      </view>
     </view>
     <view class="warmtale-recordStoryFinish_controller">
       <view class="warmtale-recordStoryFinish_slider">
-        <slider />
+        <slider value="{{ progressStyle }}"/>
       </view>
       <view class="warmtale-recordStoryFinish_duration">
-        <view>00:00</view>
-        <view>00:00</view>
+        <view>{{ currentTimeFormat }}</view>
+        <view>{{ durationFormat }}</view>
       </view>
     </view>
   </view>
@@ -113,7 +133,7 @@
     </view>
     <view class="warmtale-recordStoryFinish_buttonGroup">
       <commonbuttonPrimary >
-        <view style="font-size:30rpx;">直接上传</view>
+        <view style="font-size:30rpx;" bindtap="clickUpload">直接上传</view>
       </commonbuttonPrimary>
       <commonbuttonGhost type="ghost">
         <view style="font-size:30rpx;">去美化</view>
@@ -126,20 +146,105 @@
 <script>
 import wepy from 'wepy'
 import CommonButton from '@/components/common/CommonButton2'
+import { connect } from 'wepy-redux'
+import api from '@/api'
+import moment from 'moment'
+import _ from 'lodash'
 
+@connect({
+  record: state => state.record
+})
 export default class RecordStoryFinish extends wepy.page {
+  config = {
+    navigationBarBackgroundColor: '#ffffff',
+    navigationBarTextStyle: 'black',
+    navigationBarTitleText: '录制完成'
+  }
+  data = {
+    currentTime: 0.0,
+    duration: 1.0
+  }
+  computed = {
+    durationFormat: () => {
+      return moment(parseFloat(this.duration.toFixed(3)) * 1000).format('mm:ss')
+    },
+    currentTimeFormat: () => {
+      return moment(parseFloat(this.currentTime.toFixed(3)) * 1000).format('mm:ss')
+    },
+    progressStyle: () => {
+      let percent = (this.currentTime / this.duration) * 100
+      return percent
+    }
+  }
   components = {
     commonbuttonPrimary: CommonButton,
     commonbuttonGhost: CommonButton
   }
+  methods = {
+    clickUpload: () => {
+      console.log(api)
+      wepy.saveFile({
+        tempFilePath: this.record.tempFilePath,
+        success: (res) => {
+          console.log(res.savedFilePath)
+        }
+      })
+      // wepy.request({
+      //   url: api.ossToken.get,
+      //   success: (data, statusCode, headers) => {
+      //     let token = data.data.obj
+      //     // console.log(token)
+      //     console.log(this.record, `${token.host}/${token.dir}/test.aac`)
+      //     let uploadTask = wepy.uploadFile({
+      //       url: token.host,
+      //       filePath: this.record.tempFilePath,
+      //       name: 'file',
+      //       formData: {
+      //         key: token.dir + '/' + 'test.aac',
+      //         policy: token.policy,
+      //         OSSAccessKeyId: token.accessid,
+      //         success_action_status: '200',
+      //         signature: token.signature
+      //       },
+      //       success: (res) => {
+      //         console.log('upload success', res)
+      //       }
+      //     })
+      //     uploadTask.onProgressUpdate((res) => {
+      //       console.log('上传进度', res.progress)
+      //       console.log('已经上传的数据长度', res.totalBytesSent)
+      //       console.log('预期需要上传的数据总长度', res.totalBytesExpectedToSend)
+      //       console.log('oss', res)
+      //     })
+      //   }
+      // })
+    },
+    clickPlayButton: () => {
+      let audioManager = wepy.getBackgroundAudioManager()
+      audioManager.onTimeUpdate(() => {
+        _.throttle(() => {
+          this.currentTime = audioManager.currentTime
+          this.duration = audioManager.duration
+          this.$apply()
+        }, 1000)()
+      })
+      if (typeof audioManager.paused === 'undefined' && this.record.tempFilePath) {
+        // 没有设置音频源
+        wepy.playBackgroundAudio({
+          // dataUrl: 'http://warmtale-backend-bucket.oss-cn-beijing.aliyuncs.com/app/works/3120/1514791743206.mp3'
+          dataUrl: this.record.tempFilePath
+        })
+      } else {
+        // 设置了音频源，
+        if (audioManager.paused) {
+          audioManager.play()
+        } else {
+          audioManager.pause()
+        }
+      }
+    }
+  }
   onReady () {
-    wepy.setNavigationBarTitle({
-      title: '录制完成'
-    })
-    wepy.setNavigationBarColor({
-      backgroundColor: '#ffffff',
-      frontColor: '#000000'
-    })
   }
 }
 </script>

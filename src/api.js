@@ -6,6 +6,9 @@ export default {
     get: `${baseUrl}/wx/mockLogin?id=1066`
   },
   todayStory: {
-    getTodayStory: `${baseUrl}/wx/mockLogin?id=1066`
+    getTodayStory: `${baseUrl}/user/getStoryById?id=40`
+  },
+  ossToken: {
+    get: `${baseUrl}/auth/getOssSignature`
   }
 }
