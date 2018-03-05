@@ -3,10 +3,10 @@ const baseUrl = 'http://47.93.242.215'
 
 export default {
   user: {
-    get: `${baseUrl}/wx/mockLogin?id=1066`
+    get: (id = 1066) => `${baseUrl}/wx/mockLogin?id=${id}`
   },
   todayStory: {
-    getTodayStory: `${baseUrl}/user/getStoryById?id=40`
+    get: (id = 40) => `${baseUrl}/user/getStoryById?id=${id}`
   },
   ossToken: {
     get: `${baseUrl}/auth/getOssSignature`

@@ -6,9 +6,8 @@ import { createAction } from 'redux-actions'
 export const getTodayStory = createAction(GET_TODAYSTORY, () => {
   return new Promise(resolve => {
     wepy.request({
-      url: api.todayStory.getTodayStory,
+      url: api.todayStory.get(),
       success: (data, statusCode, header) => {
-        console.log(data.data);
         resolve({
           data: data.data
         })

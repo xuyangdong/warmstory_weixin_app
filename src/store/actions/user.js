@@ -6,7 +6,7 @@ import { createAction } from 'redux-actions'
 export const getUserInfo = createAction(GET_USERINFO, () => {
   return new Promise(resolve => {
     wepy.request({
-      url: api.user.get,
+      url: api.user.get(),
       success: (data, statusCode, header) => {
         resolve({
           data: data.data

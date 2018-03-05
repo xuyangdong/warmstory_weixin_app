@@ -109,26 +109,7 @@
       }
     }
     onLoad() {
-      // let store = wepy.getStore()
-      // this.getTodayStory({
-      //   withCredentials: true,
-      //   complete: (...args) => {
-      //     store.dispatch(this.getTodayStory())
-      //   }
-      // })
       this.methods.getTodayStory()
     }
-    // getTodayStory(cb) {
-    //   const that = this
-    //   if (this.globalData.todayStory) {
-    //     return this.globalData.todayStory
-    //   }
-    //   this.getTodayStory({
-    //     success(res) {
-    //       that.globalData.todayStory = res.todayStory
-    //       cb && cb(res.todayStory)
-    //     }
-    //   })
-    // }
   }
 </script>
