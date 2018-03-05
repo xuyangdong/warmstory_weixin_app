@@ -25,7 +25,7 @@
       border-radius: 46rpx;
 		}
 
-    & > span {
+    & > view {
 			color: white;
 			height: 130rpx;
 			line-height: 130rpx;
@@ -52,7 +52,7 @@
 	flex-direction: column;
 	width: 100%;
 	box-sizing: border-box;
-	padding: 0 80rpx;
+	padding: 0 56rpx;
 
   .warmtale-tellstory_tab{
 		display: flex;
@@ -83,7 +83,7 @@
 	<view class='warmtale-tellstory_header'>
 		<view class='warmtale-tellstory_headerImg'>
 			<image src="{{ userInfo.headImgUrl }}"/>
-			<span>{{ userInfo.nickname }}</span>
+			<view>{{ userInfo.nickname }}</view>
 		</view>
 		<view class='warmtale-tellstory_easeListen' bindtap="clickEaseListen">
 			随意听听>
@@ -95,12 +95,12 @@
 			<view bindtap='switchTab' data-tabName='listenstory' style="{{ listenStoryStyle }}">听故事</view>
 		</view>
 		<view>
-            <view wx:if="{{ tabName=='todaystory' }}">
-    			<todaystory/>
-            </view>
-            <view wx:if="{{ tabName=='listenstory' }}">
-                <listenstory/>
-            </view>
+			<view wx:if="{{ tabName=='todaystory' }}">
+				<todaystory/>
+			</view>
+			<view wx:if="{{ tabName=='listenstory' }}">
+				<listenstory/>
+			</view>
 		</view>
 	</scroll-view>
 </view>
