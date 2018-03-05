@@ -20,27 +20,28 @@
 		margin-left: 50rpx;
 
 		& > image {
-			width: 130rpx;
-			height: 130rpx;
-			border-radius: 65rpx;
+      width: 92rpx;
+      height: 92rpx;
+      border-radius: 46rpx;
 		}
 
-		& > view {
+    & > span {
 			color: white;
 			height: 130rpx;
 			line-height: 130rpx;
 			margin-left: 30rpx;
+      font-size: 32rpx;
 		}
-
 	}
 
 	.warmtale-tellstory_easeListen {
 		background-color: white;
-		width: 276rpx;
-		height: 88rpx;
+    width: 190rpx;
+    height: 60rpx;
 		text-align: center;
-		color: #B4B4B4;
-		line-height: 88rpx;
+    color: #BEC2C9;
+    font-size: 28rpx;
+    line-height: 60rpx;
 		border-top-left-radius: 44rpx;
 		border-bottom-left-radius: 44rpx;
 	}
@@ -53,14 +54,15 @@
 	box-sizing: border-box;
 	padding: 0 80rpx;
 
-	.warmtale-tellstory_tab{
+  .warmtale-tellstory_tab{
 		display: flex;
-		height: 180rpx;
+		height: 130rpx;
 		justify-content: space-around;
 
 		& > view {
 			width: 50%;
-			line-height: 180rpx;
+			line-height: 130rpx;
+			font-size: 32rpx;
 		}
 
 		& > view:nth-child(1) {
@@ -81,7 +83,7 @@
 	<view class='warmtale-tellstory_header'>
 		<view class='warmtale-tellstory_headerImg'>
 			<image src="{{ userInfo.headImgUrl }}"/>
-			<view>{{ userInfo.nickname }}</view>
+			<span>{{ userInfo.nickname }}</span>
 		</view>
 		<view class='warmtale-tellstory_easeListen' bindtap="clickEaseListen">
 			随意听听>
