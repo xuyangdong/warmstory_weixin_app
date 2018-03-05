@@ -69,7 +69,7 @@
       <view class='warmtale-todaystory_storyintro'>
         <view>故事简介：</view>
         <view class=''>{{todayStory.readGuide}}</view>
-        <view>
+        <view bindtap="clickButton">
           <commonbutton>下一个</commonbutton>
         </view>
       </view>
@@ -103,6 +103,9 @@
         wepy.navigateTo({
           url: 'record/recordStory'
         })
+      },
+      clickButton: () => {
+        this.methods.getTodayStory()
       }
     }
     onLoad() {
@@ -113,7 +116,7 @@
       //     store.dispatch(this.getTodayStory())
       //   }
       // })
-      this.methods.getTodayStory((info) => {})
+      this.methods.getTodayStory()
     }
     // getTodayStory(cb) {
     //   const that = this

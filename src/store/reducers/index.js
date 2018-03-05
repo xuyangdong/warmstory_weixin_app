@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import counter from './counter'
 import user from './user'
 import record from './record'
-import todayStory from './record'
+import todayStory from './todayStory'
 
 export default combineReducers({
   counter,

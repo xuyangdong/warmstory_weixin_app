@@ -8,6 +8,7 @@ export const getTodayStory = createAction(GET_TODAYSTORY, () => {
     wepy.request({
       url: api.todayStory.getTodayStory,
       success: (data, statusCode, header) => {
+        console.log(data.data);
         resolve({
           data: data.data
         })
