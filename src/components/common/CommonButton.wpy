@@ -14,7 +14,7 @@
 
 <template>
 <view class='warmtale-ui-button_mini'>
-	<slot></slot>
+    <slot></slot>
 </view>
 </template>
 

@@ -82,44 +82,56 @@
 </style>
 
 <template>
-<view class='warmtale-todaystory_container'>
-	<view class='warmtale-todaystory_storycover'>
-		<image src='https://picsum.photos/460/287'/>
-	</view>
-	<view class='warmtale-todaystory_storyinfo'>
-		<view class='warmtale-todaystory_storytitle'>《两只兔子的故事》</view>
-		<view class='warmtale-todaystory_storyintro'>
-			<view>故事简介：</view>
-			<view class=''>两只兔子在草丛中蹦蹦跳跳，发现了一个神奇的洞穴的冒险故事</view>
-			<view bindtap="clickNextStory">
-				<commonbutton>下一个</commonbutton>
-			</view>
-		</view>
-		<view class="warmtale-todaystory_record">
-			<image bindtap="clickRecord" src="../../resource/img/recorder.png"/>
-		</view>
-	</view>
-</view>
+  <view class='warmtale-todaystory_container'>
+    <view class='warmtale-todaystory_storycover'>
+      <image src="{{todayStory.coverUrl}}" />
+    </view>
+    <view class='warmtale-todaystory_storyinfo'>
+      <view class='warmtale-todaystory_storytitle'>《{{todayStory.title}}》</view>
+      <view class='warmtale-todaystory_storyintro'>
+        <view>故事简介：</view>
+        <view class=''>{{todayStory.readGuide}}</view>
+        <view bindtap="clickButton">
+          <commonbutton>下一个</commonbutton>
+        </view>
+      </view>
+      <view class="warmtale-todaystory_record">
+        <image bindtap="clickRecord" src="../../resource/img/recorder.png" />
+      </view>
+    </view>
+  </view>
 </template>
 
 <script>
-import wepy from 'wepy'
-import CommonButton from '@/components/common/CommonButton'
-
-export default class TodayStory extends wepy.component {
-  components = {
-    commonbutton: CommonButton
-  }
-
-  methods = {
-    clickRecord () {
-      wepy.navigateTo({
-        url: 'record/recordStory'
-      })
-    },
-    clickNextStory () {
-      console.log('click')
+  import wepy from 'wepy'
+  import CommonButton from '@/components/common/CommonButton'
+  import {
+    connect
+  } from 'wepy-redux'
+  import {
+    getTodayStory
+  } from '@/store/actions/todayStory'
+  @connect({
+    todayStory: state => state.todayStory
+  }, {
+    getTodayStory
+  })
+  export default class TodayStory extends wepy.component {
+    components = {
+      commonbutton: CommonButton
+    }
+    methods = {
+      clickRecord() {
+        wepy.navigateTo({
+          url: 'record/recordStory'
+        })
+      },
+      clickButton: () => {
+        this.methods.getTodayStory()
+      }
+    }
+    onLoad() {
+      this.methods.getTodayStory()
     }
   }
-}
 </script>

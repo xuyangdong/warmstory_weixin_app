@@ -1,12 +1,12 @@
 import wepy from 'wepy'
 import api from '@/api'
-import { GET_USERINFO } from '../types/user'
+import { GET_TODAYSTORY } from '../types/todayStory'
 import { createAction } from 'redux-actions'
 
-export const getUserInfo = createAction(GET_USERINFO, (id) => {
+export const getTodayStory = createAction(GET_TODAYSTORY, () => {
   return new Promise(resolve => {
     wepy.request({
-      url: api.user.get(id),
+      url: api.todayStory.get(),
       success: (data, statusCode, header) => {
         resolve({
           data: data.data

@@ -1,84 +1,84 @@
 <style lang="less">
 .warmtale-player_container {
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	box-sizing: border-box;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
 
-	.warmtale-player_displayPart {
-		display: flex;
-		flex-direction: column;
-		width: 100%;
-		box-sizing: border-box;
+    .warmtale-player_displayPart {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        box-sizing: border-box;
 
-		.warmtale-player_progressWrapper {
-			position: relative;
-			width: 100%;
-			.warmtale-player_progressBase {
-				width: 100%;
-				height: 4rpx;
-				background-color: rgba(148,141,141,0.53);
-			}
+        .warmtale-player_progressWrapper {
+            position: relative;
+            width: 100%;
+            .warmtale-player_progressBase {
+                width: 100%;
+                height: 4rpx;
+                background-color: rgba(148,141,141,0.53);
+            }
 
-			.warmtale-player_progress {
-				position: absolute;
-				top: 0;
-				left: 0;
-				background-color: #18A151;
-				height: 4rpx;
-				width: 50%;
-			}
-		}
+            .warmtale-player_progress {
+                position: absolute;
+                top: 0;
+                left: 0;
+                background-color: #18A151;
+                height: 4rpx;
+                width: 50%;
+            }
+        }
 
-		.warmtale-player_playDuration {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			width: 100%;
-			color: white;
-			font-size: 24rpx;
-			padding: 10rpx 0;
-		}
-	}
+        .warmtale-player_playDuration {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            color: white;
+            font-size: 24rpx;
+            padding: 10rpx 0;
+        }
+    }
 
-	.warmtale-player_controlPart {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding:0 100rpx;
+    .warmtale-player_controlPart {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding:0 100rpx;
 
-		&>image {
-			width: 100rpx;
-			height: 100rpx;
+        &>image {
+            width: 100rpx;
+            height: 100rpx;
 
-			&:nth-child(1) {
-				transform: rotate(180deg);
-			}
-		}
+            &:nth-child(1) {
+                transform: rotate(180deg);
+            }
+        }
 
 
-	}
+    }
 }
 </style>
 
 <template>
 <view class="warmtale-player_container">
-	<view class="warmtale-player_displayPart">
-		<view class="warmtale-player_progressWrapper">
-			<view class="warmtale-player_progressBase"></view>
-			<view class="warmtale-player_progress" style="{{ progressStyle }}"></view>
-		</view>
-		<view class="warmtale-player_playDuration">
-			<view class="warmtale-player_leftDuration">{{ currentTimeFormat }}</view>
-			<view class="warmtale-player_rightDuration">{{ durationFormat }}</view>
-		</view>
-	</view>
-	<view class="warmtale-player_controlPart">
-		<image src="../../../resource/img/next.png"/>
-		<image src="../../../resource/img/play.png" bindtap="clickPlayButton"/>
-		<image src="../../../resource/img/next.png"/>
-	</view>
+    <view class="warmtale-player_displayPart">
+        <view class="warmtale-player_progressWrapper">
+            <view class="warmtale-player_progressBase"></view>
+            <view class="warmtale-player_progress" style="{{ progressStyle }}"></view>
+        </view>
+        <view class="warmtale-player_playDuration">
+            <view class="warmtale-player_leftDuration">{{ currentTimeFormat }}</view>
+            <view class="warmtale-player_rightDuration">{{ durationFormat }}</view>
+        </view>
+    </view>
+    <view class="warmtale-player_controlPart">
+        <image src="../../../resource/img/next.png"/>
+        <image src="../../../resource/img/play.png" bindtap="clickPlayButton"/>
+        <image src="../../../resource/img/next.png"/>
+    </view>
 </view>
 </template>
 

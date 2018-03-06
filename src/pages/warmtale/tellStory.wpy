@@ -1,15 +1,15 @@
 <style lang='less'>
 .warmtale-tellstory_container{
     justify-content: flex-start;
-	box-sizing: border-box;
+    box-sizing: border-box;
 }
 .warmtale-tellstory_header{
-	background-color: #15A153;
-	height: 238rpx;
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
+    background-color: #15A153;
+    height: 238rpx;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     flex-grow: 0;
     flex-shrink: 0;
 
@@ -80,6 +80,7 @@
 
 <template>
 <view class='weui-flex container warmtale-tellstory_container'>
+<<<<<<< HEAD
 	<view class='warmtale-tellstory_header'>
 		<view class='warmtale-tellstory_headerImg'>
 			<image src="{{ userInfo.headImgUrl }}"/>
@@ -103,6 +104,31 @@
 			</view>
 		</view>
 	</scroll-view>
+=======
+    <view class='warmtale-tellstory_header'>
+        <view class='warmtale-tellstory_headerImg'>
+            <image src="{{ userInfo.headImgUrl }}"/>
+            <view>{{ userInfo.nickname }}</view>
+        </view>
+        <view class='warmtale-tellstory_easeListen' bindtap="clickEaseListen">
+            随意听听>
+        </view>
+    </view>
+    <scroll-view scroll-y={{true}} class='warmtale-tellstory_body'>
+        <view class='warmtale-tellstory_tab'>
+            <view bindtap='switchTab' data-tabName='todaystory' style="{{ todayStoryStyle }}">今日故事</view>
+            <view bindtap='switchTab' data-tabName='listenstory' style="{{ listenStoryStyle }}">听故事</view>
+        </view>
+        <view>
+            <view wx:if="{{ tabName=='todaystory' }}">
+                <todaystory/>
+            </view>
+            <view wx:if="{{ tabName=='listenstory' }}">
+                <listenstory/>
+            </view>
+        </view>
+    </scroll-view>
+>>>>>>> master
 </view>
 </template>
 
