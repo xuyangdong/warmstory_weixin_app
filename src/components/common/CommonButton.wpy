@@ -1,26 +1,24 @@
 <style>
-.warmtale-ui-button_mini {
-	height: 56rpx;
-	line-height: 56rpx;
-	font-size: 28rpx;
-	border-radius: 28rpx;
-	text-align: center;
-	padding: 0 10rpx;
-	border: 2rpx solid #259B24;
-	width: 160rpx;
-	color: #259B24;
-}
+    .warmtale-ui-button_mini {
+        height: 56rpx;
+        line-height: 56rpx;
+        font-size: 28rpx;
+        border-radius: 28rpx;
+        text-align: center;
+        padding: 0 10rpx;
+        border: 2rpx solid #259B24;
+        width: 160rpx;
+        color: #259B24;
+    }
 </style>
 
 <template>
-<view class='warmtale-ui-button_mini'>
-    <slot></slot>
-</view>
+    <view class='warmtale-ui-button_mini'>
+        <slot></slot>
+    </view>
 </template>
 
 <script>
-import wepy from 'wepy'
-
-export default class CommonButton extends wepy.component {
-}
+    import wepy from 'wepy'
+    export default class CommonButton extends wepy.component {}
 </script>

@@ -1,148 +1,137 @@
 <style lang='less'>
-.warmtale-tellstory_container{
-    justify-content: flex-start;
-    box-sizing: border-box;
-}
-.warmtale-tellstory_header{
-    background-color: #15A153;
-    height: 238rpx;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-grow: 0;
-    flex-shrink: 0;
-
-	.warmtale-tellstory_headerImg{
+	.warmtale-tellstory_container {
+		justify-content: flex-start;
+		box-sizing: border-box;
+	}
+	.warmtale-tellstory_header {
+		background-color: #15A153;
+		height: 238rpx;
+		width: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		margin-left: 50rpx;
-
-		& > image {
-      width: 92rpx;
-      height: 92rpx;
-      border-radius: 46rpx;
+		flex-grow: 0;
+		flex-shrink: 0;
+		.warmtale-tellstory_headerImg {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			margin-left: 50rpx;
+			&>image {
+				width: 92rpx;
+				height: 92rpx;
+				border-radius: 46rpx;
+			}
+			&>view {
+				color: white;
+				height: 130rpx;
+				line-height: 130rpx;
+				margin-left: 30rpx;
+				font-size: 32rpx;
+			}
 		}
-
-    & > view {
-			color: white;
-			height: 130rpx;
-			line-height: 130rpx;
-			margin-left: 30rpx;
-      font-size: 32rpx;
+		.warmtale-tellstory_easeListen {
+			background-color: white;
+			width: 190rpx;
+			height: 60rpx;
+			text-align: center;
+			color: #BEC2C9;
+			font-size: 28rpx;
+			line-height: 60rpx;
+			border-top-left-radius: 44rpx;
+			border-bottom-left-radius: 44rpx;
 		}
 	}
-
-	.warmtale-tellstory_easeListen {
-		background-color: white;
-    width: 190rpx;
-    height: 60rpx;
-		text-align: center;
-    color: #BEC2C9;
-    font-size: 28rpx;
-    line-height: 60rpx;
-		border-top-left-radius: 44rpx;
-		border-bottom-left-radius: 44rpx;
-	}
-}
-
-.warmtale-tellstory_body {
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	box-sizing: border-box;
-	padding: 0 56rpx;
-
-  .warmtale-tellstory_tab{
+	.warmtale-tellstory_body {
 		display: flex;
-		height: 130rpx;
-		justify-content: space-around;
-
-		& > view {
-			width: 50%;
-			line-height: 130rpx;
-			font-size: 32rpx;
-		}
-
-		& > view:nth-child(1) {
-			text-align: right;
-			padding-right: 80rpx;
-		}
-
-		& > view:nth-child(2) {
-			text-align: left;
-			padding-left: 80rpx;
+		flex-direction: column;
+		width: 100%;
+		box-sizing: border-box;
+		padding: 0 56rpx;
+		.warmtale-tellstory_tab {
+			display: flex;
+			height: 130rpx;
+			justify-content: space-around;
+			&>view {
+				width: 50%;
+				line-height: 130rpx;
+				font-size: 32rpx;
+			}
+			&>view:nth-child(1) {
+				text-align: right;
+				padding-right: 80rpx;
+			}
+			&>view:nth-child(2) {
+				text-align: left;
+				padding-left: 80rpx;
+			}
 		}
 	}
-}
 </style>
 
 <template>
-<view class='weui-flex container warmtale-tellstory_container'>
-	<view class='warmtale-tellstory_header'>
-		<view class='warmtale-tellstory_headerImg'>
-			<image src="{{ userInfo.headImgUrl }}"/>
-			<view>{{ userInfo.nickname }}</view>
+	<view class='weui-flex container warmtale-tellstory_container'>
+		<view class='warmtale-tellstory_header'>
+			<view class='warmtale-tellstory_headerImg'>
+				<image src="{{ userInfo.headImgUrl }}" />
+				<view>{{ userInfo.nickname }}</view>
+			</view>
+			<view class='warmtale-tellstory_easeListen' bindtap="clickEaseListen">
+				随意听听>
+			</view>
 		</view>
-		<view class='warmtale-tellstory_easeListen' bindtap="clickEaseListen">
-			随意听听>
-		</view>
+		<scroll-view scroll-y={{true}} class='warmtale-tellstory_body'>
+			<view class='warmtale-tellstory_tab'>
+				<view bindtap='switchTab' data-tabName='todaystory' style="{{ todayStoryStyle }}">今日故事</view>
+				<view bindtap='switchTab' data-tabName='listenstory' style="{{ listenStoryStyle }}">听故事</view>
+			</view>
+			<view>
+				<view wx:if="{{ tabName=='todaystory' }}">
+					<todaystory/>
+				</view>
+				<view wx:if="{{ tabName=='listenstory' }}">
+					<listenstory/>
+				</view>
+			</view>
+		</scroll-view>
 	</view>
-	<scroll-view scroll-y={{true}} class='warmtale-tellstory_body'>
-		<view class='warmtale-tellstory_tab'>
-			<view bindtap='switchTab' data-tabName='todaystory' style="{{ todayStoryStyle }}">今日故事</view>
-			<view bindtap='switchTab' data-tabName='listenstory' style="{{ listenStoryStyle }}">听故事</view>
-		</view>
-		<view>
-			<view wx:if="{{ tabName=='todaystory' }}">
-				<todaystory/>
-			</view>
-			<view wx:if="{{ tabName=='listenstory' }}">
-				<listenstory/>
-			</view>
-		</view>
-	</scroll-view>
-</view>
 </template>
 
 <script>
-import wepy from 'wepy'
-import TodayStory from '@/components/tellStory/TodayStory'
-import ListenStory from '@/components/tellStory/ListenStory'
-import { connect } from 'wepy-redux'
-
-@connect({
-  userInfo: state => state.user
-})
-export default class TellStory extends wepy.page {
-  components = {
-    todaystory: TodayStory,
-    listenstory: ListenStory
-  }
-
-  data = {
-    tabName: 'todaystory'
-  }
-
-  computed = {
-    todayStoryStyle () {
-      return this.tabName === 'todaystory' ? 'color : #097B00' : 'color : black'
-    },
-    listenStoryStyle () {
-      return this.tabName === 'listenstory' ? 'color : #097B00' : 'color : black'
-    }
-  }
-
-  methods = {
-    switchTab (event) {
-      this.tabName = event.target.dataset.tabname
-    },
-    clickEaseListen () {
-      wepy.navigateTo({
-        url: 'playingStory'
-      })
-    }
-  }
-}
+	import wepy from 'wepy'
+	import TodayStory from '@/components/tellStory/TodayStory'
+	import ListenStory from '@/components/tellStory/ListenStory'
+	import {
+		connect
+	} from 'wepy-redux'
+	@connect({
+		userInfo: state => state.user
+	})
+	export default class TellStory extends wepy.page {
+		components = {
+			todaystory: TodayStory,
+			listenstory: ListenStory
+		}
+		data = {
+			tabName: 'todaystory'
+		}
+		computed = {
+			todayStoryStyle() {
+				return this.tabName === 'todaystory' ? 'color : #097B00' : 'color : black'
+			},
+			listenStoryStyle() {
+				return this.tabName === 'listenstory' ? 'color : #097B00' : 'color : black'
+			}
+		}
+		methods = {
+			switchTab(event) {
+				this.tabName = event.target.dataset.tabname
+			},
+			clickEaseListen() {
+				wepy.navigateTo({
+					url: 'playingStory'
+				})
+			}
+		}
+	}
 </script>
