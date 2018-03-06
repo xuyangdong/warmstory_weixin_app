@@ -1,5 +1,5 @@
 
-const baseUrl = 'http://47.93.242.215'
+const baseUrl = 'https://www.warmtale.com'
 
 export default {
   user: {
