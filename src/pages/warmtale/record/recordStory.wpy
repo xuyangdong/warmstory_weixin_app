@@ -123,10 +123,18 @@ import { connect } from 'wepy-redux'
 import { finishRecord } from '@/store/actions/record'
 
 @connect({
-  todayStory: state => ({
-    ...state.todayStory,
-    content: JSON.parse(state.todayStory.content)
-  })
+  todayStory: state => {
+    let content = []
+    try {
+      content = JSON.parse(state.todayStory.content)
+    } catch (e) {
+      content = []
+    }
+    return {
+      ...state.todayStory,
+      content: content
+    }
+  }
 }, {
   finishRecord
 })
