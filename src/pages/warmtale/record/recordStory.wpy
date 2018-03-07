@@ -82,7 +82,7 @@
 <template>
 <view class="weui-flex container warmtale-recordStory_container">
   <view class="warmtale-recordStory_topProgressBar">
-    <progressbar :percent="percent"/>
+    <progressbar :percent.sync="percent"/>
   </view>
   <view class="warmtale-recordStory_centerContent">
     <view class="warmtale-recordStory_progressInfo">
@@ -90,22 +90,17 @@
     </view>
     <view class="warmtale-recordStory_content">
       <view class="warmtale-recordStory_picture">
-        <image src="https://picsum.photos/500/600" />
+        <image src="{{ currentPageBackgroundImg }}" />
       </view>
       <scroll-view class="warmtale-recordStory_article" scroll-y="{{ true }}">
-        该上床睡觉。小龙递给龙妈妈一本故事书。
-        龙妈妈开始读故事：“塞德里克是条龙，脾气暴躁身体红。他从来没有，一次都没有睡过觉”。
-        该上床睡觉。小龙递给龙妈妈一本故事书。
-        龙妈妈开始读故事：“塞德里克是条龙，脾气暴躁身体红。他从来没有，一次都没有睡过觉”。
-        该上床睡觉。小龙递给龙妈妈一本故事书。
-        龙妈妈开始读故事：“塞德里克是条龙，脾气暴躁身体红。他从来没有，一次都没有睡过觉”。
+        {{ currentPageContent }}
       </scroll-view>
     </view>
     <view class="warmtale-recordStory_control">
-      <image src="../../../resource/img/first-prograph.png"/>
-      <image src="../../../resource/img/pre-prograph.png"/>
-      <image src="../../../resource/img/next-prograph.png"/>
-      <image src="../../../resource/img/last-prograph.png"/>
+      <image src="../../../resource/img/first-prograph.png" bindtap="gotoFirst"/>
+      <image src="../../../resource/img/pre-prograph.png" bindtap="gotoPre"/>
+      <image src="../../../resource/img/next-prograph.png" bindtap="gotoNext"/>
+      <image src="../../../resource/img/last-prograph.png" bindtap="gotoLast"/>
     </view>
   </view>
   <view class="warmtale-recordStory_bottomRecordButton">
@@ -128,7 +123,10 @@ import { connect } from 'wepy-redux'
 import { finishRecord } from '@/store/actions/record'
 
 @connect({
-  record: state => state.record
+  todayStory: state => ({
+    ...state.todayStory,
+    content: JSON.parse(state.todayStory.content)
+  })
 }, {
   finishRecord
 })
@@ -139,14 +137,25 @@ export default class RecordStory extends wepy.page {
     navigationBarTitleText: '再来一次'
   }
   data = {
-    percent: 0.7,
     isRecording: false,
-    isStarted: false
+    isStarted: false,
+    currentPage: 0
   }
 
   computed = {
+    percent: () => {
+      return this.todayStory ? (this.currentPage / (this.todayStory.content.length - 1)) : 0
+    },
     percentFormat: () => {
-      return `${this.percent * 100}%`
+      let percent = this.todayStory ? (this.currentPage / (this.todayStory.content.length - 1)) : 0
+      return `${Math.round(percent * 100)}%`
+    },
+    currentPageContent: () => {
+      return this.todayStory ? this.todayStory.content[this.currentPage].content : ''
+    },
+    currentPageBackgroundImg: () => {
+      // let jsonData = JSON.parse(this.todayStory.content)
+      return 'https://picsum.photos/500/600'
     }
   }
 
@@ -186,6 +195,18 @@ export default class RecordStory extends wepy.page {
           format: 'mp3'
         })
       }
+    },
+    gotoFirst: () => {
+      this.currentPage = 0
+    },
+    gotoPre: () => {
+      this.currentPage = this.currentPage === 0 ? 0 : this.currentPage - 1
+    },
+    gotoNext: () => {
+      this.currentPage = this.currentPage === this.todayStory.content.length - 1 ? this.todayStory.content.length - 1 : this.currentPage + 1
+    },
+    gotoLast: () => {
+      this.currentPage = this.todayStory.content.length - 1
     }
   }
 
