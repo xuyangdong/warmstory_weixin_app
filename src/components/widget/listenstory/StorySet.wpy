@@ -5,46 +5,42 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    border-bottom: 1px solid #ABABAB;
+        border-bottom: 1px solid #ababab;
     width: 100%;
     .warmtale-storyset_mainpanel {
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        padding: 20rpx 10rpx;
+            padding: 10rpx;
         flex-grow: 1;
         width: 100%;
         box-sizing: border-box;
-
         .warmtale-storyset_leftpart {
             display: flex;
             flex-direction: row;
             align-items: center;
             flex-grow: 1;
-
             .warmtale-storyset_setName {
                 // overflow: hidden;
                 // text-overflow:ellipsis;
                 // white-space: nowrap;
+                    font-size: 32rpx;
             }
-
-            & > image {
-                width: 150rpx;
-                height: 156rpx;
-                margin-right: 50rpx;
+                &>image {
+                    width: 102rpx;
+                    height: 102rpx;
+                    margin-right: 34rpx;
             }
         }
-
         .warmtale-storyset_rightpart {
-            & > image {
-                width: 44rpx;
-                height: 64rpx;
-                transform: rotate( 180deg );
+                &>image {
+                width: 24rpx;
+                height: 48rpx;
+                    transform: rotate(180deg);
             }
         }
     }
-
     .warmtale-storyset_dropdown {
         display: flex;
         flex-direction: column;
@@ -58,7 +54,7 @@
 <view class='warmtale-storyset_container' style="{{ containerStyle }}">
     <view class='warmtale-storyset_mainpanel'>
         <view class='warmtale-storyset_leftpart'>
-            <image src='https://picsum.photos/460/287'/>
+                <image src='https://picsum.photos/460/287' />
             <view class='warmtale-storyset_setName'>
                 我读的故事
             </view>
@@ -69,45 +65,47 @@
     </view>
     <view wx:if="{{ dropDown }}" class='warmtale-storyset_dropdown'>
         <repeat for="{{ storyList }}" key="index" index="index" item="item">
-            <storyitem :story="item"/>
+                <storyitem :story="item" />
         </repeat>
     </view>
 </view>
 </template>
 
 <script>
-import wepy from 'wepy'
-import StoryItem from '@/components/widget/listenstory/StoryItem'
-
+    import wepy from 'wepy';
+    import StoryItem from '@/components/widget/listenstory/StoryItem';
 export default class StorySet extends wepy.component {
   components = {
     storyitem: StoryItem
-  }
-
+        };
   data = {
     dropDown: false,
     storyList: [{
       title: '巴利长水痘',
       duration: '3\'20"'
-    }, {
+                },
+                {
       title: '阿波林上幼儿园',
       duration: '3\'20"'
-    }]
   }
-
+            ]
+        };
   computed = {
-    dropDownButtonStyle () {
-      return this.dropDown ? 'transform : rotate(270deg);' : 'transform : rotate(180deg);'
+            dropDownButtonStyle() {
+                return this.dropDown ?
+                    'transform : rotate(270deg);' :
+                    'transform : rotate(180deg);';
     },
-    containerStyle () {
-      return this.dropDown ? 'border-bottom : none;' : 'border-bottom : 1px solid #ABABAB;'
-    }
+            containerStyle() {
+                return this.dropDown ?
+                    'border-bottom : none;' :
+                    'border-bottom : 1px solid #ABABAB;';
   }
-
+        };
   methods = {
-    displayDropDown () {
-      this.dropDown = !this.dropDown
-    }
+            displayDropDown() {
+                this.dropDown = !this.dropDown;
   }
+        };
 }
 </script>
