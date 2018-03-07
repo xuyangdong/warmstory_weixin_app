@@ -159,9 +159,7 @@ export default class RecordStory extends wepy.page {
     clickFinishButton: () => {
       let recorderManager = wepy.getRecorderManager()
       recorderManager.stop()
-      // wepy.navigateTo({
-      //   url: 'recordStoryFinish'
-      // })
+      // wepy.stopRecord()
     },
     clickRecord: () => {
       let recorderManager = wepy.getRecorderManager()
@@ -184,11 +182,8 @@ export default class RecordStory extends wepy.page {
       } else {
         // 还没开始录音
         recorderManager.start({
-          sampleRate: 44100,
-          numberOfChannels: 1,
-          encodeBitRate: 192000,
-          format: 'aac',
-          frameSize: 50
+          duration: 600000,
+          format: 'mp3'
         })
       }
     }

@@ -57,13 +57,17 @@ export default class extends wepy.app {
 
     let store = getStore()
     wepy.login({
-      success (errMsg, code) {
-        console.log(errMsg, code)
+      success (...argsLogin) {
         wepy.getUserInfo({
           withCredentials: true,
           complete: (...args) => {
-            // console.log('withCredentials args', args)
-            store.dispatch(getUserInfo(1066))
+            console.log(args)
+            let jsonData = {
+              code: argsLogin[0].code,
+              encryptedData: args[0].encryptedData,
+              iv: args[0].iv
+            }
+            store.dispatch(getUserInfo(jsonData))
           }
         })
       }
