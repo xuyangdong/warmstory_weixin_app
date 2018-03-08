@@ -15,9 +15,11 @@
     <view>
         <addstoryset />
     </view>
-    <view>
-        <storyset/>
-    </view>
+    <repeat for="{{ storySetList }}" key="index" index="index" item="item">
+      <view id="{{index}}">
+          <storyset id="{{index}}" :index="index"/>
+      </view>
+    </repeat>
 </view>
 </template>
 
@@ -25,7 +27,14 @@
 import wepy from 'wepy'
 import StorySet from '@/components/widget/listenstory/StorySet'
 import AddStorySet from '@/components/widget/listenstory/AddStorySet'
+import { getStorySet } from '@/store/actions/storySetList'
+import { connect } from 'wepy-redux'
 
+@connect({
+  storySetList: state => state.storySetList
+}, {
+  getStorySet
+})
 export default class ListenStory extends wepy.component {
   components = {
     storyset: StorySet,
@@ -35,5 +44,7 @@ export default class ListenStory extends wepy.component {
   data = {
 
   }
+
+  onLoad() {}
 }
 </script>

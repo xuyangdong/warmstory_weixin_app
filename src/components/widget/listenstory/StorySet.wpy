@@ -55,7 +55,7 @@
       <view class='warmtale-storyset_leftpart'>
         <image src='https://picsum.photos/460/287' />
         <view class='warmtale-storyset_setName'>
-          我读的故事
+          {{ storySetList[index].name }}，{{ id }}
         </view>
       </view>
       <view bindtap="displayDropDown" class='warmtale-storyset_rightpart'>
@@ -78,9 +78,9 @@
   } from 'wepy-redux'
   import {
     getStorySet
-  } from '@/store/actions/storySet'
+  } from '@/store/actions/storySetList'
   @connect({
-    storySet: state => state.storySet
+    storySetList: state => state.storySetList
   }, {
     getStorySet
   })
@@ -93,6 +93,7 @@
     }
     computed = {
       dropDownButtonStyle() {
+        console.log('haha:', this.index)
         return this.dropDown ? 'transform : rotate(270deg);' : 'transform : rotate(180deg);'
       },
       containerStyle() {
@@ -108,7 +109,7 @@
       }
     }
     onLoad() {
-      this.methods.getStorySet()
+      // this.methods.getStorySet()
     }
   }
 </script>

@@ -1,1 +1,0 @@
-export const GET_STORYLIST = 'GET_STORYLIST'

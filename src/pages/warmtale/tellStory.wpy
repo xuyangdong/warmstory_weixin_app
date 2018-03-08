@@ -108,10 +108,17 @@
 import wepy from 'wepy'
 import TodayStory from '@/components/tellStory/TodayStory'
 import ListenStory from '@/components/tellStory/ListenStory'
+import { getUserInfo } from '@/store/actions/user'
+import { getTodayStory } from '@/store/actions/todayStory'
+import { getStorySetList } from '@/store/actions/storySetList'
 import { connect } from 'wepy-redux'
 
 @connect({
   userInfo: state => state.user
+}, {
+  getUserInfo,
+  getTodayStory,
+  getStorySetList
 })
 export default class TellStory extends wepy.page {
   components = {
@@ -135,12 +142,34 @@ export default class TellStory extends wepy.page {
   methods = {
     switchTab (event) {
       this.tabName = event.target.dataset.tabname
+      if (event.target.dataset.tabname === 'listenstory') {
+        this.methods.getStorySetList(0, 10)
+      }
     },
     clickEaseListen () {
       wepy.navigateTo({
         url: 'playingStory'
       })
     }
+  }
+  onReady() {
+    wepy.login({
+      success: (...argsLogin) => {
+        wepy.getUserInfo({
+          withCredentials: true,
+          complete: (...args) => {
+            let jsonData = {
+              code: argsLogin[0].code,
+              encryptedData: args[0].encryptedData,
+              iv: args[0].iv
+            }
+            this.methods.getUserInfo(jsonData).then((...args) => {
+              this.methods.getTodayStory()
+            })
+          }
+        })
+      }
+    })
   }
 }
 </script>

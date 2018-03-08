@@ -41,6 +41,7 @@
         &>view:nth-child(3) {
           margin-top: 40rpx;
           align-self: flex-end;
+          z-index: 2;
         }
       }
       .warmtale-todaystory_record {
@@ -105,11 +106,10 @@
         })
       },
       clickButton: () => {
+        console.log('click')
         this.methods.getTodayStory()
       }
     }
-    onLoad() {
-      this.methods.getTodayStory()
-    }
+    onLoad() {}
   }
 </script>

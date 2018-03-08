@@ -1,95 +1,85 @@
 <style lang="less">
-  @import './style/weui.less';
-  .container {
+@import './style/weui.less';
+.container {
     height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
     box-sizing: border-box;
-  }
+}
 </style>
 
 <script>
-  import wepy from 'wepy'
-  import 'wepy-async-function'
-  import {
-    setStore,
-    getStore
-  } from 'wepy-redux'
-  import configStore from './store'
-  import {
-    getUserInfo
-  } from '@/store/actions/user'
-  const store = configStore()
-  setStore(store)
-  export default class extends wepy.app {
-    config = {
-      pages: [
-        'pages/warmtale/tellStory',
-        'pages/warmtale/index',
-        'pages/warmtale/playingStory',
-        'pages/warmtale/record/recordStory',
-        'pages/warmtale/record/recordStoryFinish',
-        'pages/index'
-      ],
-      window: {
-        backgroundTextStyle: 'light',
-        navigationBarBackgroundColor: '#15A153',
-        navigationBarTitleText: '读个小故事',
-        navigationBarTextStyle: 'white'
-      }
-    }
-    globalData = {
-      userInfo: null,
-      todayStory: null,
-      storyList: null
-    }
-    constructor() {
-      super()
-      this.use('requestfix')
-    }
-    onLaunch() {
-      // this.testAsync()
-      let store = getStore()
-      wepy.login({
-        success(errMsg, code) {
-          console.log(errMsg, code)
-          wepy.getUserInfo({
-            withCredentials: true,
-            complete: (...args) => {
-              // console.log('withCredentials args', args)
-              store.dispatch(getUserInfo())
-            }
-          })
-        }
-      })
-      this.getUserInfo((info) => {})
-    }
-    sleep(s) {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve('promise resolved')
-        }, s * 1000)
-      })
-    }
-    async testAsync() {
-      const data = await this.sleep(3)
-      console.log(data)
-    }
-    login(cb) {
-    }
-    getUserInfo(cb) {
-      const that = this
-      if (this.globalData.userInfo) {
-        return this.globalData.userInfo
-      }
-      wepy.getUserInfo({
-        success(res) {
-          that.globalData.userInfo = res.userInfo
-          cb && cb(res.userInfo)
-        }
-      })
+import wepy from 'wepy'
+import 'wepy-async-function'
+
+import {
+  setStore
+} from 'wepy-redux'
+import configStore from './store'
+
+const store = configStore()
+setStore(store)
+
+export default class extends wepy.app {
+  config = {
+    pages: [
+      'pages/warmtale/tellStory',
+      'pages/warmtale/index',
+      'pages/warmtale/playingStory',
+      'pages/warmtale/record/recordStory',
+      'pages/warmtale/record/recordStoryFinish',
+      'pages/index'
+    ],
+    window: {
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#15A153',
+      navigationBarTitleText: '读个小故事',
+      navigationBarTextStyle: 'white'
     }
   }
+
+  globalData = {
+    userInfo: null,
+    todayStory: null
+  }
+
+  constructor() {
+    super()
+    this.use('requestfix')
+  }
+
+  onLaunch() {}
+
+  sleep(s) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('promise resolved')
+      }, s * 1000)
+    })
+  }
+
+  async testAsync() {
+    const data = await this.sleep(3)
+    console.log(data)
+  }
+
+  login(cb) {
+
+  }
+
+  getUserInfo(cb) {
+    const that = this
+    if (this.globalData.userInfo) {
+      return this.globalData.userInfo
+    }
+    wepy.getUserInfo({
+      success(res) {
+        that.globalData.userInfo = res.userInfo
+        cb && cb(res.userInfo)
+      }
+    })
+  }
+}
 </script>

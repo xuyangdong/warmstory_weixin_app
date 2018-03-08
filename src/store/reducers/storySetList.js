@@ -1,13 +1,21 @@
 import { handleActions } from 'redux-actions'
-import { GET_STORYSETLIST } from '../types/storySetList'
+import { GET_STORYSETLIST, GET_STORYLIST } from '../types/storySetList'
 
 export default handleActions({
   [GET_STORYSETLIST](state, action) {
-    return {
-      storySetList: action.payload.data.map(v => {
-       ...v,
-        storyList: []
-      })
-     }
+    return action.payload.data.obj.map(v => ({
+     ...v,
+      storyList: []
+    }))
+  },
+  [GET_STORYLIST] (state, action) {
+    let storySetId=action.payload.storySetId
+    let storyList=action.payload.data
+    return state.storySetList.map(v=>{
+      if(v.id == storySetId){
+        v.storyList=storyList
+      }
+      return v
+    })
   }
-})
+},[])
