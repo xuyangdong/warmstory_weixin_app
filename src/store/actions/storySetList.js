@@ -33,7 +33,8 @@ export const getStoryList = createAction(GET_STORYLIST, (playListId,page,pageSiz
       },
       success: (data, statusCode, header) => {
         resolve({
-          data: data.data
+          data: data.data,
+          storySetId: playListId
         })
       }
     })

@@ -10,8 +10,8 @@ export default handleActions({
   },
   [GET_STORYLIST] (state, action) {
     let storySetId=action.payload.storySetId
-    let storyList=action.payload.data
-    return state.storySetList.map(v=>{
+    let storyList=action.payload.data.obj
+    return state.map(v=>{
       if(v.id == storySetId){
         v.storyList=storyList
       }

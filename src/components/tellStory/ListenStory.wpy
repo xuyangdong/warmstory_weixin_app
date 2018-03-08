@@ -8,6 +8,70 @@
     border: 1px solid #ABABAB;
     padding: 45rpx 65rpx;
 }
+.warmtale-storyset_container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  border-bottom: 1px solid #ABABAB;
+  width: 100%;
+  .warmtale-storyset_mainpanel {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20rpx 10rpx;
+    flex-grow: 1;
+    width: 100%;
+    box-sizing: border-box;
+    .warmtale-storyset_leftpart {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      flex-grow: 1;
+      .warmtale-storyset_setName {
+        // overflow: hidden;
+        // text-overflow:ellipsis;
+        // white-space: nowrap;
+      }
+      &>image {
+        width: 150rpx;
+        height: 156rpx;
+        margin-right: 50rpx;
+      }
+    }
+    .warmtale-storyset_rightpart {
+      &>image {
+        width: 44rpx;
+        height: 64rpx;
+        transform: rotate( 180deg);
+      }
+    }
+  }
+  .warmtale-storyset_dropdown {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 100%;
+  }
+}
+.warmtale-storyitem_container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20rpx 10rpx;
+    border-bottom: 1px solid #CFCECF;
+
+    .warmtale-storyitem_storyTitle {
+        font-size: 40rpx;
+    }
+
+    .warmtale-storyitem_duration {
+        font-size: 30rpx;
+        color: #CFCECF;
+    }
+}
 </style>
 
 <template>
@@ -15,34 +79,78 @@
     <view>
         <addstoryset />
     </view>
-    <repeat for="{{ storySetList }}" key="index" index="index" item="item">
-      <view id="{{index}}">
-          <storyset id="{{index}}" :index="index"/>
+    <view wx:for="{{ storySetList }}">
+      <view id="{{index}}" class='warmtale-storyset_container' style="{{ dropDown[index] ? 'border-bottom : none;' : 'border-bottom : 1px solid #ABABAB;' }}">
+        <view class='warmtale-storyset_mainpanel'>
+          <view class='warmtale-storyset_leftpart'>
+            <image src='https://picsum.photos/460/287' />
+            <view class='warmtale-storyset_setName'>
+              {{ item.name }}
+            </view>
+          </view>
+          <view bindtap="displayDropDown" data-storyset="{{ index }}" class='warmtale-storyset_rightpart'>
+            <image src='../../../resource/img/more.png' style="{{ dropDown[index] ? 'transform : rotate(270deg);' : 'transform : rotate(180deg);' }}" />
+          </view>
+        </view>
+        <view wx:if="{{ dropDown[index] }}" class='warmtale-storyset_dropdown'>
+          <view wx:for="{{ item.storyList }}" wx:for-item="story">
+            <view class="warmtale-storyitem_container">
+                <view class="warmtale-storyitem_storyTitle">
+                    {{ story.storyTitle }}
+                </view>
+                <view class="warmtale-storyitem_duration">
+                    {{ story.duration }}
+                </view>
+            </view>
+          </view>
+        </view>
       </view>
-    </repeat>
+    </view>
 </view>
 </template>
 
 <script>
 import wepy from 'wepy'
-import StorySet from '@/components/widget/listenstory/StorySet'
+// import StorySet from '@/components/widget/listenstory/StorySet'
 import AddStorySet from '@/components/widget/listenstory/AddStorySet'
-import { getStorySet } from '@/store/actions/storySetList'
+import StoryItem from '@/components/widget/listenstory/StoryItem'
+import { getStorySet, getStoryList } from '@/store/actions/storySetList'
 import { connect } from 'wepy-redux'
 
 @connect({
   storySetList: state => state.storySetList
 }, {
-  getStorySet
+  getStorySet,
+  getStoryList
 })
 export default class ListenStory extends wepy.component {
   components = {
-    storyset: StorySet,
-    addstoryset: AddStorySet
+    // storyset: StorySet,
+    addstoryset: AddStorySet,
+    storyitem: StoryItem
   }
 
   data = {
+    dropDown: {},
+    openedStorySet: 0
+  }
 
+  methods = {
+    displayDropDown(event) {
+      let currentTargetIndex = event.currentTarget.dataset.storyset
+      let currentTargetNextState = !this.dropDown[currentTargetIndex]
+      this.dropDown = {
+        [currentTargetIndex]: currentTargetNextState
+      }
+      this.openedStorySet = currentTargetIndex
+
+      let currentStorySet = this.storySetList[currentTargetIndex]
+      this.methods.getStoryList(currentStorySet.id, 0, 10)
+      // this.dropDown[currentTarget] = currentTargetNextState
+      // if (this.dropDown === true) {
+      //   this.methods.getStoryList()
+      // }
+    }
   }
 
   onLoad() {}

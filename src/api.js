@@ -14,7 +14,7 @@ export default {
   },
   storyList: {
     get: (playList = -1, page = 0, pageSize = 30) =>
-      `${baseUrl}/user/playList/getWorksListByPlayListIdByPage?playList=${playList}&page=${page}&pageSize=${pageSize}`
+      `${baseUrl}/user/playList/getWorksListByPlayListIdByPage?playListId=${playList}&page=${page}&pageSize=${pageSize}`
   },
   storySet: {
     get: (page = 0, pageSize = 30) =>
