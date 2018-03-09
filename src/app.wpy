@@ -28,6 +28,7 @@ export default class extends wepy.app {
       'pages/warmtale/tellStory',
       'pages/warmtale/index',
       'pages/warmtale/playingStory',
+      'pages/warmtale/addStorySet',
       'pages/warmtale/record/recordStory',
       'pages/warmtale/record/recordStoryFinish',
       'pages/index'

@@ -105,7 +105,7 @@
   </view>
   <view class="warmtale-recordStory_bottomRecordButton">
     <commonbutton>
-      重录
+      <view bindtap="clickReRecord">重录</view>
     </commonbutton>
     <image src="../../../resource/img/recorder.png" bindtap="clickRecord"/>
     <commonbutton>
@@ -215,9 +215,20 @@ export default class RecordStory extends wepy.page {
     },
     gotoLast: () => {
       this.currentPage = this.todayStory.content.length - 1
+    },
+    clickReRecord: () => {
+      let recorderManager = wepy.getRecorderManager()
+      recorderManager.onStop(res => {
+        // console.log('结束录制', res)
+        wepy.showToast({
+          title: '录制停止,请重录',
+          icon: 'success',
+          duration: 2000
+        })
+      })
+      recorderManager.stop()
     }
   }
-
   onReady () {
   }
 }

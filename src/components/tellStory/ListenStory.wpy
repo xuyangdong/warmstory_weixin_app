@@ -76,7 +76,7 @@
 
 <template>
 <view class='warmtale-listenstory_container'>
-    <view>
+    <view bindtap="handleAddStorySet">
         <addstoryset />
     </view>
     <view wx:for="{{ storySetList }}">
@@ -151,6 +151,11 @@ export default class ListenStory extends wepy.component {
       this.methods.setPlayingWork(currentStory)
       wepy.navigateTo({
         url: 'playingStory'
+      })
+    },
+    handleAddStorySet() {
+      wepy.navigateTo({
+        url: 'addStorySet'
       })
     }
   }

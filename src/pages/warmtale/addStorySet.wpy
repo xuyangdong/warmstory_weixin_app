@@ -1,0 +1,129 @@
+<style lang="less">
+.warmtale-addstoryset_container {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 20rpx;
+
+  .warmtale-addstoryset_formItem {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+
+    &>input {
+      border: 1px solid #6a6a6a;
+      border-radius: 10rpx;
+    }
+  }
+
+  .warmtale-addstoryset_upload {
+
+    .warmtale-addstoryset_imageList {
+      &>image {
+        width: 200rpx;
+        height: 200rpx;
+      }
+    }
+  }
+}
+</style>
+
+<template>
+  <view class="weui-flex container warmtale-addstoryset_container">
+    <view class="warmtale-addstoryset_formItem">
+      <view>名称：</view>
+      <input bindinput="handleInput" />
+    </view>
+    <view class="warmtale-addstoryset_formItem warmtale-addstoryset_upload" bindtap="chooseImage">
+      <view>封面：</view>
+      <view class="warmtale-addstoryset_imageList">
+          <image wx:if="{{ !!files }}" src="{{ files[0] }}"/>
+        <image src="../../resource/img/add.png"/>
+      </view>
+
+    </view>
+    <view>
+      <commonbutton>
+         <view bindtap="">{{ uploading ? '上传中' : '创建'}}</view>
+      </commonbutton>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import CommonButton from '@/components/common/CommonButton2'
+import api from '@/api'
+
+export default class Index extends wepy.page {
+  components = {
+    commonbutton: CommonButton
+  }
+  data = {
+    files: [],
+    storySetName: '',
+    uploading: false
+  }
+  methods = {
+    chooseImage: (e) => {
+      wepy.chooseImage({
+        sizeType: ['original', 'compressed'],
+        sourceType: ['album', 'camera'],
+        success: (res) => {
+          this.files = res.tempFilePaths
+          this.$apply()
+        }
+      })
+      // console.log('adasdfasdf', res)
+      // this.files = this.files.concat(res.tempFilePaths)
+    },
+    handleInput: (event) => {
+      this.storySetName = event.detail.value
+    },
+    handleCreate: () => {
+      this.uploading = true
+      wepy.request({
+        url: api.ossToken.get,
+        success: (data, statusCode, headers) => {
+          let token = data.data.obj
+          let fileName = encodeURIComponent(this.file)
+          let host = 'https://oss.warmtale.com'
+          wepy.uploadFile({
+            url: host,
+            filePath: this.file,
+            name: 'file',
+            formData: {
+              key: token.dir + '/' + fileName,
+              policy: token.policy,
+              OSSAccessKeyId: token.accessid,
+              success_action_status: '200',
+              signature: token.signature
+            },
+            success: (res) => {
+              wepy.showToast({
+                title: '上传成功',
+                icon: 'success',
+                duration: 2000
+              })
+              console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
+            },
+            fail: () => {
+              wepy.showToast({
+                title: '上传失败',
+                icon: 'success',
+                duration: 2000
+              })
+            },
+            complete: (res) => {
+              this.uploading = false
+              console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
+            }
+          })
+        }
+      })
+    }
+  }
+}
+</script>
