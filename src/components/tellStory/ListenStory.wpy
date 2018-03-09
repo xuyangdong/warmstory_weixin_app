@@ -94,7 +94,7 @@
         </view>
         <view wx:if="{{ dropDown[index] }}" class='warmtale-storyset_dropdown'>
           <view wx:for="{{ item.storyList }}" wx:for-item="story">
-            <view class="warmtale-storyitem_container">
+            <view class="warmtale-storyitem_container" bindtap="handleClickWork" data-story="{{ index }}">
                 <view class="warmtale-storyitem_storyTitle">
                     {{ story.storyTitle }}
                 </view>
@@ -111,23 +111,21 @@
 
 <script>
 import wepy from 'wepy'
-// import StorySet from '@/components/widget/listenstory/StorySet'
 import AddStorySet from '@/components/widget/listenstory/AddStorySet'
-import StoryItem from '@/components/widget/listenstory/StoryItem'
 import { getStorySet, getStoryList } from '@/store/actions/storySetList'
+import { setPlayingWork } from '@/store/actions/work'
 import { connect } from 'wepy-redux'
 
 @connect({
   storySetList: state => state.storySetList
 }, {
   getStorySet,
-  getStoryList
+  getStoryList,
+  setPlayingWork
 })
 export default class ListenStory extends wepy.component {
   components = {
-    // storyset: StorySet,
-    addstoryset: AddStorySet,
-    storyitem: StoryItem
+    addstoryset: AddStorySet
   }
 
   data = {
@@ -146,10 +144,14 @@ export default class ListenStory extends wepy.component {
 
       let currentStorySet = this.storySetList[currentTargetIndex]
       this.methods.getStoryList(currentStorySet.id, 0, 10)
-      // this.dropDown[currentTarget] = currentTargetNextState
-      // if (this.dropDown === true) {
-      //   this.methods.getStoryList()
-      // }
+    },
+    handleClickWork(event) {
+      let currentStorySet = this.storySetList[this.openedStorySet]
+      let currentStory = currentStorySet.storyList[event.currentTarget.dataset.story]
+      this.methods.setPlayingWork(currentStory)
+      wepy.navigateTo({
+        url: 'playingStory'
+      })
     }
   }
 

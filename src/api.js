@@ -19,5 +19,8 @@ export default {
   storySet: {
     get: (page = 0, pageSize = 30) =>
       `${baseUrl}/user/playList/getPlayListsByPage?page=${page}&pageSize=${pageSize}`
+  },
+  work: {
+    get: `${baseUrl}/user/getAFreeRandomWorks`
   }
 }

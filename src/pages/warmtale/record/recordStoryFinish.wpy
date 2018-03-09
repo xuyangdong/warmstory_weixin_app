@@ -133,7 +133,7 @@
     </view>
     <view class="warmtale-recordStoryFinish_buttonGroup">
       <commonbuttonPrimary >
-        <view style="font-size:30rpx;" bindtap="clickUpload">直接上传</view>
+        <view style="font-size:30rpx;" bindtap="clickUpload">{{ uploading ? '正在上传' : '直接上传' }}</view>
       </commonbuttonPrimary>
       <commonbuttonGhost type="ghost">
         <view style="font-size:30rpx;">去美化</view>
@@ -164,7 +164,8 @@ export default class RecordStoryFinish extends wepy.page {
   data = {
     currentTime: 0.0,
     duration: 1.0,
-    tempFile: {}
+    tempFile: {},
+    uploading: false
   }
   computed = {
     durationFormat: () => {
@@ -184,6 +185,7 @@ export default class RecordStoryFinish extends wepy.page {
   }
   methods = {
     clickUpload: () => {
+      this.uploading = true
       wepy.request({
         url: api.ossToken.get,
         success: (data, statusCode, headers) => {
@@ -202,6 +204,23 @@ export default class RecordStoryFinish extends wepy.page {
               signature: token.signature
             },
             success: (res) => {
+              wepy.showToast({
+                title: '上传成功',
+                icon: 'success',
+                duration: 2000
+              })
+              console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
+            },
+            fail: () => {
+              wepy.showToast({
+                title: '上传失败',
+                icon: 'success',
+                duration: 2000
+              })
+            },
+            complete: (res) => {
+              this.uploading = false
+
               console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
             }
           })
