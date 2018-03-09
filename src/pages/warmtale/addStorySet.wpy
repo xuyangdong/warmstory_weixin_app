@@ -36,17 +36,17 @@
       <view>名称：</view>
       <input bindinput="handleInput" />
     </view>
-    <view class="warmtale-addstoryset_formItem warmtale-addstoryset_upload" bindtap="chooseImage">
+    <!-- <view class="warmtale-addstoryset_formItem warmtale-addstoryset_upload" bindtap="chooseImage">
       <view>封面：</view>
       <view class="warmtale-addstoryset_imageList">
           <image wx:if="{{ !!files }}" src="{{ files[0] }}"/>
         <image src="../../resource/img/add.png"/>
       </view>
 
-    </view>
+    </view> -->
     <view>
       <commonbutton>
-         <view bindtap="">{{ uploading ? '上传中' : '创建'}}</view>
+         <view bindtap="handleCreate">{{ uploading ? '上传中' : '创建'}}</view>
       </commonbutton>
     </view>
   </view>
@@ -55,8 +55,12 @@
 <script>
 import wepy from 'wepy'
 import CommonButton from '@/components/common/CommonButton2'
-import api from '@/api'
+import { connect } from 'wepy-redux'
+import { createPlayList } from '@/store/actions/storySetList'
 
+@connect({}, {
+  createPlayList
+})
 export default class Index extends wepy.page {
   components = {
     commonbutton: CommonButton
@@ -83,46 +87,51 @@ export default class Index extends wepy.page {
       this.storySetName = event.detail.value
     },
     handleCreate: () => {
-      this.uploading = true
-      wepy.request({
-        url: api.ossToken.get,
-        success: (data, statusCode, headers) => {
-          let token = data.data.obj
-          let fileName = encodeURIComponent(this.file)
-          let host = 'https://oss.warmtale.com'
-          wepy.uploadFile({
-            url: host,
-            filePath: this.file,
-            name: 'file',
-            formData: {
-              key: token.dir + '/' + fileName,
-              policy: token.policy,
-              OSSAccessKeyId: token.accessid,
-              success_action_status: '200',
-              signature: token.signature
-            },
-            success: (res) => {
-              wepy.showToast({
-                title: '上传成功',
-                icon: 'success',
-                duration: 2000
-              })
-              console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
-            },
-            fail: () => {
-              wepy.showToast({
-                title: '上传失败',
-                icon: 'success',
-                duration: 2000
-              })
-            },
-            complete: (res) => {
-              this.uploading = false
-              console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
-            }
-          })
-        }
+      this.methods.createPlayList(this.storySetName).then(res => {
+        wepy.navigateBack({
+          delta: 1
+        })
       })
+      // this.uploading = true
+      // wepy.request({
+      //   url: api.ossToken.get,
+      //   success: (data, statusCode, headers) => {
+      //     let token = data.data.obj
+      //     let fileName = encodeURIComponent(this.file)
+      //     let host = 'https://oss.warmtale.com'
+      //     wepy.uploadFile({
+      //       url: host,
+      //       filePath: this.file,
+      //       name: 'file',
+      //       formData: {
+      //         key: token.dir + '/' + fileName,
+      //         policy: token.policy,
+      //         OSSAccessKeyId: token.accessid,
+      //         success_action_status: '200',
+      //         signature: token.signature
+      //       },
+      //       success: (res) => {
+      //         wepy.showToast({
+      //           title: '上传成功',
+      //           icon: 'success',
+      //           duration: 2000
+      //         })
+      //         console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
+      //       },
+      //       fail: () => {
+      //         wepy.showToast({
+      //           title: '上传失败',
+      //           icon: 'success',
+      //           duration: 2000
+      //         })
+      //       },
+      //       complete: (res) => {
+      //         this.uploading = false
+      //         console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
+      //       }
+      //     })
+      //   }
+      // })
     }
   }
 }

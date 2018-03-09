@@ -1,6 +1,6 @@
 import wepy from 'wepy'
 import api from '@/api'
-import { GET_STORYSETLIST, GET_STORYLIST } from '../types/storySetList'
+import { GET_STORYSETLIST, GET_STORYLIST, CREATEPLAYLIST } from '../types/storySetList'
 import { createAction } from 'redux-actions'
 import {
   getStore
@@ -35,6 +35,28 @@ export const getStoryList = createAction(GET_STORYLIST, (playListId,page,pageSiz
         resolve({
           data: data.data,
           storySetId: playListId
+        })
+      }
+    })
+  })
+})
+
+export const createPlayList = createAction(CREATEPLAYLIST, (name) => {
+  let user = getStore().getState().user
+  return new Promise(resolve => {
+    wepy.request({
+      url: api.playList.post,
+      method: 'POST',
+      header: {
+        'Story-Access-Token': `${user.accessToken}`,
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      data: {
+        name
+      },
+      success: (data, statusCode, header) => {
+        resolve({
+          data: data.data
         })
       }
     })

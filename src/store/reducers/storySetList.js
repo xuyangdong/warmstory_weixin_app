@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions'
-import { GET_STORYSETLIST, GET_STORYLIST } from '../types/storySetList'
+import { GET_STORYSETLIST, GET_STORYLIST, CREATEPLAYLIST } from '../types/storySetList'
 
 export default handleActions({
   [GET_STORYSETLIST](state, action) {
@@ -17,5 +17,11 @@ export default handleActions({
       }
       return v
     })
+  },
+  [CREATEPLAYLIST] (state, action) {
+    return [...state, {
+      ...action.payload.data.obj,
+      storyList: []
+    }]
   }
 },[])

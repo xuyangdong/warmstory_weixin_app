@@ -21,6 +21,10 @@ export default {
       `${baseUrl}/user/playList/getPlayListsByPage?page=${page}&pageSize=${pageSize}`
   },
   work: {
-    get: `${baseUrl}/user/getAFreeRandomWorks`
+    get: `${baseUrl}/user/getAFreeRandomWorks`,
+    post: `${baseUrl}/user/v3/publishWorks`
+  },
+  playList: {
+    post: `${baseUrl}/user/playList/newPlayList`
   }
 }

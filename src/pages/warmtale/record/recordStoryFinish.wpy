@@ -150,9 +150,13 @@ import { connect } from 'wepy-redux'
 import api from '@/api'
 import moment from 'moment'
 import _ from 'lodash'
+import { publishWork } from '@/store/actions/work'
 
 @connect({
-  record: state => state.record
+  record: state => state.record,
+  todayStory: state => state.todayStory
+}, {
+  publishWork
 })
 export default class RecordStoryFinish extends wepy.page {
   config = {
@@ -209,6 +213,7 @@ export default class RecordStoryFinish extends wepy.page {
                 icon: 'success',
                 duration: 2000
               })
+              this.methods.publishWork(this.todayStory.id, `${host}/${token.dir}/${fileName}`, this.duration)
               console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
             },
             fail: () => {
@@ -220,7 +225,7 @@ export default class RecordStoryFinish extends wepy.page {
             },
             complete: (res) => {
               this.uploading = false
-
+              this.$apply()
               console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
             }
           })
