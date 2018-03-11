@@ -66,7 +66,7 @@
       <image src="{{todayStory.coverUrl}}" />
     </view>
     <view class='warmtale-todaystory_storyinfo'>
-      <view class='warmtale-todaystory_storytitle'>《{{todayStory.title}}》</view>
+      <view class='warmtale-todaystory_storytitle'>《{{displayTitle}}》</view>
       <view class='warmtale-todaystory_storyintro'>
         <view>故事简介：</view>
         <view class=''>{{displayIntroduction}}</view>
@@ -104,13 +104,22 @@
         if (typeof this.todayStory === 'undefined' || this.todayStory == null) {
           return '加载中...'
         } else if (this.todayStory.introduction == null && this.todayStory.content != null) {
-          console.log(this.todayStory)
-          return this.todayStory.content.content[0] + '...'
+          console.log(JSON.parse(this.todayStory.content))
+          return JSON.parse(this.todayStory.content)[0].content.substring(0, 20) + '...'
         } else if (this.todayStory.introduction != null && this.todayStory.introduction.length > 5) {
           console.log(this.todayStory.introduction)
           return this.todayStory.introduction.substring(0, 10) + '...'
         } else {
           return this.todayStory.introduction
+        }
+      },
+      displayTitle() {
+        if (typeof this.todayStory === 'undefined' || this.todayStory == null) {
+          return '加载中...'
+        } else if (this.todayStory.title != null && this.todayStory.title.length > 18) {
+          return this.todayStory.title.substring(0, 5) + '...'
+        } else {
+          return this.todayStory.title
         }
       }
     }
