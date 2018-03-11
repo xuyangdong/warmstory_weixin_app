@@ -116,8 +116,8 @@
       displayTitle() {
         if (typeof this.todayStory === 'undefined' || this.todayStory == null) {
           return '加载中...'
-        } else if (this.todayStory.title != null && this.todayStory.title.length > 9) {
-          return this.todayStory.title.substring(0, 8) + '...'
+        } else if (this.todayStory.title != null && this.todayStory.title.length > 18) {
+          return this.todayStory.title.substring(0, 5) + '...'
         } else {
           return this.todayStory.title
         }
