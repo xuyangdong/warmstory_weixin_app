@@ -1,235 +1,225 @@
 <style lang="less">
-.warmtale-recordStory_container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-
-  .warmtale-recordStory_topProgressBar {
-    position: fixed;
-    top: 0;
-    left: 0;
+  .warmtale-recordStory_container {
+    display: flex;
+    flex-direction: column;
     width: 100%;
-  }
-
-  .warmtale-recordStory_centerContent {
-    padding: 0 35rpx;
-    box-sizing: border-box;
-    width: 100%;
-    margin-bottom: 40rpx;
-    flex-shrink: 0;
-    flex-grow: 1;
-
-    .warmtale-recordStory_progressInfo {
+    .warmtale-recordStory_topProgressBar {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      display: flex;
-      padding: 20rpx 0;
     }
-
-    .warmtale-recordStory_content {
-      display: flex;
-      flex-direction: column;
+    .warmtale-recordStory_centerContent {
+      padding: 0 35rpx;
+      box-sizing: border-box;
       width: 100%;
-      margin: 20rpx 0 50rpx;
-      border: 6rpx solid #C2EDD8;
-
-      .warmtale-recordStory_picture {
-        height: 416rpx;
-
-        &>image {
+      margin-bottom: 40rpx;
+      flex-shrink: 0;
+      flex-grow: 1;
+      .warmtale-recordStory_progressInfo {
+        width: 100%;
+        display: flex;
+        padding: 20rpx 0;
+      }
+      .warmtale-recordStory_content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin: 20rpx 0 50rpx;
+        border: 6rpx solid #C2EDD8;
+        .warmtale-recordStory_picture {
+          height: 416rpx;
+          &>image {
+            width: 100%;
+            height: 416rpx;
+            object-fit: scale-down;
+          }
+        }
+        .warmtale-recordStory_article {
+          background-color: #78AB1C;
+          color: white;
+          padding: 30rpx;
+          box-sizing: border-box;
           width: 100%;
           height: 416rpx;
-          object-fit: scale-down;
         }
       }
-
-      .warmtale-recordStory_article {
-        background-color: #78AB1C;
-        color: white;
-        padding: 30rpx;
-        box-sizing: border-box;
-        width: 100%;
-        height: 416rpx;
+      .warmtale-recordStory_control {
+        display: flex;
+        justify-content: space-between;
+        align-content: center;
+        &>image {
+          height: 50rpx;
+          width: 50rpx;
+        }
       }
     }
-
-    .warmtale-recordStory_control {
+    .warmtale-recordStory_bottomRecordButton {
       display: flex;
-      justify-content: space-between;
-      align-content: center;
+      justify-content: center;
+      align-items: flex-end;
+      margin-bottom: 25rpx;
+      flex-shrink: 0;
       &>image {
-        height: 50rpx;
-        width: 50rpx;
+        width: 100rpx;
+        height: 100rpx;
+        margin: 25rpx 50rpx;
       }
     }
   }
-
-  .warmtale-recordStory_bottomRecordButton {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    margin-bottom: 25rpx;
-    flex-shrink: 0;
-
-    &>image {
-      width: 100rpx;
-      height: 100rpx;
-      margin: 25rpx 50rpx;
-    }
-  }
-}
 </style>
 
 <template>
-<view class="weui-flex container warmtale-recordStory_container">
-  <view class="warmtale-recordStory_topProgressBar">
-    <progressbar :percent.sync="percent"/>
-  </view>
-  <view class="warmtale-recordStory_centerContent">
-    <view class="warmtale-recordStory_progressInfo">
-      {{ percentFormat }}
+  <view class="weui-flex container warmtale-recordStory_container">
+    <view class="warmtale-recordStory_topProgressBar">
+      <progressbar :percent.sync="percent" />
     </view>
-    <view class="warmtale-recordStory_content">
-      <view class="warmtale-recordStory_picture">
-        <image src="{{ currentPageBackgroundImg }}" />
+    <view class="warmtale-recordStory_centerContent">
+      <view class="warmtale-recordStory_progressInfo">
+        {{ percentFormat }}
       </view>
-      <scroll-view class="warmtale-recordStory_article" scroll-y="{{ true }}">
-        {{ currentPageContent }}
-      </scroll-view>
+      <view class="warmtale-recordStory_content">
+        <view class="warmtale-recordStory_picture">
+          <image src="{{ currentPageBackgroundImg }}" />
+        </view>
+        <scroll-view class="warmtale-recordStory_article" scroll-y="{{ true }}">
+          {{ currentPageContent }}
+        </scroll-view>
+      </view>
+      <view class="warmtale-recordStory_control">
+        <image src="../../../resource/img/first-prograph.png" bindtap="gotoFirst" />
+        <image src="../../../resource/img/pre-prograph.png" bindtap="gotoPre" />
+        <image src="../../../resource/img/next-prograph.png" bindtap="gotoNext" />
+        <image src="../../../resource/img/last-prograph.png" bindtap="gotoLast" />
+      </view>
     </view>
-    <view class="warmtale-recordStory_control">
-      <image src="../../../resource/img/first-prograph.png" bindtap="gotoFirst"/>
-      <image src="../../../resource/img/pre-prograph.png" bindtap="gotoPre"/>
-      <image src="../../../resource/img/next-prograph.png" bindtap="gotoNext"/>
-      <image src="../../../resource/img/last-prograph.png" bindtap="gotoLast"/>
+    <view class="warmtale-recordStory_bottomRecordButton">
+      <commonbutton>
+        <view bindtap="clickReRecord">重录</view>
+      </commonbutton>
+      <image src="../../../resource/img/recorder.png" bindtap="clickRecord" />
+      <commonbutton>
+        <view bindtap="clickFinishButton">完成</view>
+      </commonbutton>
     </view>
   </view>
-  <view class="warmtale-recordStory_bottomRecordButton">
-    <commonbutton>
-      <view bindtap="clickReRecord">重录</view>
-    </commonbutton>
-    <image src="../../../resource/img/recorder.png" bindtap="clickRecord"/>
-    <commonbutton>
-      <view bindtap="clickFinishButton">完成</view>
-    </commonbutton>
-  </view>
-</view>
 </template>
 
 <script>
-import wepy from 'wepy'
-import ProgressBar from '@/components/common/ProgressBar'
-import CommonButton from '@/components/common/CommonButton'
-import { connect } from 'wepy-redux'
-import { finishRecord } from '@/store/actions/record'
-
-@connect({
-  todayStory: state => {
-    let content = []
-    try {
-      content = JSON.parse(state.todayStory.content)
-    } catch (e) {
-      content = []
-    }
-    return {
-      ...state.todayStory,
-      content: content
-    }
-  }
-}, {
-  finishRecord
-})
-export default class RecordStory extends wepy.page {
-  config = {
-    navigationBarBackgroundColor: '#ffffff',
-    navigationBarTextStyle: 'black',
-    navigationBarTitleText: '再来一次'
-  }
-  data = {
-    isRecording: false,
-    isStarted: false,
-    currentPage: 0
-  }
-
-  computed = {
-    percent: () => {
-      return this.todayStory ? (this.currentPage / (this.todayStory.content.length - 1)) : 0
-    },
-    percentFormat: () => {
-      let percent = this.todayStory ? (this.currentPage / (this.todayStory.content.length - 1)) : 0
-      return `${Math.round(percent * 100)}%`
-    },
-    currentPageContent: () => {
-      return this.todayStory ? this.todayStory.content[this.currentPage].content : ''
-    },
-    currentPageBackgroundImg: () => {
-      // let jsonData = JSON.parse(this.todayStory.content)
-      return 'https://picsum.photos/500/600'
-    }
-  }
-
-  components = {
-    progressbar: ProgressBar,
-    commonbutton: CommonButton
-  }
-
-  methods = {
-    clickFinishButton: () => {
-      let recorderManager = wepy.getRecorderManager()
-      recorderManager.stop()
-      // wepy.stopRecord()
-    },
-    clickRecord: () => {
-      let recorderManager = wepy.getRecorderManager()
-      recorderManager.onStop(res => {
-        wepy.navigateTo({
-          url: 'recordStoryFinish',
-          success: () => {
-            this.methods.finishRecord(res)
-          }
-        })
-      })
-      if (this.isStarted) {
-        // 已经开始录音
-        if (this.isRecording) {
-          // 正在录音
-          recorderManager.pause()
-        } else {
-          recorderManager.resume()
-        }
-      } else {
-        // 还没开始录音
-        recorderManager.start({
-          duration: 600000,
-          format: 'mp3'
-        })
+  import wepy from 'wepy'
+  import ProgressBar from '@/components/common/ProgressBar'
+  import CommonButton from '@/components/common/CommonButton'
+  import {
+    connect
+  } from 'wepy-redux'
+  import {
+    finishRecord
+  } from '@/store/actions/record'
+  @connect({
+    todayStory: state => {
+      let content = []
+      try {
+        content = JSON.parse(state.todayStory.content)
+      } catch (e) {
+        content = []
       }
-    },
-    gotoFirst: () => {
-      this.currentPage = 0
-    },
-    gotoPre: () => {
-      this.currentPage = this.currentPage === 0 ? 0 : this.currentPage - 1
-    },
-    gotoNext: () => {
-      this.currentPage = this.currentPage === this.todayStory.content.length - 1 ? this.todayStory.content.length - 1 : this.currentPage + 1
-    },
-    gotoLast: () => {
-      this.currentPage = this.todayStory.content.length - 1
-    },
-    clickReRecord: () => {
-      let recorderManager = wepy.getRecorderManager()
-      recorderManager.onStop(res => {
-        // console.log('结束录制', res)
-        wepy.showToast({
-          title: '录制停止,请重录',
-          icon: 'success',
-          duration: 2000
-        })
-      })
-      recorderManager.stop()
+      return {
+        ...state.todayStory,
+        content: content
+      }
     }
+  }, {
+    finishRecord
+  })
+  export default class RecordStory extends wepy.page {
+    config = {
+      navigationBarBackgroundColor: '#ffffff',
+      navigationBarTextStyle: 'black',
+      navigationBarTitleText: '再来一次'
+    }
+    data = {
+      isRecording: false,
+      isStarted: false,
+      currentPage: 0
+    }
+    computed = {
+      percent: () => {
+        return this.todayStory ? (this.currentPage / (this.todayStory.content.length - 1)) : 0
+      },
+      percentFormat: () => {
+        let percent = this.todayStory ? (this.currentPage / (this.todayStory.content.length - 1)) : 0
+        return `${Math.round(percent * 100)}%`
+      },
+      currentPageContent: () => {
+        return this.todayStory ? this.todayStory.content[this.currentPage].content : ''
+      },
+      currentPageBackgroundImg: () => {
+        console.log(this.todayStory)
+        return this.todayStory ? this.todayStory.content[this.currentPage].content.coverUrl : 'https://picsum.photos/500/600'
+        // return 'https://picsum.photos/500/600'
+      }
+    }
+    components = {
+      progressbar: ProgressBar,
+      commonbutton: CommonButton
+    }
+    methods = {
+      clickFinishButton: () => {
+        let recorderManager = wepy.getRecorderManager()
+        recorderManager.stop()
+        // wepy.stopRecord()
+      },
+      clickRecord: () => {
+        let recorderManager = wepy.getRecorderManager()
+        recorderManager.onStop(res => {
+          wepy.navigateTo({
+            url: 'recordStoryFinish',
+            success: () => {
+              this.methods.finishRecord(res)
+            }
+          })
+        })
+        if (this.isStarted) {
+          // 已经开始录音
+          if (this.isRecording) {
+            // 正在录音
+            recorderManager.pause()
+          } else {
+            recorderManager.resume()
+          }
+        } else {
+          // 还没开始录音
+          recorderManager.start({
+            duration: 600000,
+            format: 'mp3'
+          })
+        }
+      },
+      gotoFirst: () => {
+        this.currentPage = 0
+      },
+      gotoPre: () => {
+        this.currentPage = this.currentPage === 0 ? 0 : this.currentPage - 1
+      },
+      gotoNext: () => {
+        this.currentPage = this.currentPage === this.todayStory.content.length - 1 ? this.todayStory.content.length - 1 : this.currentPage + 1
+      },
+      gotoLast: () => {
+        this.currentPage = this.todayStory.content.length - 1
+      },
+      clickReRecord: () => {
+        let recorderManager = wepy.getRecorderManager()
+        recorderManager.onStop(res => {
+          // console.log('结束录制', res)
+          wepy.showToast({
+            title: '录制停止,请重录',
+            icon: 'success',
+            duration: 2000
+          })
+        })
+        recorderManager.stop()
+      }
+    }
+    onReady() {}
   }
-  onReady () {
-  }
-}
 </script>
