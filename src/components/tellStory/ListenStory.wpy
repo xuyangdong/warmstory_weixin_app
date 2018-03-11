@@ -3,10 +3,10 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    border-radius: 50rpx;
-    border-radius: 50rpx;
-    border: 1px solid #ABABAB;
-    padding: 45rpx 65rpx;
+    border-radius: 16rpx;
+    border-radius: 16rpx;
+    border: 1px solid #BBBBBB;
+    padding: 44rpx;
 }
 .warmtale-storyset_container {
   position: relative;
