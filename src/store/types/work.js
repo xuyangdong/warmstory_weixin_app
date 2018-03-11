@@ -1,0 +1,3 @@
+export const GET_AFREERANDOMWORK = 'GET_AFREERANDOMWORK'
+export const SET_WORK = 'GET_WORK'
+export const PUBLISHWORK = 'PUBLISHWORK'

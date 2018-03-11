@@ -15,11 +15,9 @@ import wepy from 'wepy'
 import 'wepy-async-function'
 
 import {
-  setStore,
-  getStore
+  setStore
 } from 'wepy-redux'
 import configStore from './store'
-import { getUserInfo } from '@/store/actions/user'
 
 const store = configStore()
 setStore(store)
@@ -30,6 +28,7 @@ export default class extends wepy.app {
       'pages/warmtale/tellStory',
       'pages/warmtale/index',
       'pages/warmtale/playingStory',
+      'pages/warmtale/addStorySet',
       'pages/warmtale/record/recordStory',
       'pages/warmtale/record/recordStoryFinish',
       'pages/index'
@@ -52,25 +51,7 @@ export default class extends wepy.app {
     this.use('requestfix')
   }
 
-  onLaunch() {
-    // this.testAsync()
-
-    let store = getStore()
-    wepy.login({
-      success (errMsg, code) {
-        console.log(errMsg, code)
-        wepy.getUserInfo({
-          withCredentials: true,
-          complete: (...args) => {
-            // console.log('withCredentials args', args)
-            store.dispatch(getUserInfo(1066))
-          }
-        })
-      }
-    })
-    this.getUserInfo((info) => {
-    })
-  }
+  onLaunch() {}
 
   sleep(s) {
     return new Promise((resolve, reject) => {

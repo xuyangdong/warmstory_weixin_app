@@ -133,7 +133,7 @@
     </view>
     <view class="warmtale-recordStoryFinish_buttonGroup">
       <commonbuttonPrimary >
-        <view style="font-size:30rpx;" bindtap="clickUpload">直接上传</view>
+        <view style="font-size:30rpx;" bindtap="clickUpload">{{ uploading ? '正在上传' : '直接上传' }}</view>
       </commonbuttonPrimary>
       <commonbuttonGhost type="ghost">
         <view style="font-size:30rpx;">去美化</view>
@@ -150,9 +150,13 @@ import { connect } from 'wepy-redux'
 import api from '@/api'
 import moment from 'moment'
 import _ from 'lodash'
+import { publishWork } from '@/store/actions/work'
 
 @connect({
-  record: state => state.record
+  record: state => state.record,
+  todayStory: state => state.todayStory
+}, {
+  publishWork
 })
 export default class RecordStoryFinish extends wepy.page {
   config = {
@@ -160,9 +164,12 @@ export default class RecordStoryFinish extends wepy.page {
     navigationBarTextStyle: 'black',
     navigationBarTitleText: '录制完成'
   }
+  _innerObj = {}
   data = {
     currentTime: 0.0,
-    duration: 1.0
+    duration: 1.0,
+    tempFile: {},
+    uploading: false
   }
   computed = {
     durationFormat: () => {
@@ -182,66 +189,104 @@ export default class RecordStoryFinish extends wepy.page {
   }
   methods = {
     clickUpload: () => {
-      console.log(api)
-      wepy.saveFile({
-        tempFilePath: this.record.tempFilePath,
-        success: (res) => {
-          console.log(res.savedFilePath)
+      this.uploading = true
+      wepy.request({
+        url: api.ossToken.get,
+        success: (data, statusCode, headers) => {
+          let token = data.data.obj
+          let fileName = Date.now() + '.mp3'
+          let host = 'https://oss.warmtale.com'
+          wepy.uploadFile({
+            url: host,
+            filePath: this.record.tempFilePath,
+            name: 'file',
+            formData: {
+              key: token.dir + '/' + fileName,
+              policy: token.policy,
+              OSSAccessKeyId: token.accessid,
+              success_action_status: '200',
+              signature: token.signature
+            },
+            success: (res) => {
+              wepy.showToast({
+                title: '上传成功',
+                icon: 'success',
+                duration: 2000
+              })
+              this.methods.publishWork(this.todayStory.id, `${host}/${token.dir}/${fileName}`, this.duration)
+              console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
+            },
+            fail: () => {
+              wepy.showToast({
+                title: '上传失败',
+                icon: 'success',
+                duration: 2000
+              })
+            },
+            complete: (res) => {
+              this.uploading = false
+              this.$apply()
+              console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
+            }
+          })
         }
       })
-      // wepy.request({
-      //   url: api.ossToken.get,
-      //   success: (data, statusCode, headers) => {
-      //     let token = data.data.obj
-      //     // console.log(token)
-      //     console.log(this.record, `${token.host}/${token.dir}/test.aac`)
-      //     let uploadTask = wepy.uploadFile({
-      //       url: token.host,
-      //       filePath: this.record.tempFilePath,
-      //       name: 'file',
-      //       formData: {
-      //         key: token.dir + '/' + 'test.aac',
-      //         policy: token.policy,
-      //         OSSAccessKeyId: token.accessid,
-      //         success_action_status: '200',
-      //         signature: token.signature
-      //       },
-      //       success: (res) => {
-      //         console.log('upload success', res)
-      //       }
-      //     })
-      //     uploadTask.onProgressUpdate((res) => {
-      //       console.log('上传进度', res.progress)
-      //       console.log('已经上传的数据长度', res.totalBytesSent)
-      //       console.log('预期需要上传的数据总长度', res.totalBytesExpectedToSend)
-      //       console.log('oss', res)
-      //     })
-      //   }
-      // })
     },
     clickPlayButton: () => {
-      let audioManager = wepy.getBackgroundAudioManager()
-      audioManager.onTimeUpdate(() => {
+      if (!this._innerObj.innerAudioContext) {
+        this._innerObj.innerAudioContext = wepy.createInnerAudioContext()
+      }
+      this._innerObj.innerAudioContext.onError((...args) => {
+        console.log('error', args)
+      })
+      this._innerObj.innerAudioContext.onPlay((...args) => {
+        console.log('success', args)
+      })
+      this._innerObj.innerAudioContext.onTimeUpdate(() => {
         _.throttle(() => {
-          this.currentTime = audioManager.currentTime
-          this.duration = audioManager.duration
+          this.currentTime = this._innerObj.innerAudioContext.currentTime
+          this.duration = this._innerObj.innerAudioContext.duration
           this.$apply()
         }, 1000)()
       })
-      if (typeof audioManager.paused === 'undefined' && this.record.tempFilePath) {
+      if (this.record.tempFilePath && this._innerObj.innerAudioContext.src === '' && this.record.tempFilePath !== this._innerObj.innerAudioContext.src) {
         // 没有设置音频源
-        wepy.playBackgroundAudio({
-          // dataUrl: 'http://warmtale-backend-bucket.oss-cn-beijing.aliyuncs.com/app/works/3120/1514791743206.mp3'
-          dataUrl: this.record.tempFilePath
-        })
+        this._innerObj.innerAudioContext.src = this.record.tempFilePath
+        this._innerObj.innerAudioContext.play()
       } else {
         // 设置了音频源，
-        if (audioManager.paused) {
-          audioManager.play()
+        if (this._innerObj.innerAudioContext.paused) {
+          // 暂停状态
+          this._innerObj.innerAudioContext.play()
         } else {
-          audioManager.pause()
+          // 播放状态
+          this._innerObj.innerAudioContext.pause()
         }
       }
+
+      // todo : 为什么不能用backgroundAudioManager，怀疑是url必须是合法的网络域名而不是一个本地地址
+      // let audioManager = wepy.getBackgroundAudioManager()
+      // audioManager.onTimeUpdate(() => {
+      //   _.throttle(() => {
+      //     this.currentTime = audioManager.currentTime
+      //     this.duration = audioManager.duration
+      //     this.$apply()
+      //   }, 1000)()
+      // })
+      // if (typeof audioManager.paused === 'undefined' && this.record.tempFilePath) {
+      //   // 没有设置音频源
+      //   wepy.playBackgroundAudio({
+      //     // dataUrl: 'http://warmtale-backend-bucket.oss-cn-beijing.aliyuncs.com/app/works/3120/1514791743206.mp3'
+      //     dataUrl: this.record.tempFilePath
+      //   })
+      // } else {
+      //   // 设置了音频源，
+      //   if (audioManager.paused) {
+      //     audioManager.play()
+      //   } else {
+      //     audioManager.pause()
+      //   }
+      // }
     }
   }
   onReady () {

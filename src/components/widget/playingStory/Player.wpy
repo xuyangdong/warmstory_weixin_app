@@ -91,14 +91,18 @@ todo:
 import wepy from 'wepy'
 import moment from 'moment'
 import _ from 'lodash'
+import { connect } from 'wepy-redux'
 
+@connect({
+  work: state => state.work
+}, {})
 export default class Player extends wepy.component {
   data = {
     audioUrl: '',
     duration: 1.0,
     currentTime: 0.0
   }
-
+  _innerObj = {}
   computed = {
     durationFormat: () => {
       return moment(parseFloat(this.duration.toFixed(3)) * 1000).format('mm:ss')
@@ -114,33 +118,65 @@ export default class Player extends wepy.component {
 
   methods = {
     clickPlayButton () {
-      let audioManager = wepy.getBackgroundAudioManager()
-      audioManager.onTimeUpdate(() => {
+      if (!this._innerObj.innerAudioContext) {
+        this._innerObj.innerAudioContext = wepy.createInnerAudioContext()
+      }
+      this._innerObj.innerAudioContext.onError((...args) => {
+        console.log('error', args)
+      })
+      this._innerObj.innerAudioContext.onPlay((...args) => {
+        console.log('success', args)
+      })
+      this._innerObj.innerAudioContext.onTimeUpdate(() => {
         _.throttle(() => {
-          this.currentTime = audioManager.currentTime
-          this.duration = audioManager.duration
+          this.currentTime = this._innerObj.innerAudioContext.currentTime
+          this.duration = this._innerObj.innerAudioContext.duration
           this.$apply()
         }, 1000)()
       })
-      if (typeof audioManager.paused === 'undefined' && this.audioUrl) {
+      if (this.work.url && this._innerObj.innerAudioContext.src === '' && this.work.url !== this._innerObj.innerAudioContext.src) {
         // 没有设置音频源
-        wepy.playBackgroundAudio({
-          dataUrl: this.audioUrl
-        })
+        this._innerObj.innerAudioContext.src = this.work.url
+        this._innerObj.innerAudioContext.play()
       } else {
         // 设置了音频源，
-        if (audioManager.paused) {
-          audioManager.play()
+        if (this._innerObj.innerAudioContext.paused) {
+          // 暂停状态
+          this._innerObj.innerAudioContext.play()
         } else {
-          audioManager.pause()
+          // 播放状态
+          this._innerObj.innerAudioContext.pause()
         }
       }
+
+      // console.log('->;', this.work.url)
+      // let audioManager = wepy.getBackgroundAudioManager()
+      // audioManager.onTimeUpdate(() => {
+      //   _.throttle(() => {
+      //     this.currentTime = audioManager.currentTime
+      //     this.duration = audioManager.duration
+      //     this.$apply()
+      //   }, 1000)()
+      // })
+      // if (typeof audioManager.paused === 'undefined' && this.work.url) {
+      //   // 没有设置音频源
+      //   wepy.playBackgroundAudio({
+      //     dataUrl: this.work.url
+      //   })
+      // } else {
+      //   // 设置了音频源，
+      //   if (audioManager.paused) {
+      //     audioManager.play()
+      //   } else {
+      //     audioManager.pause()
+      //   }
+      // }
     }
   }
 
   onLoad () {
-    this.audioUrl = 'http://warmtale-backend-bucket.oss-cn-beijing.aliyuncs.com/app/works/3120/1514791743206.mp3'
-    // 加载数据，不可在此初始化音频url，会导致直接播放，
+    this.audioUrl = 'http://www.warmtale.com/source/works/2125/uVTw9VRmLCcz743H.mp3'
+  //   // 加载数据，不可在此初始化音频url，会导致直接播放，
   }
 }
 </script>
