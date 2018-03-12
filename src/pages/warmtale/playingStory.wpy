@@ -18,19 +18,28 @@
       filter: blur(10rpx);
       z-index: -1;
     }
-    .warmtale-playstory_topTitle {
-      color: #ffffff;
-      font-size: 30rpx;
-    }
-    .warmtale-playstory_username {
-      color: #999999;
-      font-size: 24rpx;
+    .warmtale-playstory_userInfo {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .warmtale-playstory_topTitle {
+        color: #ffffff;
+        font-size: 30rpx;
+        margin-bottom: 22px;
+      }
+      .warmtale-playstory_username {
+        color: #999999;
+        font-size: 24rpx;
+      }
     }
     .warmtale-playstory_middleCover {
       width: 432rpx;
       height: 432rpx;
       border-radius: 216rpx;
       border: 4rpx solid #3D9073;
+      margin-top: 60rpx;
       &>image {
         width: 432rpx;
         height: 432rpx;
@@ -48,11 +57,13 @@
     <view class="warmtale-playstory_middleCover">
       <image src="{{ work.coverUrl }}" />
     </view>
-    <view class="warmtale-playstory_topTitle">
-      {{ work.storyTitle }}
-    </view>
-    <view class="warmtale-playstory_username">
-      {{ work.username }}
+    <view class="warmtale-playstory_userInfo">
+      <view class="warmtale-playstory_topTitle">
+        {{ work.storyTitle }}
+      </view>
+      <view class="warmtale-playstory_username">
+        {{ work.username }}
+      </view>
     </view>
     <view class="warmtale-playstory_bottomPlayer">
       <player />
@@ -62,23 +73,6 @@
 </template>
 
 <script>
-<<<<<<< HEAD
-  import wepy from 'wepy'
-  import Player from '@/components/widget/playingStory/Player'
-  import {
-    connect
-  } from 'wepy-redux'
-  @connect({
-    work: state => state.work
-  }, {})
-  export default class PlayingStory extends wepy.page {
-    components = {
-      player: Player
-    }
-    onReady() {
-      console.log('ready')
-    }
-=======
 import wepy from 'wepy'
 import Player from '@/components/widget/playingStory/Player'
 import { connect } from 'wepy-redux'
@@ -97,6 +91,6 @@ export default class PlayingStory extends wepy.page {
   }
   onReady() {
     wepy.hideLoading()
->>>>>>> master
   }
+}
 </script>
