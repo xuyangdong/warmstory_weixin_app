@@ -1,5 +1,5 @@
 <style lang="less">
-.warmtale-playstory_container {
+  .warmtale-playstory_container {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -9,68 +9,73 @@
     height: 100vh;
     padding: 60rpx;
     box-sizing: border-box;
-
-    & > image {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100vh;
-        filter: blur(10rpx);
-        z-index: -1;
+    &>image {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      filter: blur(10rpx);
+      z-index: -1;
     }
-
     .warmtale-playstory_topTitle {
-        color: white;
+      color: #ffffff;
+      font-size: 30rpx;
     }
-
+    .warmtale-playstory_username {
+      color: #999999;
+      font-size: 24rpx;
+    }
     .warmtale-playstory_middleCover {
-        width: 325rpx;
-        height: 325rpx;
-        border-radius: 163rpx;
-        border: 4rpx solid #3D9073;
-        & > image {
-            width: 325rpx;
-            height: 325rpx;
-            border-radius: 163rpx;
-        }
+      width: 432rpx;
+      height: 432rpx;
+      border-radius: 216rpx;
+      border: 4rpx solid #3D9073;
+      &>image {
+        width: 432rpx;
+        height: 432rpx;
+        border-radius: 216rpx;
+      }
     }
-
     .warmtale-playstory_bottomPlayer {
-        width: 100%;
+      width: 100%;
     }
-}
+  }
 </style>
 
 <template>
-<view class="warmtale-playstory_container">
-    <view class="warmtale-playstory_topTitle">
-        {{ work.storyTitle }}
-    </view>
+  <view class="warmtale-playstory_container">
     <view class="warmtale-playstory_middleCover">
-        <image src="{{ work.coverUrl }}"/>
+      <image src="{{ work.coverUrl }}" />
+    </view>
+    <view class="warmtale-playstory_topTitle">
+      {{ work.storyTitle }}
+    </view>
+    <view class="warmtale-playstory_username">
+      {{ work.username }}
     </view>
     <view class="warmtale-playstory_bottomPlayer">
-        <player />
+      <player />
     </view>
-    <image src="{{ work.coverUrl }}"/>
-</view>
+    <image src="{{ work.coverUrl }}" />
+  </view>
 </template>
 
 <script>
-import wepy from 'wepy'
-import Player from '@/components/widget/playingStory/Player'
-import { connect } from 'wepy-redux'
-
-@connect({
-  work: state => state.work
-}, {})
-export default class PlayingStory extends wepy.page {
-  components = {
-    player: Player
+  import wepy from 'wepy'
+  import Player from '@/components/widget/playingStory/Player'
+  import {
+    connect
+  } from 'wepy-redux'
+  @connect({
+    work: state => state.work
+  }, {})
+  export default class PlayingStory extends wepy.page {
+    components = {
+      player: Player
+    }
+    onReady() {
+      console.log('ready')
+    }
   }
-  onReady() {
-    console.log('ready')
-  }
-}
 </script>

@@ -111,7 +111,7 @@
   </view>
   <view class="warmtale-recordStoryFinish_middleContent">
     <view class="warmtale-recordStoryFinish_picture">
-      <image src="https://picsum.photos/500/600"/>
+      <image src="{{todayStory.preCoverUrl}}"/>
       <view class="warmtale-recordStoryFinish_mask">
         <image src="{{ isPlaying ? '../../../resource/img/pause.png' : '../../../resource/img/play.png'}}" bindtap="clickPlayButton"/>
       </view>

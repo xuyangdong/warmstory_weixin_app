@@ -49,11 +49,16 @@
         padding:0 100rpx;
 
         &>image {
-            width: 100rpx;
-            height: 100rpx;
+            width: 38rpx;
+            height: 48rpx;
 
             &:nth-child(1) {
                 transform: rotate(180deg);
+            }
+
+            &:nth-child(2) {
+                width: 76rpx;
+                height: 76rpx;
             }
         }
 
