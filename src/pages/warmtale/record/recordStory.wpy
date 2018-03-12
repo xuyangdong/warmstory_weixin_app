@@ -154,8 +154,8 @@
         return this.todayStory ? this.todayStory.content[this.currentPage].content : ''
       },
       currentPageBackgroundImg: () => {
-        console.log(this.todayStory)
-        return this.todayStory ? this.todayStory.content[this.currentPage].content.coverUrl : 'https://picsum.photos/500/600'
+        // console.log(this.todayStory)
+        return this.todayStory ? (this.todayStory.content[this.currentPage].content.coverUrl ? this.todayStory.content[this.currentPage].content.coverUrl : this.todayStory.content[this.currentPage].content.coverUrl) : ''
         // return 'https://picsum.photos/500/600'
       }
     }
