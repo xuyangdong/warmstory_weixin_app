@@ -6,16 +6,24 @@ import { createAction } from 'redux-actions'
 export const getUserInfo = createAction(GET_USERINFO, (jsonData) => {
   return new Promise(resolve => {
     wepy.request({
-      url: api.user.get(),
+      url: api.user.check(),
       data: {
         code: jsonData.code,
         encryptedData: jsonData.encryptedData,
         iv: jsonData.iv
       },
       success: (data, statusCode, header) => {
-        console.log(data)
-        resolve({
-          data: data.data
+        wepy.request({
+          url: api.user.get,
+          method: 'POST',
+          header: {
+            'Story-Access-Token': data.data.obj.accessToken
+          },
+          success: (...args) => {
+            resolve({
+              data: args[0].data
+            })
+          }
         })
       }
     })

@@ -45,7 +45,7 @@
 <template>
 <view class="warmtale-playstory_container">
     <view class="warmtale-playstory_topTitle">
-        胖河马的故事
+        {{ work.storyTitle }}
     </view>
     <view class="warmtale-playstory_middleCover">
         <image src="{{ work.coverUrl }}"/>

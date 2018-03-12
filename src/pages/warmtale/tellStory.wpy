@@ -155,7 +155,6 @@ export default class TellStory extends wepy.page {
         wepy.getUserInfo({
           withCredentials: true,
           complete: (...args) => {
-            console.log(args[0].encryptedData)
             let jsonData = {
               code: argsLogin[0].code,
               encryptedData: args[0].encryptedData,

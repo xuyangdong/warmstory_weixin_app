@@ -3,7 +3,8 @@ const baseUrl = 'https://www.warmtale.com'
 
 export default {
   user: {
-     get: (id = 1066) => `${baseUrl}/user/wxAppletLoginByWeChat`
+     check: (id = 1066) => `${baseUrl}/user/wxAppletLoginByWeChat`,
+     get: `${baseUrl}/user/getUserSelfInfo`
     // get: (id = 1066) => `${baseUrl}/wx/mockLogin?id=1066`
   },
   todayStory: {

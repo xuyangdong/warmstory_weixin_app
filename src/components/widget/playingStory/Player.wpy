@@ -75,9 +75,9 @@
         </view>
     </view>
     <view class="warmtale-player_controlPart">
-        <image src="../../../resource/img/next.png"/>
-        <image src="../../../resource/img/play.png" bindtap="clickPlayButton"/>
-        <image src="../../../resource/img/next.png"/>
+        <image src="../../../resource/img/next.png" bindtap="goBefore"/>
+        <image src="{{ playing ? '../../../resource/img/pause.png' : '../../../resource/img/play.png'}}" bindtap="clickPlayButton"/>
+        <image src="../../../resource/img/next.png" bindtap="goNext"/>
     </view>
 </view>
 </template>
@@ -92,15 +92,21 @@ import wepy from 'wepy'
 import moment from 'moment'
 import _ from 'lodash'
 import { connect } from 'wepy-redux'
+import { setPlayingWork, getAFreeRandomWork } from '@/store/actions/work'
 
 @connect({
-  work: state => state.work
-}, {})
+  work: state => state.work,
+  storySetList: state => state.storySetList
+}, {
+  setPlayingWork,
+  getAFreeRandomWork
+})
 export default class Player extends wepy.component {
   data = {
     audioUrl: '',
     duration: 1.0,
-    currentTime: 0.0
+    currentTime: 0.0,
+    playing: false
   }
   _innerObj = {}
   computed = {
@@ -138,14 +144,17 @@ export default class Player extends wepy.component {
         // 没有设置音频源
         this._innerObj.innerAudioContext.src = this.work.url
         this._innerObj.innerAudioContext.play()
+        this.playing = true
       } else {
         // 设置了音频源，
         if (this._innerObj.innerAudioContext.paused) {
           // 暂停状态
           this._innerObj.innerAudioContext.play()
+          this.playing = true
         } else {
           // 播放状态
           this._innerObj.innerAudioContext.pause()
+          this.playing = false
         }
       }
 
@@ -171,6 +180,22 @@ export default class Player extends wepy.component {
       //     audioManager.pause()
       //   }
       // }
+    },
+    goBefore: () => {
+      if (this.work.playingType === 'random') {
+        this.methods.getAFreeRandomWork()
+      } else {
+        let sequence = this.work.sequence
+        let storyList = this.storySetList[sequence[0]].storyList
+        this.methods.setPlayingWork([sequence[0], sequence[1] === 0 ? storyList.length - 1 : sequence[1] - 1])
+      }
+    },
+    goNext: () => {
+      if (this.work.playingType === 'random') {
+        this.methods.getAFreeRandomWork()
+      } else {
+        this.methods.setPlayingWork()
+      }
     }
   }
 

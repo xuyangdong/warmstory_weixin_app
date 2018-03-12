@@ -113,7 +113,7 @@
     <view class="warmtale-recordStoryFinish_picture">
       <image src="https://picsum.photos/500/600"/>
       <view class="warmtale-recordStoryFinish_mask">
-        <image src="../../../resource/img/play.png" bindtap="clickPlayButton"/>
+        <image src="{{ isPlaying ? '../../../resource/img/pause.png' : '../../../resource/img/play.png'}}" bindtap="clickPlayButton"/>
       </view>
     </view>
     <view class="warmtale-recordStoryFinish_controller">
@@ -136,7 +136,7 @@
         <view style="font-size:30rpx;" bindtap="clickUpload">{{ uploading ? '正在上传' : '直接上传' }}</view>
       </commonbuttonPrimary>
       <commonbuttonGhost type="ghost">
-        <view style="font-size:30rpx;">去美化</view>
+        <view style="font-size:30rpx;" bindtap="handleBeauty">去美化</view>
       </commonbuttonGhost>
     </view>
   </view>
@@ -169,7 +169,8 @@ export default class RecordStoryFinish extends wepy.page {
     currentTime: 0.0,
     duration: 1.0,
     tempFile: {},
-    uploading: false
+    uploading: false,
+    isPlaying: false
   }
   computed = {
     durationFormat: () => {
@@ -253,17 +254,19 @@ export default class RecordStoryFinish extends wepy.page {
         // 没有设置音频源
         this._innerObj.innerAudioContext.src = this.record.tempFilePath
         this._innerObj.innerAudioContext.play()
+        this.isPlaying = true
       } else {
         // 设置了音频源，
         if (this._innerObj.innerAudioContext.paused) {
           // 暂停状态
           this._innerObj.innerAudioContext.play()
+          this.isPlaying = true
         } else {
           // 播放状态
           this._innerObj.innerAudioContext.pause()
+          this.isPlaying = false
         }
       }
-
       // todo : 为什么不能用backgroundAudioManager，怀疑是url必须是合法的网络域名而不是一个本地地址
       // let audioManager = wepy.getBackgroundAudioManager()
       // audioManager.onTimeUpdate(() => {
@@ -287,6 +290,21 @@ export default class RecordStoryFinish extends wepy.page {
       //     audioManager.pause()
       //   }
       // }
+    },
+    handleBeauty: () => {
+      wepy.showModal({
+        title: '提示',
+        content: '可以在APP中体验更多美化功能',
+        cancelText: '去下载',
+        confirmText: '打开应用',
+        success: function(res) {
+          if (res.confirm) {
+            console.log('用户点击确定')
+          } else if (res.cancel) {
+            console.log('用户点击取消')
+          }
+        }
+      })
     }
   }
   onReady () {

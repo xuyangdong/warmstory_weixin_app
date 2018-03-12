@@ -146,16 +146,26 @@ export default class ListenStory extends wepy.component {
       this.methods.getStoryList(currentStorySet.id, 0, 10)
     },
     handleClickWork(event) {
-      let currentStorySet = this.storySetList[this.openedStorySet]
-      let currentStory = currentStorySet.storyList[event.currentTarget.dataset.story]
-      this.methods.setPlayingWork(currentStory)
+      // let currentStorySet = this.storySetList[this.openedStorySet]
+      // let currentStory = currentStorySet.storyList[event.currentTarget.dataset.story]
+      this.methods.setPlayingWork([this.openedStorySet, event.currentTarget.dataset.story])
       wepy.navigateTo({
         url: 'playingStory'
       })
     },
     handleAddStorySet() {
-      wepy.navigateTo({
-        url: 'addStorySet'
+      wepy.showModal({
+        title: '提示',
+        content: '去下载APP创建更多作品集',
+        showCancel: false,
+        confirmText: '下载应用',
+        success: function(res) {
+          if (res.confirm) {
+            console.log('用户点击确定')
+          } else if (res.cancel) {
+            console.log('用户点击取消')
+          }
+        }
       })
     }
   }

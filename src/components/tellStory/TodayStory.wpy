@@ -116,10 +116,8 @@
         if (typeof this.todayStory === 'undefined' || this.todayStory == null) {
           return '加载中...'
         } else if (this.todayStory.introduction == null && this.todayStory.content != null) {
-          // console.log(JSON.parse(this.todayStory.content))
           return JSON.parse(this.todayStory.content)[0].content.substring(0, 30) + '...'
         } else if (this.todayStory.introduction != null && this.todayStory.introduction.length > 5) {
-          // console.log(this.todayStory.introduction)
           return this.todayStory.introduction.substring(0, 30) + '...'
         } else {
           return this.todayStory.introduction
@@ -142,7 +140,6 @@
         })
       },
       clickButton: () => {
-        console.log('click')
         this.methods.getTodayStory()
       }
     }
