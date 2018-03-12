@@ -69,8 +69,13 @@ export default class PlayingStory extends wepy.page {
   components = {
     player: Player
   }
+  onLoad() {
+    wepy.showLoading({
+      title: '渲染中'
+    })
+  }
   onReady() {
-    console.log('ready')
+    wepy.hideLoading()
   }
 }
 </script>
