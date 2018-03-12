@@ -4,6 +4,9 @@ import { GET_USERINFO } from '../types/user'
 import { createAction } from 'redux-actions'
 
 export const getUserInfo = createAction(GET_USERINFO, (jsonData) => {
+  wepy.showLoading({
+    title: '登录中。。。'
+  })
   return new Promise(resolve => {
     wepy.request({
       url: api.user.check(),
@@ -20,6 +23,7 @@ export const getUserInfo = createAction(GET_USERINFO, (jsonData) => {
             'Story-Access-Token': data.data.obj.accessToken
           },
           success: (...args) => {
+            wepy.hideLoading()
             resolve({
               data: args[0].data
             })

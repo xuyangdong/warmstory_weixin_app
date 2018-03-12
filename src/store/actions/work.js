@@ -6,6 +6,9 @@ import { getStore } from 'wepy-redux'
 
 export const getAFreeRandomWork = createAction(GET_AFREERANDOMWORK, () => {
   let user = getStore().getState().user
+  wepy.showLoading({
+    title: '加载中',
+  })
   return new Promise(resolve => {
     wepy.request({
       url: api.work.get,
@@ -13,6 +16,7 @@ export const getAFreeRandomWork = createAction(GET_AFREERANDOMWORK, () => {
         'Story-Access-Token': `${user.accessToken}`
       },
       success: (data, statusCode, header) => {
+        wepy.hideLoading()
         resolve({
           data: {
             ...data.data,
