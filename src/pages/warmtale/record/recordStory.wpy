@@ -42,6 +42,15 @@
           box-sizing: border-box;
           width: 100%;
           height: 416rpx;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+
+          &>text {
+            display: block;
+            margin: 0px;
+            font-size: 10px;
+          }
         }
       }
       .warmtale-recordStory_control {
@@ -83,7 +92,9 @@
           <image src="{{ currentPageBackgroundImg }}" />
         </view>
         <scroll-view class="warmtale-recordStory_article" scroll-y="{{ true }}">
+          <text>
           {{ currentPageContent }}
+          </text>
         </scroll-view>
       </view>
       <view class="warmtale-recordStory_control">
@@ -151,7 +162,8 @@
         return `${Math.round(percent * 100)}%`
       },
       currentPageContent: () => {
-        return this.todayStory ? this.todayStory.content[this.currentPage].content.replace(/\*/g, '\r\n\t') : ''
+        return this.todayStory ? this.todayStory.content[this.currentPage].content.replace(/\*/g, '\n') : ''
+        // return '12345*678910'.replace(/\*/g, '\n')
       },
       currentPageBackgroundImg: () => {
         // console.log(this.todayStory)
