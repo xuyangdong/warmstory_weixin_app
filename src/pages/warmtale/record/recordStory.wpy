@@ -151,11 +151,11 @@
         return `${Math.round(percent * 100)}%`
       },
       currentPageContent: () => {
-        return this.todayStory ? this.todayStory.content[this.currentPage].content.replace(/'*'/g, '/n') : ''
+        return this.todayStory ? this.todayStory.content[this.currentPage].content.replace(/\*/g, '\r\n\t') : ''
       },
       currentPageBackgroundImg: () => {
         // console.log(this.todayStory)
-        return this.todayStory ? (this.todayStory.content[this.currentPage].content.coverUrl ? this.todayStory.content[this.currentPage].content.coverUrl : this.todayStory.content[this.currentPage].content.coverUrl) : ''
+        return this.todayStory ? (this.todayStory.content[this.currentPage].content.coverUrl ? this.todayStory.content[this.currentPage].content.coverUrl : this.todayStory.backgroundUrl) : ''
         // return 'https://picsum.photos/500/600'
       }
     }
@@ -184,7 +184,6 @@
                 // wepy.stopRecord()
                 this.isStarted = false
                 this.isRecording = false
-                this.$apply()
               } else if (res.cancel) {
                 console.log('取消了')
               }

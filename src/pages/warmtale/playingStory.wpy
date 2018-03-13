@@ -27,11 +27,12 @@
       .warmtale-playstory_topTitle {
         color: #ffffff;
         font-size: 30rpx;
-        margin-bottom: 22px;
+        margin-bottom: 10px;
       }
       .warmtale-playstory_username {
         color: #999999;
         font-size: 24rpx;
+        margin-top: 10px;
       }
     }
     .warmtale-playstory_middleCover {
@@ -94,5 +95,4 @@
       wepy.hideLoading()
     }
   }
-}
 </script>
