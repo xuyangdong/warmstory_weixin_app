@@ -81,7 +81,7 @@
     </view>
     <view class="warmtale-player_controlPart">
         <image src="../../../resource/img/next.png" bindtap="goBefore"/>
-        <image src="{{ playing ? '../../../resource/img/pause.png' : '../../../resource/img/play.png'}}" bindtap="clickPlayButton"/>
+        <image src="{{ playing ? '../../resource/img/pause.png' : '../../resource/img/play.png'}}" bindtap="clickPlayButton"/>
         <image src="../../../resource/img/next.png" bindtap="goNext"/>
     </view>
 </view>
