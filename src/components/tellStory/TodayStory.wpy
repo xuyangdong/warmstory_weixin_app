@@ -114,7 +114,7 @@
     computed = {
       displayIntroduction() {
         if (typeof this.todayStory === 'undefined' || this.todayStory == null) {
-          return '加载中...'
+          return '加载中……'
         } else if (this.todayStory.introduction == null && this.todayStory.content != null) {
           return JSON.parse(this.todayStory.content)[0].content.substring(0, 30) + '...'
         } else if (this.todayStory.introduction != null && this.todayStory.introduction.length > 5) {
@@ -125,7 +125,7 @@
       },
       displayTitle() {
         if (typeof this.todayStory === 'undefined' || this.todayStory == null) {
-          return '加载中...'
+          return '加载中……'
         } else if (this.todayStory.title != null && this.todayStory.title.length > 15) {
           return this.todayStory.title.substring(0, 14) + '...'
         } else {
