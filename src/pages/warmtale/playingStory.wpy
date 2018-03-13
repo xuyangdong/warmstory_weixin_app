@@ -95,6 +95,11 @@
       wepy.hideLoading()
     }
     onShow() {
+      if (this.$parent.globalData.innerAudioContext) {
+        this.$parent.globalData.innerAudioContext.stop()
+        this.$parent.globalData.innerAudioContext.destroy()
+        this.$parent.globalData.innerAudioContext = null
+      }
     }
     onHide() {
       console.log('hide')
