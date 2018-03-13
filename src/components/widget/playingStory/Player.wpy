@@ -254,6 +254,14 @@ export default class Player extends wepy.component {
     this.$apply()
   }
 
+  onHide() {
+    console.log('hide')
+  }
+
+  onUnload() {
+    console.log('unload')
+  }
+
   onLoad () {
     this.audioUrl = 'http://www.warmtale.com/source/works/2125/uVTw9VRmLCcz743H.mp3'
   //   // 加载数据，不可在此初始化音频url，会导致直接播放，

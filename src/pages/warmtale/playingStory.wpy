@@ -94,5 +94,10 @@
     onReady() {
       wepy.hideLoading()
     }
+    onShow() {
+    }
+    onHide() {
+      console.log('hide')
+    }
   }
 </script>
