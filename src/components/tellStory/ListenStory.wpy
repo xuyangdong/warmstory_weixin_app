@@ -89,7 +89,7 @@
             </view>
           </view>
           <view bindtap="displayDropDown" data-storyset="{{ index }}" class='warmtale-storyset_rightpart'>
-            <image src='../../../resource/img/more.png' style="{{ dropDown[index] ? 'transform : rotate(270deg);' : 'transform : rotate(180deg);' }}" />
+            <image src='../../resource/img/more.png' style="{{ dropDown[index] ? 'transform : rotate(270deg);' : 'transform : rotate(180deg);' }}" />
           </view>
         </view>
         <view wx:if="{{ dropDown[index] }}" class='warmtale-storyset_dropdown'>

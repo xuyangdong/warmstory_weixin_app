@@ -187,10 +187,12 @@ export default class Player extends wepy.component {
       // }
     },
     goBefore: () => {
-      this._innerObj.innerAudioContext.stop()
-      this._innerObj.innerAudioContext.destroy()
-      this._innerObj.innerAudioContext = null
-      this.playing = false
+      if (this._innerObj.innerAudioContext) {
+        this._innerObj.innerAudioContext.stop()
+        this._innerObj.innerAudioContext.destroy()
+        this._innerObj.innerAudioContext = null
+        this.playing = false
+      }
 
       if (this.work.playingType === 'random') {
         this.methods.getAFreeRandomWork()
@@ -201,11 +203,12 @@ export default class Player extends wepy.component {
       }
     },
     goNext: () => {
-      this._innerObj.innerAudioContext.stop()
-      this._innerObj.innerAudioContext.destroy()
-      this._innerObj.innerAudioContext = null
-      this.playing = false
-
+      if (this._innerObj.innerAudioContext) {
+        this._innerObj.innerAudioContext.stop()
+        this._innerObj.innerAudioContext.destroy()
+        this._innerObj.innerAudioContext = null
+        this.playing = false
+      }
       if (this.work.playingType === 'random') {
         this.methods.getAFreeRandomWork()
       } else {
