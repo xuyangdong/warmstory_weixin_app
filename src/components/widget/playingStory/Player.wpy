@@ -81,7 +81,7 @@
     </view>
     <view class="warmtale-player_controlPart">
         <image src="../../../resource/img/next.png" bindtap="goBefore"/>
-        <image src="{{ playing ? '../../../resource/img/pause.png' : '../../../resource/img/play.png'}}" bindtap="clickPlayButton"/>
+        <image src="{{ playing ? '../../resource/img/pause.png' : '../../resource/img/play.png'}}" bindtap="clickPlayButton"/>
         <image src="../../../resource/img/next.png" bindtap="goNext"/>
     </view>
 </view>
@@ -131,20 +131,21 @@ export default class Player extends wepy.component {
     clickPlayButton () {
       if (!this._innerObj.innerAudioContext) {
         this._innerObj.innerAudioContext = wepy.createInnerAudioContext()
+        this._innerObj.innerAudioContext.onError((...args) => {
+          console.log('error', args)
+        })
+        this._innerObj.innerAudioContext.onPlay((...args) => {
+          console.log('success', args)
+        })
+        this._innerObj.innerAudioContext.onTimeUpdate(() => {
+          _.throttle(() => {
+            this.currentTime = this._innerObj.innerAudioContext && this._innerObj.innerAudioContext.currentTime
+            this.duration = this._innerObj.innerAudioContext && this._innerObj.innerAudioContext.duration
+            this.$apply()
+          }, 1000)()
+        })
       }
-      this._innerObj.innerAudioContext.onError((...args) => {
-        console.log('error', args)
-      })
-      this._innerObj.innerAudioContext.onPlay((...args) => {
-        console.log('success', args)
-      })
-      this._innerObj.innerAudioContext.onTimeUpdate(() => {
-        _.throttle(() => {
-          this.currentTime = this._innerObj.innerAudioContext && this._innerObj.innerAudioContext.currentTime
-          this.duration = this._innerObj.innerAudioContext && this._innerObj.innerAudioContext.duration
-          this.$apply()
-        }, 1000)()
-      })
+
       if (this.work.url && this._innerObj.innerAudioContext.src === '' && this.work.url !== this._innerObj.innerAudioContext.src) {
         // 没有设置音频源
         this._innerObj.innerAudioContext.src = this.work.url
@@ -187,31 +188,70 @@ export default class Player extends wepy.component {
       // }
     },
     goBefore: () => {
-      this._innerObj.innerAudioContext.stop()
-      this._innerObj.innerAudioContext.destroy()
-      this._innerObj.innerAudioContext = null
-      this.playing = false
+      if (this._innerObj.innerAudioContext) {
+        this._innerObj.innerAudioContext.stop()
+        this._innerObj.innerAudioContext.destroy()
+        this._innerObj.innerAudioContext = null
+        this.playing = false
+      }
 
       if (this.work.playingType === 'random') {
-        this.methods.getAFreeRandomWork()
+        this.methods.getAFreeRandomWork().then(res => {
+          let music = res.payload.data.obj
+          this.playMusic(music)
+        })
       } else {
         let sequence = this.work.sequence
         let storyList = this.storySetList[sequence[0]].storyList
         this.methods.setPlayingWork([sequence[0], sequence[1] === 0 ? storyList.length - 1 : sequence[1] - 1])
+        .then(res => {
+          let music = res.payload
+          this.playMusic(music)
+        })
       }
     },
     goNext: () => {
-      this._innerObj.innerAudioContext.stop()
-      this._innerObj.innerAudioContext.destroy()
-      this._innerObj.innerAudioContext = null
-      this.playing = false
-
+      if (this._innerObj.innerAudioContext) {
+        this._innerObj.innerAudioContext.stop()
+        this._innerObj.innerAudioContext.destroy()
+        this._innerObj.innerAudioContext = null
+        this.playing = false
+      }
       if (this.work.playingType === 'random') {
-        this.methods.getAFreeRandomWork()
+        this.methods.getAFreeRandomWork().then(res => {
+          let music = res.payload.data.obj
+          this.playMusic(music)
+        })
       } else {
-        this.methods.setPlayingWork()
+        this.methods.setPlayingWork().then(res => {
+          let music = res.payload
+          this.playMusic(music)
+        })
       }
     }
+  }
+
+  playMusic = (music) => {
+    if (!this._innerObj.innerAudioContext) {
+      this._innerObj.innerAudioContext = wepy.createInnerAudioContext()
+      this._innerObj.innerAudioContext.onError((...args) => {
+        console.log('error', args)
+      })
+      this._innerObj.innerAudioContext.onPlay((...args) => {
+        console.log('success', args)
+      })
+      this._innerObj.innerAudioContext.onTimeUpdate(() => {
+        _.throttle(() => {
+          this.currentTime = this._innerObj.innerAudioContext && this._innerObj.innerAudioContext.currentTime
+          this.duration = this._innerObj.innerAudioContext && this._innerObj.innerAudioContext.duration
+          this.$apply()
+        }, 1000)()
+      })
+    }
+    this._innerObj.innerAudioContext.src = music.url
+    this._innerObj.innerAudioContext.play()
+    this.playing = true
+    this.$apply()
   }
 
   onLoad () {

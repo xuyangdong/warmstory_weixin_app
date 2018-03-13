@@ -113,19 +113,19 @@
         </view>
       </view>
     </view>
-    <view class="warmtale-recordStoryFinish_bottomController">
-      <view class="warmtale-recordStoryFinish_switch">
-        <switch />
-        <view class="warmtale-recordStoryFinish_switchLabel">自动匹配背景音乐</view>
-      </view>
-      <view class="warmtale-recordStoryFinish_buttonGroup">
-        <commonbuttonPrimary>
-          <view style="font-size:30rpx;" bindtap="clickUpload">{{ uploading ? '正在上传' : '直接上传' }}</view>
-        </commonbuttonPrimary>
-        <commonbuttonGhost type="ghost">
-          <view style="font-size:30rpx;" bindtap="handleBeauty">去美化</view>
-        </commonbuttonGhost>
-      </view>
+  </view>
+  <view class="warmtale-recordStoryFinish_bottomController">
+    <view class="warmtale-recordStoryFinish_switch">
+      <!-- <switch />
+      <view class="warmtale-recordStoryFinish_switchLabel">自动匹配背景音乐</view> -->
+    </view>
+    <view class="warmtale-recordStoryFinish_buttonGroup">
+      <commonbuttonPrimary >
+        <view style="font-size:30rpx;" bindtap="clickUpload">{{ uploading ? '正在上传' : '直接上传' }}</view>
+      </commonbuttonPrimary>
+      <commonbuttonGhost type="ghost">
+        <view style="font-size:30rpx;" bindtap="handleBeauty">去美化</view>
+      </commonbuttonGhost>
     </view>
   </view>
 </template>
