@@ -83,7 +83,7 @@
         <view>故事简介：</view>
         <view class=''>{{displayIntroduction}}</view>
         <view bindtap="clickButton">
-          <commonbutton>下一个</commonbutton>
+          <commonbutton>换一个</commonbutton>
         </view>
       </view>
       <view class="warmtale-todaystory_record">

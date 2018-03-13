@@ -83,7 +83,7 @@
       <view id="{{index}}" class='warmtale-storyset_container' style="{{ dropDown[index] ? 'border-bottom : none;' : 'border-bottom : 1px solid #ABABAB;' }}">
         <view class='warmtale-storyset_mainpanel'>
           <view class='warmtale-storyset_leftpart'>
-            <image src='https://picsum.photos/460/287' />
+            <image src='{{item.cover}}' />
             <view class='warmtale-storyset_setName'>
               {{ item.name }}
             </view>
@@ -155,10 +155,10 @@ export default class ListenStory extends wepy.component {
     },
     handleAddStorySet() {
       wepy.showModal({
-        title: '提示',
-        content: '去下载APP创建更多作品集',
-        showCancel: false,
-        confirmText: '下载应用',
+        title: '叮咚~',
+        content: '可以去【读个小故事】APP里创新更多作品集哟！',
+        confirmText: '现在就去',
+        cancelText: '再等等',
         success: function(res) {
           if (res.confirm) {
             console.log('用户点击确定')

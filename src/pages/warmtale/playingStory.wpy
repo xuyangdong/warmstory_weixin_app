@@ -62,7 +62,6 @@
 </template>
 
 <script>
-<<<<<<< HEAD
   import wepy from 'wepy'
   import Player from '@/components/widget/playingStory/Player'
   import {
@@ -75,28 +74,13 @@
     components = {
       player: Player
     }
-    onReady() {
-      console.log('ready')
+    onLoad() {
+      wepy.showLoading({
+        title: '渲染中'
+      })
     }
-=======
-import wepy from 'wepy'
-import Player from '@/components/widget/playingStory/Player'
-import { connect } from 'wepy-redux'
-
-@connect({
-  work: state => state.work
-}, {})
-export default class PlayingStory extends wepy.page {
-  components = {
-    player: Player
-  }
-  onLoad() {
-    wepy.showLoading({
-      title: '渲染中'
-    })
-  }
-  onReady() {
-    wepy.hideLoading()
->>>>>>> master
+    onReady() {
+      wepy.hideLoading()
+    }
   }
 </script>

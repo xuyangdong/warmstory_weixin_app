@@ -293,10 +293,10 @@ export default class RecordStoryFinish extends wepy.page {
     },
     handleBeauty: () => {
       wepy.showModal({
-        title: '提示',
-        content: '可以在APP中体验更多美化功能',
-        cancelText: '去下载',
-        confirmText: '打开应用',
+        title: '叮咚~',
+        content: '快去APP里体验更炫酷的美化功能吧！',
+        cancelText: '再等等',
+        confirmText: '现在就去',
         success: function(res) {
           if (res.confirm) {
             console.log('用户点击确定')
