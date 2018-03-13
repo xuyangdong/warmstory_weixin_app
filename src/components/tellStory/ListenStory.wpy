@@ -155,15 +155,13 @@ export default class ListenStory extends wepy.component {
     },
     handleAddStorySet() {
       wepy.showModal({
-        title: '叮咚~',
-        content: '可以去【读个小故事】APP里创新更多作品集哟！',
-        confirmText: '现在就去',
-        cancelText: '再等等',
+        title: 'o(╥﹏╥)o',
+        content: '抱歉，作品集只能在【读个小故事】app里创建，app里还能体验到更多更炫酷的功能，快去应用商店下载体验吧！',
+        showCancel: false,
+        confirmText: '好的',
         success: function(res) {
           if (res.confirm) {
             console.log('用户点击确定')
-          } else if (res.cancel) {
-            console.log('用户点击取消')
           }
         }
       })

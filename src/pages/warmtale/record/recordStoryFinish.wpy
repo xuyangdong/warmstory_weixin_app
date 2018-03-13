@@ -1,313 +1,300 @@
 <style lang="less">
-.warmtale-recordStoryFinish_container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 0 28rpx;
-
-  .warmtale-recordStoryFinish_topTips {
-    padding: 32rpx 47rpx;
-    font-size: 32rpx;
-    flex-grow: 0;
-    flex-shrink: 0;
-  }
-
-  .warmtale-recordStoryFinish_middleContent {
+  .warmtale-recordStoryFinish_container {
     display: flex;
     flex-direction: column;
     width: 100%;
-    flex-grow: 1;
-    flex-shrink: 0;
-
-    .warmtale-recordStoryFinish_picture {
-      width: 100%;
-      height: 578rpx;
-      position: relative;
-
-      .warmtale-recordStoryFinish_mask {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 578rpx;
-        position: absolute;
-        top: 0;
-        left: 0;
-
-        &>image {
-          width: 130rpx;
-          height: 130rpx;
-        }
-      }
-
-      &>image {
-        width: 100%;
-        height: 578rpx;
-        object-fit: scale-down;
-        border-top-left-radius: 20rpx;
-        border-top-right-radius: 20rpx;
-      }
+    padding: 0 28rpx;
+    .warmtale-recordStoryFinish_topTips {
+      padding: 32rpx 47rpx;
+      font-size: 32rpx;
+      flex-grow: 0;
+      flex-shrink: 0;
     }
-
-    .warmtale-recordStoryFinish_controller {
+    .warmtale-recordStoryFinish_middleContent {
       display: flex;
       flex-direction: column;
-      height: 310rpx;
-      border: 1rpx solid #AEAEAE;
-      border-top: none;
-      border-bottom-left-radius: 20rpx;
-      border-bottom-right-radius: 20rpx;
-      justify-content: center;
-
-      .warmtale-recordStoryFinish_slider {
-        width: 100%;
-      }
-
-      .warmtale-recordStoryFinish_duration {
-        display: flex;
-        justify-content: space-between;
-        align-content: center;
-        width: 100%;
-        padding: 0 45rpx;
-        box-sizing: border-box;
-        color: #CDCDCD;
-      }
-    }
-  }
-
-  .warmtale-recordStoryFinish_bottomController {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    flex-shrink: 0;
-    padding:0 30rpx;
-    box-sizing: border-box;
-
-    .warmtale-recordStoryFinish_switch {
       width: 100%;
-      display: flex;
-      align-items: center;
-      margin: 60rpx 0;
-
-      .warmtale-recordStoryFinish_switchLabel {
-        margin-left: 40rpx;
+      flex-grow: 1;
+      flex-shrink: 0;
+      .warmtale-recordStoryFinish_picture {
+        width: 100%;
+        height: 578rpx;
+        position: relative;
+        .warmtale-recordStoryFinish_mask {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          height: 578rpx;
+          position: absolute;
+          top: 0;
+          left: 0;
+          &>image {
+            width: 130rpx;
+            height: 130rpx;
+          }
+        }
+        &>image {
+          width: 100%;
+          height: 578rpx;
+          object-fit: scale-down;
+          border-top-left-radius: 20rpx;
+          border-top-right-radius: 20rpx;
+        }
+      }
+      .warmtale-recordStoryFinish_controller {
+        display: flex;
+        flex-direction: column;
+        height: 310rpx;
+        border: 1rpx solid #AEAEAE;
+        border-top: none;
+        border-bottom-left-radius: 20rpx;
+        border-bottom-right-radius: 20rpx;
+        justify-content: center;
+        .warmtale-recordStoryFinish_slider {
+          width: 100%;
+        }
+        .warmtale-recordStoryFinish_duration {
+          display: flex;
+          justify-content: space-between;
+          align-content: center;
+          width: 100%;
+          padding: 0 45rpx;
+          box-sizing: border-box;
+          color: #CDCDCD;
+        }
       }
     }
-
-    .warmtale-recordStoryFinish_buttonGroup {
+    .warmtale-recordStoryFinish_bottomController {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 120rpx;
+      flex-direction: column;
+      width: 100%;
+      flex-shrink: 0;
+      padding: 0 30rpx;
+      box-sizing: border-box;
+      .warmtale-recordStoryFinish_switch {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        margin: 60rpx 0;
+        .warmtale-recordStoryFinish_switchLabel {
+          margin-left: 40rpx;
+        }
+      }
+      .warmtale-recordStoryFinish_buttonGroup {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 120rpx;
+      }
     }
   }
-}
 </style>
 
 <template>
-<view class="weui-flex container warmtale-recordStoryFinish_container">
-  <view class="warmtale-recordStoryFinish_topTips">
-    录音已保存至草稿，可以进行美化哦~
-  </view>
-  <view class="warmtale-recordStoryFinish_middleContent">
-    <view class="warmtale-recordStoryFinish_picture">
-      <image src="{{todayStory.preCoverUrl}}"/>
-      <view class="warmtale-recordStoryFinish_mask">
-        <image src="{{ isPlaying ? '../../../resource/img/pause.png' : '../../../resource/img/play.png'}}" bindtap="clickPlayButton"/>
+  <view class="weui-flex container warmtale-recordStoryFinish_container">
+    <view class="warmtale-recordStoryFinish_topTips">
+      录音已保存至草稿，可以进行美化哦~
+    </view>
+    <view class="warmtale-recordStoryFinish_middleContent">
+      <view class="warmtale-recordStoryFinish_picture">
+        <image src="{{todayStory.preCoverUrl}}" />
+        <view class="warmtale-recordStoryFinish_mask">
+          <image src="{{ isPlaying ? '../../../resource/img/pause.png' : '../../../resource/img/play.png'}}" bindtap="clickPlayButton" />
+        </view>
+      </view>
+      <view class="warmtale-recordStoryFinish_controller">
+        <view class="warmtale-recordStoryFinish_slider">
+          <slider value="{{ progressStyle }}" />
+        </view>
+        <view class="warmtale-recordStoryFinish_duration">
+          <view>{{ currentTimeFormat }}</view>
+          <view>{{ durationFormat }}</view>
+        </view>
       </view>
     </view>
-    <view class="warmtale-recordStoryFinish_controller">
-      <view class="warmtale-recordStoryFinish_slider">
-        <slider value="{{ progressStyle }}"/>
+    <view class="warmtale-recordStoryFinish_bottomController">
+      <view class="warmtale-recordStoryFinish_switch">
+        <switch />
+        <view class="warmtale-recordStoryFinish_switchLabel">自动匹配背景音乐</view>
       </view>
-      <view class="warmtale-recordStoryFinish_duration">
-        <view>{{ currentTimeFormat }}</view>
-        <view>{{ durationFormat }}</view>
+      <view class="warmtale-recordStoryFinish_buttonGroup">
+        <commonbuttonPrimary>
+          <view style="font-size:30rpx;" bindtap="clickUpload">{{ uploading ? '正在上传' : '直接上传' }}</view>
+        </commonbuttonPrimary>
+        <commonbuttonGhost type="ghost">
+          <view style="font-size:30rpx;" bindtap="handleBeauty">去美化</view>
+        </commonbuttonGhost>
       </view>
     </view>
   </view>
-  <view class="warmtale-recordStoryFinish_bottomController">
-    <view class="warmtale-recordStoryFinish_switch">
-      <switch />
-      <view class="warmtale-recordStoryFinish_switchLabel">自动匹配背景音乐</view>
-    </view>
-    <view class="warmtale-recordStoryFinish_buttonGroup">
-      <commonbuttonPrimary >
-        <view style="font-size:30rpx;" bindtap="clickUpload">{{ uploading ? '正在上传' : '直接上传' }}</view>
-      </commonbuttonPrimary>
-      <commonbuttonGhost type="ghost">
-        <view style="font-size:30rpx;" bindtap="handleBeauty">去美化</view>
-      </commonbuttonGhost>
-    </view>
-  </view>
-</view>
 </template>
 
 <script>
-import wepy from 'wepy'
-import CommonButton from '@/components/common/CommonButton2'
-import { connect } from 'wepy-redux'
-import api from '@/api'
-import moment from 'moment'
-import _ from 'lodash'
-import { publishWork } from '@/store/actions/work'
-
-@connect({
-  record: state => state.record,
-  todayStory: state => state.todayStory
-}, {
-  publishWork
-})
-export default class RecordStoryFinish extends wepy.page {
-  config = {
-    navigationBarBackgroundColor: '#ffffff',
-    navigationBarTextStyle: 'black',
-    navigationBarTitleText: '录制完成'
-  }
-  _innerObj = {}
-  data = {
-    currentTime: 0.0,
-    duration: 1.0,
-    tempFile: {},
-    uploading: false,
-    isPlaying: false
-  }
-  computed = {
-    durationFormat: () => {
-      return moment(parseFloat(this.duration.toFixed(3)) * 1000).format('mm:ss')
-    },
-    currentTimeFormat: () => {
-      return moment(parseFloat(this.currentTime.toFixed(3)) * 1000).format('mm:ss')
-    },
-    progressStyle: () => {
-      let percent = (this.currentTime / this.duration) * 100
-      return percent
+  import wepy from 'wepy'
+  import CommonButton from '@/components/common/CommonButton2'
+  import {
+    connect
+  } from 'wepy-redux'
+  import api from '@/api'
+  import moment from 'moment'
+  import _ from 'lodash'
+  import {
+    publishWork
+  } from '@/store/actions/work'
+  @connect({
+    record: state => state.record,
+    todayStory: state => state.todayStory
+  }, {
+    publishWork
+  })
+  export default class RecordStoryFinish extends wepy.page {
+    config = {
+      navigationBarBackgroundColor: '#ffffff',
+      navigationBarTextStyle: 'black',
+      navigationBarTitleText: '录制完成'
     }
-  }
-  components = {
-    commonbuttonPrimary: CommonButton,
-    commonbuttonGhost: CommonButton
-  }
-  methods = {
-    clickUpload: () => {
-      this.uploading = true
-      wepy.request({
-        url: api.ossToken.get,
-        success: (data, statusCode, headers) => {
-          let token = data.data.obj
-          let fileName = Date.now() + '.mp3'
-          let host = 'https://oss.warmtale.com'
-          wepy.uploadFile({
-            url: host,
-            filePath: this.record.tempFilePath,
-            name: 'file',
-            formData: {
-              key: token.dir + '/' + fileName,
-              policy: token.policy,
-              OSSAccessKeyId: token.accessid,
-              success_action_status: '200',
-              signature: token.signature
-            },
-            success: (res) => {
-              wepy.showToast({
-                title: '上传成功',
-                icon: 'success',
-                duration: 2000
-              })
-              this.methods.publishWork(this.todayStory.id, `${host}/${token.dir}/${fileName}`, this.duration)
-              console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
-            },
-            fail: () => {
-              wepy.showToast({
-                title: '上传失败',
-                icon: 'success',
-                duration: 2000
-              })
-            },
-            complete: (res) => {
-              this.uploading = false
-              this.$apply()
-              console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
-            }
-          })
-        }
-      })
-    },
-    clickPlayButton: () => {
-      if (!this._innerObj.innerAudioContext) {
-        this._innerObj.innerAudioContext = wepy.createInnerAudioContext()
+    _innerObj = {}
+    data = {
+      currentTime: 0.0,
+      duration: 1.0,
+      tempFile: {},
+      uploading: false,
+      isPlaying: false
+    }
+    computed = {
+      durationFormat: () => {
+        return moment(parseFloat(this.duration.toFixed(3)) * 1000).format('mm:ss')
+      },
+      currentTimeFormat: () => {
+        return moment(parseFloat(this.currentTime.toFixed(3)) * 1000).format('mm:ss')
+      },
+      progressStyle: () => {
+        let percent = (this.currentTime / this.duration) * 100
+        return percent
       }
-      this._innerObj.innerAudioContext.onError((...args) => {
-        console.log('error', args)
-      })
-      this._innerObj.innerAudioContext.onPlay((...args) => {
-        console.log('success', args)
-      })
-      this._innerObj.innerAudioContext.onTimeUpdate(() => {
-        _.throttle(() => {
-          this.currentTime = this._innerObj.innerAudioContext.currentTime
-          this.duration = this._innerObj.innerAudioContext.duration
-          this.$apply()
-        }, 1000)()
-      })
-      if (this.record.tempFilePath && this._innerObj.innerAudioContext.src === '' && this.record.tempFilePath !== this._innerObj.innerAudioContext.src) {
-        // 没有设置音频源
-        this._innerObj.innerAudioContext.src = this.record.tempFilePath
-        this._innerObj.innerAudioContext.play()
-        this.isPlaying = true
-      } else {
-        // 设置了音频源，
-        if (this._innerObj.innerAudioContext.paused) {
-          // 暂停状态
+    }
+    components = {
+      commonbuttonPrimary: CommonButton,
+      commonbuttonGhost: CommonButton
+    }
+    methods = {
+      clickUpload: () => {
+        this.uploading = true
+        wepy.request({
+          url: api.ossToken.get,
+          success: (data, statusCode, headers) => {
+            let token = data.data.obj
+            let fileName = Date.now() + '.mp3'
+            let host = 'https://oss.warmtale.com'
+            wepy.uploadFile({
+              url: host,
+              filePath: this.record.tempFilePath,
+              name: 'file',
+              formData: {
+                key: token.dir + '/' + fileName,
+                policy: token.policy,
+                OSSAccessKeyId: token.accessid,
+                success_action_status: '200',
+                signature: token.signature
+              },
+              success: (res) => {
+                wepy.showToast({
+                  title: '上传成功',
+                  icon: 'success',
+                  duration: 2000
+                })
+                this.methods.publishWork(this.todayStory.id, `${host}/${token.dir}/${fileName}`, this.duration)
+                console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
+              },
+              fail: () => {
+                wepy.showToast({
+                  title: '上传失败',
+                  icon: 'success',
+                  duration: 2000
+                })
+              },
+              complete: (res) => {
+                this.uploading = false
+                this.$apply()
+                console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
+              }
+            })
+          }
+        })
+      },
+      clickPlayButton: () => {
+        if (!this._innerObj.innerAudioContext) {
+          this._innerObj.innerAudioContext = wepy.createInnerAudioContext()
+        }
+        this._innerObj.innerAudioContext.onError((...args) => {
+          console.log('error', args)
+        })
+        this._innerObj.innerAudioContext.onPlay((...args) => {
+          console.log('success', args)
+        })
+        this._innerObj.innerAudioContext.onTimeUpdate(() => {
+          _.throttle(() => {
+            this.currentTime = this._innerObj.innerAudioContext.currentTime
+            this.duration = this._innerObj.innerAudioContext.duration
+            this.$apply()
+          }, 1000)()
+        })
+        if (this.record.tempFilePath && this._innerObj.innerAudioContext.src === '' && this.record.tempFilePath !== this._innerObj.innerAudioContext.src) {
+          // 没有设置音频源
+          this._innerObj.innerAudioContext.src = this.record.tempFilePath
           this._innerObj.innerAudioContext.play()
           this.isPlaying = true
         } else {
-          // 播放状态
-          this._innerObj.innerAudioContext.pause()
-          this.isPlaying = false
-        }
-      }
-      // todo : 为什么不能用backgroundAudioManager，怀疑是url必须是合法的网络域名而不是一个本地地址
-      // let audioManager = wepy.getBackgroundAudioManager()
-      // audioManager.onTimeUpdate(() => {
-      //   _.throttle(() => {
-      //     this.currentTime = audioManager.currentTime
-      //     this.duration = audioManager.duration
-      //     this.$apply()
-      //   }, 1000)()
-      // })
-      // if (typeof audioManager.paused === 'undefined' && this.record.tempFilePath) {
-      //   // 没有设置音频源
-      //   wepy.playBackgroundAudio({
-      //     // dataUrl: 'http://warmtale-backend-bucket.oss-cn-beijing.aliyuncs.com/app/works/3120/1514791743206.mp3'
-      //     dataUrl: this.record.tempFilePath
-      //   })
-      // } else {
-      //   // 设置了音频源，
-      //   if (audioManager.paused) {
-      //     audioManager.play()
-      //   } else {
-      //     audioManager.pause()
-      //   }
-      // }
-    },
-    handleBeauty: () => {
-      wepy.showModal({
-        title: '叮咚~',
-        content: '快去APP里体验更炫酷的美化功能吧！',
-        cancelText: '再等等',
-        confirmText: '现在就去',
-        success: function(res) {
-          if (res.confirm) {
-            console.log('用户点击确定')
-          } else if (res.cancel) {
-            console.log('用户点击取消')
+          // 设置了音频源，
+          if (this._innerObj.innerAudioContext.paused) {
+            // 暂停状态
+            this._innerObj.innerAudioContext.play()
+            this.isPlaying = true
+          } else {
+            // 播放状态
+            this._innerObj.innerAudioContext.pause()
+            this.isPlaying = false
           }
         }
-      })
+        // todo : 为什么不能用backgroundAudioManager，怀疑是url必须是合法的网络域名而不是一个本地地址
+        // let audioManager = wepy.getBackgroundAudioManager()
+        // audioManager.onTimeUpdate(() => {
+        //   _.throttle(() => {
+        //     this.currentTime = audioManager.currentTime
+        //     this.duration = audioManager.duration
+        //     this.$apply()
+        //   }, 1000)()
+        // })
+        // if (typeof audioManager.paused === 'undefined' && this.record.tempFilePath) {
+        //   // 没有设置音频源
+        //   wepy.playBackgroundAudio({
+        //     // dataUrl: 'http://warmtale-backend-bucket.oss-cn-beijing.aliyuncs.com/app/works/3120/1514791743206.mp3'
+        //     dataUrl: this.record.tempFilePath
+        //   })
+        // } else {
+        //   // 设置了音频源，
+        //   if (audioManager.paused) {
+        //     audioManager.play()
+        //   } else {
+        //     audioManager.pause()
+        //   }
+        // }
+      },
+      handleBeauty: () => {
+        wepy.showModal({
+          title: 'o(╥﹏╥)o',
+          content: '抱歉，现在部分功能还没办法在小程序里实现，在【读个小故事】app里能体验到更多更炫酷的美化功能，快去应用商店下载体验吧！',
+          showCancel: false,
+          confirmText: '好的',
+          success: function(res) {
+            if (res.confirm) {
+              console.log('用户点击确定')
+            }
+          }
+        })
+      }
     }
+    onReady() {}
   }
-  onReady () {
-  }
-}
 </script>

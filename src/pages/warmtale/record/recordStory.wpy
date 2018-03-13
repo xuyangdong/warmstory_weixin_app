@@ -36,7 +36,7 @@
           }
         }
         .warmtale-recordStory_article {
-          background-color: #78AB1C;
+          background-color: #3dc791;
           color: white;
           padding: 30rpx;
           box-sizing: border-box;
@@ -155,7 +155,7 @@
       },
       currentPageBackgroundImg: () => {
         // console.log(this.todayStory)
-        return this.todayStory ? (this.todayStory.content[this.currentPage].content.coverUrl ? this.todayStory.content[this.currentPage].content.coverUrl : this.todayStory.backgroundUrl) : ''
+        return this.todayStory ? (this.todayStory.content[this.currentPage].coverUrl ? this.todayStory.backgroundUrl : this.todayStory.content[this.currentPage].content.coverUrl) : ''
         // return 'https://picsum.photos/500/600'
       }
     }
