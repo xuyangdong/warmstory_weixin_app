@@ -163,11 +163,9 @@
       },
       currentPageContent: () => {
         return this.todayStory ? this.todayStory.content[this.currentPage].content.replace(/\*/g, '\n') : ''
-        // return '12345*678910'.replace(/\*/g, '\n')
       },
       currentPageBackgroundImg: () => {
-        // console.log(this.todayStory)
-        return this.todayStory ? (this.todayStory.content[this.currentPage].content.coverUrl ? this.todayStory.content[this.currentPage].content.coverUrl : this.todayStory.backgroundUrl) : ''
+        return this.todayStory ? this.todayStory.content[this.currentPage].coverUrl || this.todayStory.backgroundUrl || '' : ''
         // return 'https://picsum.photos/500/600'
       }
     }
