@@ -38,18 +38,18 @@ export const setPlayingWork = createAction(SET_WORK, (sequence) => {
     let currentStorySet = storySetList[sequenceInWork[0]] || {storyList: []}
     let newSequenceInWork = [sequenceInWork[0], sequenceInWork[1] >= (currentStorySet.storyList.length - 1) ? 0 : (sequenceInWork[1] + 1)]
     // 根据指定的sequence找到新的故事
-    return {
+    return Promise.resolve({
       ...storySetList[newSequenceInWork[0]].storyList[newSequenceInWork[1]],
       playingType: 'sequence',
       sequence: newSequenceInWork
-    }
+    })
   } else {
     //指定播放
-    return {
+    return Promise.resolve({
       ...storySetList[sequence[0]].storyList[sequence[1]],
       playingType: 'sequence',
       sequence: sequence
-    }
+    })
   }
 })
 

@@ -128,8 +128,8 @@
   </view>
   <view class="warmtale-recordStoryFinish_bottomController">
     <view class="warmtale-recordStoryFinish_switch">
-      <switch />
-      <view class="warmtale-recordStoryFinish_switchLabel">自动匹配背景音乐</view>
+      <!-- <switch />
+      <view class="warmtale-recordStoryFinish_switchLabel">自动匹配背景音乐</view> -->
     </view>
     <view class="warmtale-recordStoryFinish_buttonGroup">
       <commonbuttonPrimary >
