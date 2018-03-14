@@ -129,37 +129,37 @@ export default class Player extends wepy.component {
 
   methods = {
     clickPlayButton () {
-      if (!this._innerObj.innerAudioContext) {
-        this._innerObj.innerAudioContext = wepy.createInnerAudioContext()
-        this._innerObj.innerAudioContext.onError((...args) => {
+      if (!this.$parent.$parent.globalData.innerAudioContext) {
+        this.$parent.$parent.globalData.innerAudioContext = wepy.createInnerAudioContext()
+        this.$parent.$parent.globalData.innerAudioContext.onError((...args) => {
           console.log('error', args)
         })
-        this._innerObj.innerAudioContext.onPlay((...args) => {
+        this.$parent.$parent.globalData.innerAudioContext.onPlay((...args) => {
           console.log('success', args)
         })
-        this._innerObj.innerAudioContext.onTimeUpdate(() => {
+        this.$parent.$parent.globalData.innerAudioContext.onTimeUpdate(() => {
           _.throttle(() => {
-            this.currentTime = this._innerObj.innerAudioContext && this._innerObj.innerAudioContext.currentTime
-            this.duration = this._innerObj.innerAudioContext && this._innerObj.innerAudioContext.duration
+            this.currentTime = this.$parent.$parent.globalData.innerAudioContext && this.$parent.$parent.globalData.innerAudioContext.currentTime
+            this.duration = this.$parent.$parent.globalData.innerAudioContext && this.$parent.$parent.globalData.innerAudioContext.duration
             this.$apply()
           }, 1000)()
         })
       }
 
-      if (this.work.url && this._innerObj.innerAudioContext.src === '' && this.work.url !== this._innerObj.innerAudioContext.src) {
+      if (this.work.url && this.$parent.$parent.globalData.innerAudioContext.src === '' && this.work.url !== this.$parent.$parent.globalData.innerAudioContext.src) {
         // 没有设置音频源
-        this._innerObj.innerAudioContext.src = this.work.url
-        this._innerObj.innerAudioContext.play()
+        this.$parent.$parent.globalData.innerAudioContext.src = this.work.url
+        this.$parent.$parent.globalData.innerAudioContext.play()
         this.playing = true
       } else {
         // 设置了音频源，
-        if (this._innerObj.innerAudioContext.paused) {
+        if (this.$parent.$parent.globalData.innerAudioContext.paused) {
           // 暂停状态
-          this._innerObj.innerAudioContext.play()
+          this.$parent.$parent.globalData.innerAudioContext.play()
           this.playing = true
         } else {
           // 播放状态
-          this._innerObj.innerAudioContext.pause()
+          this.$parent.$parent.globalData.innerAudioContext.pause()
           this.playing = false
         }
       }
@@ -188,10 +188,10 @@ export default class Player extends wepy.component {
       // }
     },
     goBefore: () => {
-      if (this._innerObj.innerAudioContext) {
-        this._innerObj.innerAudioContext.stop()
-        this._innerObj.innerAudioContext.destroy()
-        this._innerObj.innerAudioContext = null
+      if (this.$parent.$parent.globalData.innerAudioContext) {
+        this.$parent.$parent.globalData.innerAudioContext.stop()
+        this.$parent.$parent.globalData.innerAudioContext.destroy()
+        this.$parent.$parent.globalData.innerAudioContext = null
         this.playing = false
       }
 
@@ -211,10 +211,10 @@ export default class Player extends wepy.component {
       }
     },
     goNext: () => {
-      if (this._innerObj.innerAudioContext) {
-        this._innerObj.innerAudioContext.stop()
-        this._innerObj.innerAudioContext.destroy()
-        this._innerObj.innerAudioContext = null
+      if (this.$parent.$parent.globalData.innerAudioContext) {
+        this.$parent.$parent.globalData.innerAudioContext.stop()
+        this.$parent.$parent.globalData.innerAudioContext.destroy()
+        this.$parent.$parent.globalData.innerAudioContext = null
         this.playing = false
       }
       if (this.work.playingType === 'random') {
@@ -232,26 +232,34 @@ export default class Player extends wepy.component {
   }
 
   playMusic = (music) => {
-    if (!this._innerObj.innerAudioContext) {
-      this._innerObj.innerAudioContext = wepy.createInnerAudioContext()
-      this._innerObj.innerAudioContext.onError((...args) => {
+    if (!this.$parent.$parent.globalData.innerAudioContext) {
+      this.$parent.$parent.globalData.innerAudioContext = wepy.createInnerAudioContext()
+      this.$parent.$parent.globalData.innerAudioContext.onError((...args) => {
         console.log('error', args)
       })
-      this._innerObj.innerAudioContext.onPlay((...args) => {
+      this.$parent.$parent.globalData.innerAudioContext.onPlay((...args) => {
         console.log('success', args)
       })
-      this._innerObj.innerAudioContext.onTimeUpdate(() => {
+      this.$parent.$parent.globalData.innerAudioContext.onTimeUpdate(() => {
         _.throttle(() => {
-          this.currentTime = this._innerObj.innerAudioContext && this._innerObj.innerAudioContext.currentTime
-          this.duration = this._innerObj.innerAudioContext && this._innerObj.innerAudioContext.duration
+          this.currentTime = this.$parent.$parent.globalData.innerAudioContext && this.$parent.$parent.globalData.innerAudioContext.currentTime
+          this.duration = this.$parent.$parent.globalData.innerAudioContext && this.$parent.$parent.globalData.innerAudioContext.duration
           this.$apply()
         }, 1000)()
       })
     }
-    this._innerObj.innerAudioContext.src = music.url
-    this._innerObj.innerAudioContext.play()
+    this.$parent.$parent.globalData.innerAudioContext.src = music.url
+    this.$parent.$parent.globalData.innerAudioContext.play()
     this.playing = true
     this.$apply()
+  }
+
+  onHide() {
+    console.log('hide')
+  }
+
+  onUnload() {
+    console.log('unload')
   }
 
   onLoad () {

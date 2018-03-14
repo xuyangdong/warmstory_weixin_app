@@ -154,84 +154,73 @@
       navigationBarTextStyle: 'black',
       navigationBarTitleText: '录制完成'
     }
-    _innerObj = {}
-    data = {
-      currentTime: 0.0,
-      duration: 1.0,
-      tempFile: {},
-      uploading: false,
-      isPlaying: false
+  }
+  events = {
+    'record-finish': (record) => {
+      console.log(record)
     }
-    computed = {
-      durationFormat: () => {
-        return moment(parseFloat(this.duration.toFixed(3)) * 1000).format('mm:ss')
-      },
-      currentTimeFormat: () => {
-        return moment(parseFloat(this.currentTime.toFixed(3)) * 1000).format('mm:ss')
-      },
-      progressStyle: () => {
-        let percent = (this.currentTime / this.duration) * 100
-        return percent
-      }
-    }
-    components = {
-      commonbuttonPrimary: CommonButton,
-      commonbuttonGhost: CommonButton
-    }
-    methods = {
-      clickUpload: () => {
-        this.uploading = true
-        wepy.request({
-          url: api.ossToken.get,
-          success: (data, statusCode, headers) => {
-            let token = data.data.obj
-            let fileName = Date.now() + '.mp3'
-            let host = 'https://oss.warmtale.com'
-            wepy.uploadFile({
-              url: host,
-              filePath: this.record.tempFilePath,
-              name: 'file',
-              formData: {
-                key: token.dir + '/' + fileName,
-                policy: token.policy,
-                OSSAccessKeyId: token.accessid,
-                success_action_status: '200',
-                signature: token.signature
-              },
-              success: (res) => {
-                wepy.showToast({
-                  title: '上传成功',
-                  icon: 'success',
-                  duration: 2000
-                })
-                this.methods.publishWork(this.todayStory.id, `${host}/${token.dir}/${fileName}`, this.duration)
-                console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
-              },
-              fail: () => {
-                wepy.showToast({
-                  title: '上传失败',
-                  icon: 'success',
-                  duration: 2000
-                })
-              },
-              complete: (res) => {
-                this.uploading = false
-                this.$apply()
-                console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
-              }
-            })
-          }
-        })
-      },
-      clickPlayButton: () => {
-        if (!this._innerObj.innerAudioContext) {
-          this._innerObj.innerAudioContext = wepy.createInnerAudioContext()
+  }
+  components = {
+    commonbuttonPrimary: CommonButton,
+    commonbuttonGhost: CommonButton
+  }
+  methods = {
+    clickUpload: () => {
+      this.uploading = true
+      wepy.request({
+        url: api.ossToken.get,
+        success: (data, statusCode, headers) => {
+          let token = data.data.obj
+          let fileName = Date.now() + '.mp3'
+          let host = 'https://oss.warmtale.com'
+          wepy.uploadFile({
+            url: host,
+            filePath: this.record.tempFilePath,
+            name: 'file',
+            formData: {
+              key: token.dir + '/' + fileName,
+              policy: token.policy,
+              OSSAccessKeyId: token.accessid,
+              success_action_status: '200',
+              signature: token.signature
+            },
+            success: (res) => {
+              wepy.showToast({
+                title: '上传成功',
+                icon: 'success',
+                duration: 2000
+              })
+              this.methods.publishWork(this.todayStory.id, `${host}/${token.dir}/${fileName}`, moment(parseFloat(this.duration.toFixed(3)) * 1000).format('mm:ss'))
+              console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
+            },
+            fail: () => {
+              wepy.showToast({
+                title: '上传失败',
+                icon: 'success',
+                duration: 2000
+              })
+            },
+            complete: (res) => {
+              this.uploading = false
+              this.$apply()
+              console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
+            }
+          })
         }
+      })
+    },
+    clickPlayButton: () => {
+      if (!this._innerObj.innerAudioContext) {
+        this._innerObj.innerAudioContext = wepy.createInnerAudioContext()
         this._innerObj.innerAudioContext.onError((...args) => {
           console.log('error', args)
         })
         this._innerObj.innerAudioContext.onPlay((...args) => {
           console.log('success', args)
+        })
+        this._innerObj.innerAudioContext.onEnded(() => {
+          this._innerObj.innerAudioContext.stop()
+          this.isPlaying = false
         })
         this._innerObj.innerAudioContext.onTimeUpdate(() => {
           _.throttle(() => {
@@ -240,9 +229,17 @@
             this.$apply()
           }, 1000)()
         })
-        if (this.record.tempFilePath && this._innerObj.innerAudioContext.src === '' && this.record.tempFilePath !== this._innerObj.innerAudioContext.src) {
-          // 没有设置音频源
-          this._innerObj.innerAudioContext.src = this.record.tempFilePath
+      }
+
+      if (this.record.tempFilePath && this._innerObj.innerAudioContext.src === '' && this.record.tempFilePath !== this._innerObj.innerAudioContext.src) {
+        // 没有设置音频源
+        this._innerObj.innerAudioContext.src = this.record.tempFilePath
+        this._innerObj.innerAudioContext.play()
+        this.isPlaying = true
+      } else {
+        // 设置了音频源，
+        if (this._innerObj.innerAudioContext.paused) {
+          // 暂停状态
           this._innerObj.innerAudioContext.play()
           this.isPlaying = true
         } else {
@@ -299,4 +296,33 @@
     }
     onReady() {}
   }
+  onShow() {
+    console.log(this.record)
+    if (!this._innerObj.innerAudioContext) {
+      this._innerObj.innerAudioContext = wepy.createInnerAudioContext()
+      this._innerObj.innerAudioContext.onError((...args) => {
+        console.log('error', args)
+      })
+      this._innerObj.innerAudioContext.onPlay((...args) => {
+        console.log('success', args)
+      })
+      this._innerObj.innerAudioContext.onEnded(() => {
+        this._innerObj.innerAudioContext.stop()
+        this.isPlaying = false
+      })
+      this._innerObj.innerAudioContext.onTimeUpdate(() => {
+        _.throttle(() => {
+          this.currentTime = this._innerObj.innerAudioContext.currentTime
+          this.duration = this._innerObj.innerAudioContext.duration
+          this.$apply()
+        }, 1000)()
+      })
+    }
+    this._innerObj.innerAudioContext.src = this.record.tempFilePath
+    this._innerObj.innerAudioContext.play()
+    this.isPlaying = true
+  }
+  onReady () {
+  }
+}
 </script>

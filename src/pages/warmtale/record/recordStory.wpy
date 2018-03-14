@@ -216,25 +216,10 @@
       clickRecord: () => {
         let recorderManager = wepy.getRecorderManager()
         recorderManager.onStop(res => {
-          console.log(res)
-          // if (typeof res === 'undefined' || res.duration < 100000) {
-          //   wepy.showModal({
-          //     title: 'o(╥﹏╥)o',
-          //     content: '录制时间不能少于10秒钟哦！',
-          //     showCancel: false,
-          //     confirmText: '好的',
-          //     success: function(res) {
-          //       if (res.confirm) {
-          //         console.log('用户点击确定')
-          //       }
-          //     }
-          //   })
-          // } else {
-          wepy.navigateTo({
-            url: 'recordStoryFinish',
-            success: () => {
-              this.methods.finishRecord(res)
-            }
+          this.methods.finishRecord(res).then(res => {
+            wepy.navigateTo({
+              url: 'recordStoryFinish'
+            })
           })
           // }
         })
