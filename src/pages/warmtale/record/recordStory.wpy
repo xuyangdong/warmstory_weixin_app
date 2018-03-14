@@ -268,6 +268,7 @@
           this.currentPage = 0
           this.isRecording = false
           this.isStarted = false
+          this.$apply()
         })
         recorderManager.onPause(res => {
           wepy.showModal({

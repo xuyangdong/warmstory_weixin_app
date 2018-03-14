@@ -305,7 +305,6 @@
       }
     }
     onShow() {
-      console.log(this.record)
       if (!this._innerObj.innerAudioContext) {
         this._innerObj.innerAudioContext = wepy.createInnerAudioContext()
         this._innerObj.innerAudioContext.onError((...args) => {
