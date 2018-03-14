@@ -277,7 +277,7 @@
         //     audioManager.pause()
         //   }
         // }
-      },
+      }
       handleBeauty: () => {
         wepy.showModal({
           title: '叮咚~',
@@ -294,7 +294,6 @@
         })
       }
     }
-    onReady() {}
   }
   onShow() {
     console.log(this.record)
@@ -322,7 +321,6 @@
     this._innerObj.innerAudioContext.play()
     this.isPlaying = true
   }
-  onReady () {
-  }
+
 }
 </script>
