@@ -92,8 +92,8 @@
         </view>
         <scroll-view class="warmtale-recordStory_article" scroll-y="{{ true }}">
           <text>
-                                {{ currentPageContent }}
-                                </text>
+                                  {{ currentPageContent }}
+                                  </text>
         </scroll-view>
       </view>
       <view class="warmtale-recordStory_control">
@@ -237,6 +237,10 @@
             }
           })
           // }
+        })
+        //  重新加载暂停的回调方法
+        recorderManager.onPause(res => {
+          console.log(res, '暂停了')
         })
         if (this.isStarted) {
           // 已经开始录音

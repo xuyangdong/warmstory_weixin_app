@@ -94,7 +94,7 @@
 <template>
   <view class="weui-flex container warmtale-recordStoryFinish_container">
     <view class="warmtale-recordStoryFinish_topTips">
-      录音已保存至草稿，可以进行美化哦~
+      点击播放，试听你的精彩作品吧~
     </view>
     <view class="warmtale-recordStoryFinish_middleContent">
       <view class="warmtale-recordStoryFinish_picture">
@@ -113,19 +113,19 @@
         </view>
       </view>
     </view>
-  </view>
-  <view class="warmtale-recordStoryFinish_bottomController">
-    <view class="warmtale-recordStoryFinish_switch">
-      <!-- <switch />
-      <view class="warmtale-recordStoryFinish_switchLabel">自动匹配背景音乐</view> -->
-    </view>
-    <view class="warmtale-recordStoryFinish_buttonGroup">
-      <commonbuttonPrimary >
-        <view style="font-size:30rpx;" bindtap="clickUpload">{{ uploading ? '正在上传' : '直接上传' }}</view>
-      </commonbuttonPrimary>
-      <commonbuttonGhost type="ghost">
-        <view style="font-size:30rpx;" bindtap="handleBeauty">去美化</view>
-      </commonbuttonGhost>
+    <view class="warmtale-recordStoryFinish_bottomController">
+      <view class="warmtale-recordStoryFinish_switch">
+        <!-- <switch />
+        <view class="warmtale-recordStoryFinish_switchLabel">自动匹配背景音乐</view> -->
+      </view>
+      <view class="warmtale-recordStoryFinish_buttonGroup">
+        <commonbuttonPrimary>
+          <view style="font-size:30rpx;" bindtap="clickUpload">{{ uploading ? '正在上传' : '直接上传' }}</view>
+        </commonbuttonPrimary>
+        <commonbuttonGhost type="ghost">
+          <view style="font-size:30rpx;" bindtap="handleBeauty">去美化</view>
+        </commonbuttonGhost>
+      </view>
     </view>
   </view>
 </template>
@@ -178,11 +178,6 @@
       commonbuttonPrimary: CommonButton,
       commonbuttonGhost: CommonButton
     }
-    computed = {
-      formatTime: (duration) => {
-        return duration / (1000 * 60) + '\'' + (duration % 60) / 1000 + '"'
-      }
-    }
     methods = {
       clickUpload: () => {
         this.uploading = true
@@ -209,7 +204,7 @@
                   icon: 'success',
                   duration: 2000
                 })
-                this.methods.publishWork(this.todayStory.id, `${host}/${token.dir}/${fileName}`, this.formatTime(this.duration))
+                this.methods.publishWork(this.todayStory.id, `${host}/${token.dir}/${fileName}`, this.duration)
                 console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
               },
               fail: () => {
@@ -288,13 +283,15 @@
       },
       handleBeauty: () => {
         wepy.showModal({
-          title: 'o(╥﹏╥)o',
-          content: '抱歉，现在部分功能还没办法在小程序里实现，在【读个小故事】app里能体验到更多更炫酷的美化功能，快去应用商店下载体验吧！',
-          showCancel: false,
-          confirmText: '好的',
+          title: '叮咚~',
+          content: '快去APP里体验更炫酷的美化功能吧！',
+          cancelText: '再等等',
+          confirmText: '现在就去',
           success: function(res) {
             if (res.confirm) {
               console.log('用户点击确定')
+            } else if (res.cancel) {
+              console.log('用户点击取消')
             }
           }
         })

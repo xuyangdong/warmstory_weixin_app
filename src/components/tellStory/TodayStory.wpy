@@ -116,7 +116,7 @@
         if (typeof this.todayStory === 'undefined' || this.todayStory == null) {
           return '加载中……'
         } else if (this.todayStory.introduction == null && this.todayStory.content != null) {
-          return JSON.parse(this.todayStory.content)[0].content.substring(0, 30) + '...'
+          return JSON.parse(this.todayStory.content)[0].content.substring(0, 30).replace(/\*/g, '  ') + '...'
         } else if (this.todayStory.introduction != null && this.todayStory.introduction.length > 5) {
           return this.todayStory.introduction.substring(0, 30) + '...'
         } else {
