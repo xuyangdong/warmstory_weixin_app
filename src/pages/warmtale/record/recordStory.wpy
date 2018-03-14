@@ -204,11 +204,10 @@
       clickRecord: () => {
         let recorderManager = wepy.getRecorderManager()
         recorderManager.onStop(res => {
-          wepy.navigateTo({
-            url: 'recordStoryFinish',
-            success: () => {
-              this.methods.finishRecord(res)
-            }
+          this.methods.finishRecord(res).then(res => {
+            wepy.navigateTo({
+              url: 'recordStoryFinish'
+            })
           })
         })
         if (this.isStarted) {
