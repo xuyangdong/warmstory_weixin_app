@@ -92,8 +92,8 @@
         </view>
         <scroll-view class="warmtale-recordStory_article" scroll-y="{{ true }}">
           <text>
-                                  {{ currentPageContent }}
-                                  </text>
+                                    {{ currentPageContent }}
+                                    </text>
         </scroll-view>
       </view>
       <view class="warmtale-recordStory_control">
@@ -217,7 +217,7 @@
         let recorderManager = wepy.getRecorderManager()
         recorderManager.onStop(res => {
           this.methods.finishRecord(res).then(res => {
-            wepy.navigateTo({
+            wepy.redirectTo({
               url: 'recordStoryFinish'
             })
           })
@@ -280,6 +280,7 @@
                 recorderManager.stop()
               } else if (res.cancel) {
                 recorderManager.resume()
+                this.isRecording = true
               }
             }
           })
