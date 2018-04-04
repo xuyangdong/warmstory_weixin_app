@@ -105,7 +105,7 @@
       </view>
       <view class="warmtale-recordStoryFinish_controller">
         <view class="warmtale-recordStoryFinish_slider">
-          <slider value="{{ progressStyle }}" />
+          <slider value="{{ progressStyle }}" bindchanging="dragingProgress" bindchange="finishDrag"/>
         </view>
         <view class="warmtale-recordStoryFinish_duration">
           <view>{{ currentTimeFormat }}</view>
@@ -222,6 +222,9 @@
               complete: (res) => {
                 this.uploading = false
                 this.$apply()
+                wepy.navigateTo({
+                  url: '../tellStory'
+                })
                 console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
               }
             })
@@ -302,6 +305,40 @@
             }
           }
         })
+      },
+      dragingProgress: (event) => {
+        this._innerObj.innerAudioContext.onTimeUpdate(null)
+      },
+      finishDrag: (event) => {
+        let position = this.duration * (event.detail.value / 100)
+        this._innerObj.innerAudioContext.seek(Math.floor(position))
+        this.currentTime = Math.floor(position)
+        this._innerObj.innerAudioContext.onTimeUpdate(() => {
+          _.throttle(() => {
+            this.currentTime = this._innerObj.innerAudioContext && this._innerObj.innerAudioContext.currentTime
+            this.duration = this._innerObj.innerAudioContext && this._innerObj.innerAudioContext.duration
+            this.$apply()
+          }, 1000)()
+        })
+        // wepy.seekBackgroundAudio({
+        //   position: Math.floor(position),
+        //   success: (...args) => {
+        //   },
+        //   fail: (...args) => {
+        //     console.log('fail', args)
+        //   },
+        //   complete: (...args) => {
+        //     this.currentTime = Math.floor(position)
+        //     this._innerObj.innerAudioContext.onTimeUpdate(() => {
+        //       _.throttle(() => {
+        //         this.currentTime = this._innerObj.innerAudioContext && this._innerObj.innerAudioContext.currentTime
+        //         this.duration = this._innerObj.innerAudioContext && this._innerObj.innerAudioContext.duration
+        //         this.$apply()
+        //       }, 1000)()
+        //     })
+        //     this.$apply()
+        //   }
+        // })
       }
     }
     onShow() {

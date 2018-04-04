@@ -109,7 +109,7 @@
       </commonbutton>
       <image src="{{ isRecording ? '../../../resource/img/stop-recorder.png' : '../../../resource/img/recorder.png'}}" bindtap="clickRecord" />
       <commonbutton>
-        <view bindtap="clickFinishButton">完成</view>
+        <view bindtap="clickFinishButton">下一步</view>
       </commonbutton>
     </view>
   </view>
@@ -217,7 +217,7 @@
         let recorderManager = wepy.getRecorderManager()
         recorderManager.onStop(res => {
           this.methods.finishRecord(res).then(res => {
-            wepy.redirectTo({
+            wepy.navigateTo({
               url: 'recordStoryFinish'
             })
           })
@@ -289,6 +289,15 @@
         recorderManager.pause()
       }
     }
-    onReady() {}
+    onReady() {
+      console.log('ready')
+    }
+    onShow() {
+      console.log('show')
+      this.currentPage = 0
+    }
+    onLoad() {
+      console.log('load')
+    }
   }
 </script>

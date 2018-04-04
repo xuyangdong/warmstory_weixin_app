@@ -16,6 +16,16 @@
       width: 100%;
       height: 100vh;
       filter: blur(10rpx);
+      z-index: -2;
+    }
+    .warmtale-playstory_mask {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      background-color: gray;
+      opacity: 0.4;
       z-index: -1;
     }
     .warmtale-playstory_userInfo {
@@ -69,6 +79,7 @@
     <view class="warmtale-playstory_bottomPlayer">
       <player />
     </view>
+    <view class="warmtale-playstory_mask"></view>
     <image src="{{ work.coverUrl }}" />
   </view>
 </template>
@@ -76,6 +87,7 @@
 <script>
   import wepy from 'wepy'
   import Player from '@/components/widget/playingStory/Player'
+  import _ from 'lodash'
   import {
     connect
   } from 'wepy-redux'
@@ -96,13 +108,37 @@
     }
     onShow() {
       if (this.$parent.globalData.innerAudioContext) {
-        this.$parent.globalData.innerAudioContext.stop()
-        this.$parent.globalData.innerAudioContext.destroy()
-        this.$parent.globalData.innerAudioContext = null
+        if (!this.$parent.globalData.innerAudioContext.paused) {
+          // 处于播放状态状态
+        } else {
+          this.$parent.globalData.innerAudioContext.stop()
+          // this.$parent.globalData.innerAudioContext.destroy()
+          this.$parent.globalData.innerAudioContext = null
+        }
+      } else {
+        // 没有播放器对象
+        this.$parent.globalData.innerAudioContext = wepy.getBackgroundAudioManager()
+        this.$parent.globalData.innerAudioContext.onError((...args) => {
+          console.log('error', args)
+        })
+        this.$parent.globalData.innerAudioContext.onPlay((...args) => {
+          console.log('success', args)
+        })
+        this.$parent.globalData.innerAudioContext.onTimeUpdate(() => {
+          _.throttle(() => {
+            this.currentTime = this.$parent.globalData.innerAudioContext && this.$parent.globalData.innerAudioContext.currentTime
+            this.duration = this.$parent.globalData.innerAudioContext && this.$parent.globalData.innerAudioContext.duration
+            this.$apply()
+          }, 1000)()
+        })
+        this.$parent.globalData.innerAudioContext.src = this.work.url
       }
     }
     onHide() {
       console.log('hide')
+    }
+    onUnload() {
+      console.log('unload')
     }
   }
 </script>

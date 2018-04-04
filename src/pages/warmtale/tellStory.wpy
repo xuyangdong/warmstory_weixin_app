@@ -108,7 +108,8 @@ import { getAFreeRandomWork } from '@/store/actions/work'
 import { connect } from 'wepy-redux'
 
 @connect({
-  userInfo: state => state.user
+  userInfo: state => state.user,
+  work: state => state.work
 }, {
   getUserInfo,
   getTodayStory,
@@ -142,11 +143,19 @@ export default class TellStory extends wepy.page {
       }
     },
     clickEaseListen () {
-      this.methods.getAFreeRandomWork().then(res => {
+      console.log(!this.work)
+      if (!this.work.id) {
+        // work为空的时候去获取新的作品
+        this.methods.getAFreeRandomWork().then(res => {
+          wepy.navigateTo({
+            url: 'playingStory'
+          })
+        })
+      } else {
         wepy.navigateTo({
           url: 'playingStory'
         })
-      })
+      }
     }
   }
   onReady() {
@@ -167,6 +176,16 @@ export default class TellStory extends wepy.page {
         })
       }
     })
+  }
+  onShareAppMessage(options) {
+    console.log(options)
+    return {
+      title: '绮语文化|读个小故事',
+      path: '/pages/warmtale/tellStory',
+      success: (res) => {
+        console.log(res)
+      }
+    }
   }
 }
 </script>
