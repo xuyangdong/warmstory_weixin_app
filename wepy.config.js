@@ -43,7 +43,7 @@ module.exports = {
   plugins: {
   },
   appConfig: {
-    noPromiseAPI: ['createSelectorQuery']
+    noPromiseAPI: ['getBackgroundAudioManager','createSelectorQuery']
   }
 }
 

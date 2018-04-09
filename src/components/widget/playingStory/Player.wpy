@@ -135,39 +135,60 @@ export default class Player extends wepy.component {
 
   methods = {
     clickPlayButton () {
-      if (!this.$parent.$parent.globalData.innerAudioContext) {
-        this.$parent.$parent.globalData.innerAudioContext = wepy.getBackgroundAudioManager()
-        this.$parent.$parent.globalData.innerAudioContext.onError((...args) => {
-          console.log('error', args)
-        })
-        this.$parent.$parent.globalData.innerAudioContext.onPlay((...args) => {
-          console.log('success', args)
-        })
-        this.$parent.$parent.globalData.innerAudioContext.onTimeUpdate(() => {
-          _.throttle(() => {
-            this.currentTime = this.$parent.$parent.globalData.innerAudioContext && this.$parent.$parent.globalData.innerAudioContext.currentTime
-            this.duration = this.$parent.$parent.globalData.innerAudioContext && this.$parent.$parent.globalData.innerAudioContext.duration
-            this.$apply()
-          }, 1000)()
-        })
-      }
-      if ((this.work.url && this.$parent.$parent.globalData.innerAudioContext.src === '' && this.work.url !== this.$parent.$parent.globalData.innerAudioContext.src) || typeof this.$parent.$parent.globalData.innerAudioContext.src === 'undefined') {
-        // 没有设置音频源
-        this.$parent.$parent.globalData.innerAudioContext.src = this.work.url
-        this.$parent.$parent.globalData.innerAudioContext.play()
-        this.playing = true
-      } else {
-        // 设置了音频源，
-        if (this.$parent.$parent.globalData.innerAudioContext.paused) {
-          // 暂停状态
-          this.$parent.$parent.globalData.innerAudioContext.play()
-          this.playing = true
-        } else {
-          // 播放状态
-          this.$parent.$parent.globalData.innerAudioContext.pause()
-          this.playing = false
+      wepy.getBackgroundAudioPlayerState({
+        success: (res) => {
+          if (res.status === 1) {
+            // 播放中
+            wepy.pauseBackgroundAudio()
+            this.playing = false
+          } else if (res.status === 0) {
+            // 暂停中
+            wepy.playBackgroundAudio()
+            this.playing = true
+          }
+        },
+        fail: (res) => {
+          if (res.errMsg === 'getBackgroundAudioPlayerState: fail not playing') {
+            // 没有播放
+            wepy.playBackgroundAudio({
+              dataUrl: this.work.url
+            })
+          }
         }
-      }
+      })
+      // if (!this.$parent.$parent.globalData.innerAudioContext) {
+      //   this.$parent.$parent.globalData.innerAudioContext = wepy.getBackgroundAudioManager()
+      //   this.$parent.$parent.globalData.innerAudioContext.onError((...args) => {
+      //     console.log('error', args)
+      //   })
+      //   this.$parent.$parent.globalData.innerAudioContext.onPlay((...args) => {
+      //     console.log('success', args)
+      //   })
+      //   this.$parent.$parent.globalData.innerAudioContext.onTimeUpdate(() => {
+      //     _.throttle(() => {
+      //       this.currentTime = this.$parent.$parent.globalData.innerAudioContext && this.$parent.$parent.globalData.innerAudioContext.currentTime
+      //       this.duration = this.$parent.$parent.globalData.innerAudioContext && this.$parent.$parent.globalData.innerAudioContext.duration
+      //       this.$apply()
+      //     }, 1000)()
+      //   })
+      // }
+      // if ((this.work.url && this.$parent.$parent.globalData.innerAudioContext.src === '' && this.work.url !== this.$parent.$parent.globalData.innerAudioContext.src) || typeof this.$parent.$parent.globalData.innerAudioContext.src === 'undefined') {
+      //   // 没有设置音频源
+      //   this.$parent.$parent.globalData.innerAudioContext.src = this.work.url
+      //   this.$parent.$parent.globalData.innerAudioContext.play()
+      //   this.playing = true
+      // } else {
+      //   // 设置了音频源，
+      //   if (this.$parent.$parent.globalData.innerAudioContext.paused) {
+      //     // 暂停状态
+      //     this.$parent.$parent.globalData.innerAudioContext.play()
+      //     this.playing = true
+      //   } else {
+      //     // 播放状态
+      //     this.$parent.$parent.globalData.innerAudioContext.pause()
+      //     this.playing = false
+      //   }
+      // }
     },
     goBefore: () => {
       if (this.$parent.$parent.globalData.innerAudioContext) {
@@ -180,7 +201,10 @@ export default class Player extends wepy.component {
       if (this.work.playingType === 'random') {
         this.methods.getAFreeRandomWork().then(res => {
           let music = res.payload.data.obj
-          this.playMusic(music)
+          wepy.playBackgroundAudio({
+            dataUrl: music.url
+          })
+          // this.playMusic(music)
         })
       } else {
         let sequence = this.work.sequence
@@ -188,7 +212,10 @@ export default class Player extends wepy.component {
         this.methods.setPlayingWork([sequence[0], sequence[1] === 0 ? storyList.length - 1 : sequence[1] - 1])
         .then(res => {
           let music = res.payload
-          this.playMusic(music)
+          wepy.playBackgroundAudio({
+            dataUrl: music.url
+          })
+          // this.playMusic(music)
         })
       }
     },
@@ -202,17 +229,24 @@ export default class Player extends wepy.component {
       if (this.work.playingType === 'random') {
         this.methods.getAFreeRandomWork().then(res => {
           let music = res.payload.data.obj
-          this.playMusic(music)
+          wepy.playBackgroundAudio({
+            dataUrl: music.url
+          })
+          // this.playMusic(music)
         })
       } else {
         this.methods.setPlayingWork().then(res => {
           let music = res.payload
-          this.playMusic(music)
+          wepy.playBackgroundAudio({
+            dataUrl: music.url
+          })
+          // this.playMusic(music)
         })
       }
     },
     dragingProgress: (event) => {
-      this.$parent.$parent.globalData.innerAudioContext.onTimeUpdate(null)
+      // this.$parent.$parent.globalData.innerAudioContext.onTimeUpdate(null)
+      clearInterval(this._innerObj.temp)
     },
     finishDrag: (event) => {
       let position = this.duration * (event.detail.value / 100)
@@ -225,13 +259,25 @@ export default class Player extends wepy.component {
         },
         complete: (...args) => {
           this.currentTime = Math.floor(position)
-          this.$parent.$parent.globalData.innerAudioContext.onTimeUpdate(() => {
-            _.throttle(() => {
-              this.currentTime = this.$parent.$parent.globalData.innerAudioContext && this.$parent.$parent.globalData.innerAudioContext.currentTime
-              this.duration = this.$parent.$parent.globalData.innerAudioContext && this.$parent.$parent.globalData.innerAudioContext.duration
-              this.$apply()
-            }, 1000)()
-          })
+          // this.$parent.$parent.globalData.innerAudioContext.onTimeUpdate(() => {
+          //   _.throttle(() => {
+          //     this.currentTime = this.$parent.$parent.globalData.innerAudioContext && this.$parent.$parent.globalData.innerAudioContext.currentTime
+          //     this.duration = this.$parent.$parent.globalData.innerAudioContext && this.$parent.$parent.globalData.innerAudioContext.duration
+          //     this.$apply()
+          //   }, 1000)()
+          // })
+          this._innerObj.temp = setInterval(() => {
+            wepy.getBackgroundAudioPlayerState({
+              success: (res) => {
+                if (res.status === 1) {
+                  this.currentTime = res.currentPosition
+                  this.duration = res.duration
+                  this.playing = true
+                }
+                this.$apply()
+              }
+            })
+          }, 1000)
           this.$apply()
         }
       })
@@ -239,53 +285,63 @@ export default class Player extends wepy.component {
   }
 
   playMusic = (music) => {
-    if (!this.$parent.$parent.globalData.innerAudioContext) {
-      this.$parent.$parent.globalData.innerAudioContext = wepy.getBackgroundAudioManager()
-      this.$parent.$parent.globalData.innerAudioContext.onError((...args) => {
-        console.log('error', args)
-      })
-      this.$parent.$parent.globalData.innerAudioContext.onPlay((...args) => {
-        console.log('success', args)
-      })
-      this.$parent.$parent.globalData.innerAudioContext.onTimeUpdate(() => {
-        _.throttle(() => {
-          this.currentTime = this.$parent.$parent.globalData.innerAudioContext && this.$parent.$parent.globalData.innerAudioContext.currentTime
-          this.duration = this.$parent.$parent.globalData.innerAudioContext && this.$parent.$parent.globalData.innerAudioContext.duration
-          this.$apply()
-        }, 1000)()
-      })
-    }
-    this.$parent.$parent.globalData.innerAudioContext.src = music.url
-    this.$parent.$parent.globalData.innerAudioContext.play()
-    this.playing = true
-    this.$apply()
+
+    // if (!this.$parent.$parent.globalData.innerAudioContext) {
+    //   this.$parent.$parent.globalData.innerAudioContext = wepy.getBackgroundAudioManager()
+    //   this.$parent.$parent.globalData.innerAudioContext.onError((...args) => {
+    //     console.log('error', args)
+    //   })
+    //   this.$parent.$parent.globalData.innerAudioContext.onPlay((...args) => {
+    //     console.log('success', args)
+    //   })
+    //   this.$parent.$parent.globalData.innerAudioContext.onTimeUpdate(() => {
+    //     _.throttle(() => {
+    //       this.currentTime = this.$parent.$parent.globalData.innerAudioContext && this.$parent.$parent.globalData.innerAudioContext.currentTime
+    //       this.duration = this.$parent.$parent.globalData.innerAudioContext && this.$parent.$parent.globalData.innerAudioContext.duration
+    //       this.$apply()
+    //     }, 1000)()
+    //   })
+    // }
+    // this.$parent.$parent.globalData.innerAudioContext.src = music.url
+    // this.$parent.$parent.globalData.innerAudioContext.play()
+    // this.playing = true
+    // this.$apply()
   }
 
   onLoad () {
-    let temp = setInterval(() => {
-      if (this.$parent.$parent.globalData.innerAudioContext) {
-        this.$parent.$parent.globalData.innerAudioContext.onError((...args) => {
-          console.log('error', args)
-        })
-        this.$parent.$parent.globalData.innerAudioContext.onPlay((...args) => {
-          console.log('success', args)
-        })
-        this.$parent.$parent.globalData.innerAudioContext.onTimeUpdate(() => {
-          _.throttle(() => {
-            this.currentTime = this.$parent.$parent.globalData.innerAudioContext && this.$parent.$parent.globalData.innerAudioContext.currentTime
-            this.duration = this.$parent.$parent.globalData.innerAudioContext && this.$parent.$parent.globalData.innerAudioContext.duration
-            this.$apply()
-          }, 1000)()
-        })
-        clearInterval(temp)
-      }
+    this._innerObj.temp = setInterval(() => {
+      wepy.getBackgroundAudioPlayerState({
+        success: (res) => {
+          if (res.status === 1) {
+            this.currentTime = res.currentPosition
+            this.duration = res.duration
+            this.playing = true
+          }
+          this.$apply()
+        }
+      })
     }, 1000)
+    // let temp = setInterval(() => {
+    //   if (this.$parent.$parent.globalData.innerAudioContext) {
+    //     this.$parent.$parent.globalData.innerAudioContext.onError((...args) => {
+    //       console.log('error', args)
+    //     })
+    //     this.$parent.$parent.globalData.innerAudioContext.onPlay((...args) => {
+    //       console.log('success', args)
+    //     })
+    //     this.$parent.$parent.globalData.innerAudioContext.onTimeUpdate(() => {
+    //       _.throttle(() => {
+    //         this.currentTime = this.$parent.$parent.globalData.innerAudioContext && this.$parent.$parent.globalData.innerAudioContext.currentTime
+    //         this.duration = this.$parent.$parent.globalData.innerAudioContext && this.$parent.$parent.globalData.innerAudioContext.duration
+    //         this.$apply()
+    //       }, 1000)()
+    //     })
+    //     clearInterval(temp)
+    //   }
+    // }, 1000)
   }
-  onShow() {
-    console.log('show', this.$parent.$parent.globalData.innerAudioContext)
-  }
-  onReady() {
-    console.log('ready', this.$parent.$parent.globalData.innerAudioContext)
+  onUnload() {
+    console.log('onUnload')
   }
 }
 </script>

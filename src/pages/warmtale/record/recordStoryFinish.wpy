@@ -185,6 +185,13 @@
     }
     methods = {
       clickUpload: () => {
+        if (this.uploading) {
+          wepy.showToast({
+            title: '正在上传',
+            mask: true
+          })
+          return
+        }
         this.uploading = true
         wepy.request({
           url: api.ossToken.get,
@@ -269,29 +276,6 @@
             this.isPlaying = false
           }
         }
-        // todo : 为什么不能用backgroundAudioManager，怀疑是url必须是合法的网络域名而不是一个本地地址
-        // let audioManager = wepy.getBackgroundAudioManager()
-        // audioManager.onTimeUpdate(() => {
-        //   _.throttle(() => {
-        //     this.currentTime = audioManager.currentTime
-        //     this.duration = audioManager.duration
-        //     this.$apply()
-        //   }, 1000)()
-        // })
-        // if (typeof audioManager.paused === 'undefined' && this.record.tempFilePath) {
-        //   // 没有设置音频源
-        //   wepy.playBackgroundAudio({
-        //     // dataUrl: 'http://warmtale-backend-bucket.oss-cn-beijing.aliyuncs.com/app/works/3120/1514791743206.mp3'
-        //     dataUrl: this.record.tempFilePath
-        //   })
-        // } else {
-        //   // 设置了音频源，
-        //   if (audioManager.paused) {
-        //     audioManager.play()
-        //   } else {
-        //     audioManager.pause()
-        //   }
-        // }
       },
       handleBeauty: () => {
         wepy.showModal({
@@ -320,25 +304,6 @@
             this.$apply()
           }, 1000)()
         })
-        // wepy.seekBackgroundAudio({
-        //   position: Math.floor(position),
-        //   success: (...args) => {
-        //   },
-        //   fail: (...args) => {
-        //     console.log('fail', args)
-        //   },
-        //   complete: (...args) => {
-        //     this.currentTime = Math.floor(position)
-        //     this._innerObj.innerAudioContext.onTimeUpdate(() => {
-        //       _.throttle(() => {
-        //         this.currentTime = this._innerObj.innerAudioContext && this._innerObj.innerAudioContext.currentTime
-        //         this.duration = this._innerObj.innerAudioContext && this._innerObj.innerAudioContext.duration
-        //         this.$apply()
-        //       }, 1000)()
-        //     })
-        //     this.$apply()
-        //   }
-        // })
       }
     }
     onShow() {
@@ -366,14 +331,9 @@
       this._innerObj.innerAudioContext.play()
       this.isPlaying = true
     }
-    onHide() {
-      console.log('onHide')
-    }
     onUnload() {
-      console.log('onunload')
       this._innerObj.innerAudioContext.stop()
       this.isPlaying = false
     }
-    onReady() {}
   }
 </script>
