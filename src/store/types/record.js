@@ -1,1 +1,2 @@
 export const FINISH_RECORD = 'FINISH_RECORD'
+export const CLEAN_RECORD = 'CLEAN_RECORD'

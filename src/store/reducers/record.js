@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions'
-import { FINISH_RECORD } from '../types/record'
+import { FINISH_RECORD,CLEAN_RECORD } from '../types/record'
 
 export default handleActions({
   [FINISH_RECORD] (state, action) {
@@ -7,7 +7,8 @@ export default handleActions({
       ...state,
       ...action.payload
     }
+  },
+  [CLEAN_RECORD] (state, action) {
+    return {}
   }
-}, {
-  test: 'test4'
-})
+}, {})

@@ -123,7 +123,8 @@
     connect
   } from 'wepy-redux'
   import {
-    finishRecord
+    finishRecord,
+    cleanRecord
   } from '@/store/actions/record'
   @connect({
     todayStory: state => {
@@ -137,9 +138,11 @@
         ...state.todayStory,
         content: content
       }
-    }
+    },
+    record: state => state.record
   }, {
-    finishRecord
+    finishRecord,
+    cleanRecord
   })
   export default class RecordStory extends wepy.page {
     config = {
@@ -174,7 +177,13 @@
     }
     methods = {
       clickFinishButton: () => {
-        console.log(this.isStarted, '是否已经开始录制')
+        console.log(this.record)
+        if (this.record.fileSize > 0) {
+          wepy.navigateTo({
+            url: 'recordStoryFinish'
+          })
+          return
+        }
         if (!this.isStarted) {
           wepy.showModal({
             title: 'o(╥﹏╥)o',
@@ -241,13 +250,16 @@
           }
         } else {
           // 还没开始录音
-          recorderManager.start({
-            duration: 600000,
-            format: 'mp3'
+          this.methods.cleanRecord({}).then(res => {
+            recorderManager.start({
+              duration: 600000,
+              format: 'mp3'
+            })
+            this.isRecording = true
+            this.isStarted = true
+            this.$apply()
+            console.log('开始录音', this.isRecording)
           })
-          this.isRecording = true
-          this.isStarted = true
-          console.log('开始录音', this.isRecording)
         }
       },
       gotoFirst: () => {
