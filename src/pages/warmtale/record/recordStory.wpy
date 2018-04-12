@@ -276,12 +276,7 @@
       },
       clickReRecord: () => {
         let recorderManager = wepy.getRecorderManager()
-        recorderManager.onStop(res => {
-          this.currentPage = 0
-          this.isRecording = false
-          this.isStarted = false
-          this.$apply()
-        })
+
         recorderManager.onPause(res => {
           wepy.showModal({
             title: '叮咚~',
@@ -290,6 +285,12 @@
             cancelText: '取消',
             success: function(res) {
               if (res.confirm) {
+                recorderManager.onStop(res => {
+                  this.currentPage = 0
+                  this.isRecording = false
+                  this.isStarted = false
+                  this.$apply()
+                })
                 recorderManager.stop()
               } else if (res.cancel) {
                 recorderManager.resume()
