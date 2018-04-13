@@ -312,5 +312,13 @@
     onLoad() {
       console.log('load')
     }
+    onUnload() {
+      let recorderManager = wepy.getRecorderManager()
+      recorderManager.onStop(() => {
+        console.log('stop record')
+      })
+      recorderManager.stop()
+      console.log('unload')
+    }
   }
 </script>
