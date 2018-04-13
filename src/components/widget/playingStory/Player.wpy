@@ -115,7 +115,9 @@ export default class Player extends wepy.component {
     currentTime: 0.0,
     playing: false
   }
-  _innerObj = {}
+  _innerObj = {
+    temp: 'empty'
+  }
   computed = {
     durationFormat: () => {
       return moment(parseFloat((this.duration || 0.0).toFixed(3)) * 1000).format('mm:ss')
@@ -204,6 +206,7 @@ export default class Player extends wepy.component {
     },
     dragingProgress: (event) => {
       clearInterval(this._innerObj.temp)
+      this._innerObj.temp = 'empty'
     },
     finishDrag: (event) => {
       let position = this.duration * (event.detail.value / 100)
@@ -223,12 +226,12 @@ export default class Player extends wepy.component {
                   this.currentTime = res.currentPosition
                   this.duration = res.duration
                   this.playing = true
+                  this.$apply()
                 }
-                this.$apply()
               }
             })
           }, 1000)
-          this.$apply()
+          // this.$apply()
         }
       })
     }
@@ -238,6 +241,9 @@ export default class Player extends wepy.component {
   }
 
   onLoad () {
+    if (this._innerObj.temp !== 'empty') {
+      clearInterval(this._innerObj.temp)
+    }
     this._innerObj.temp = setInterval(() => {
       wepy.getBackgroundAudioPlayerState({
         success: (res) => {
@@ -245,14 +251,18 @@ export default class Player extends wepy.component {
             this.currentTime = res.currentPosition
             this.duration = res.duration
             this.playing = true
+            this.$apply()
           }
-          this.$apply()
         }
       })
     }, 1000)
   }
   onUnload() {
     console.log('onUnload')
+  }
+
+  onUnLoad() {
+    console.log('onUnLoad')
   }
 }
 </script>

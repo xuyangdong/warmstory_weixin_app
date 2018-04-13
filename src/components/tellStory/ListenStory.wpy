@@ -94,7 +94,7 @@
         </view>
         <view wx:if="{{ dropDown[index] }}" class='warmtale-storyset_dropdown'>
           <view wx:for="{{ item.storyList }}" wx:for-item="story">
-            <view class="warmtale-storyitem_container" bindtap="handleClickWork" data-story="{{ index }}">
+            <view class="warmtale-storyitem_container" bindlongpress="handleDeleteWork" bindtap="handleClickWork" data-story="{{ index }}">
                 <view class="warmtale-storyitem_storyTitle">
                     {{ story.storyTitle }}
                 </view>
@@ -113,7 +113,7 @@
 import wepy from 'wepy'
 import AddStorySet from '@/components/widget/listenstory/AddStorySet'
 import { getStorySet, getStoryList } from '@/store/actions/storySetList'
-import { setPlayingWork } from '@/store/actions/work'
+import { setPlayingWork, deleteWork } from '@/store/actions/work'
 import { connect } from 'wepy-redux'
 
 @connect({
@@ -121,7 +121,8 @@ import { connect } from 'wepy-redux'
 }, {
   getStorySet,
   getStoryList,
-  setPlayingWork
+  setPlayingWork,
+  deleteWork
 })
 export default class ListenStory extends wepy.component {
   components = {
@@ -162,6 +163,25 @@ export default class ListenStory extends wepy.component {
         success: function(res) {
           if (res.confirm) {
             console.log('用户点击确定')
+          }
+        }
+      })
+    },
+    handleDeleteWork(event) {
+      console.log('longPress')
+      wepy.showModal({
+        title: 'o(╥﹏╥)o',
+        content: '确定要删除该作品吗？',
+        showCancel: false,
+        confirmText: '好的',
+        success: (res) => {
+          if (res.confirm) {
+            console.log('用户点击确定')
+            this.methods.deleteWork([this.openedStorySet, event.currentTarget.dataset.story]).then(() => {
+              // this.methods.getStoryList(currentStorySet.id, 0, 10)
+            })
+          } else {
+            console.log('用户点击取消')
           }
         }
       })

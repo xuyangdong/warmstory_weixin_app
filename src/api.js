@@ -23,7 +23,8 @@ export default {
   },
   work: {
     get: `${baseUrl}/user/getAFreeRandomWorks`,
-    post: `${baseUrl}/user/v3/publishWorks`
+    post: `${baseUrl}/user/v3/publishWorks`,
+    delete: `${baseUrl}/user/deleteWorks`
   },
   playList: {
     post: `${baseUrl}/user/playList/newPlayList`

@@ -1,6 +1,6 @@
 import wepy from 'wepy'
 import api from '@/api'
-import { GET_AFREERANDOMWORK, SET_WORK, PUBLISHWORK} from '../types/work'
+import { GET_AFREERANDOMWORK, SET_WORK, PUBLISHWORK, DELETE_WORK} from '../types/work'
 import { createAction } from 'redux-actions'
 import { getStore } from 'wepy-redux'
 
@@ -73,6 +73,41 @@ export const publishWork = createAction(PUBLISHWORK, (storyId, url, duration = '
         resolve({
           data: data.data
         })
+      }
+    })
+  })
+})
+
+export const deleteWork = createAction(DELETE_WORK, (sequence) => {
+  let storySetList = getStore().getState().storySetList
+  let work = storySetList[sequence[0]].storyList[sequence[1]]
+  let user = getStore().getState().user
+  return new Promise(resolve => {
+    wepy.request({
+      url: api.work.delete,
+      method: 'POST',
+      header: {
+        'Story-Access-Token': `${user.accessToken}`,
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      data: {
+        worksId: work.id
+      },
+      success: (data, statusCode, header) => {
+        console.log(data)
+        if (data.data.status === 1) {
+          // 删除成功
+          resolve({
+            data: {
+              storySetIndex: sequence[0],
+              workIndex: sequence[1]
+            }
+          })
+        } else {
+        }
+      },
+      complete: (...args) => {
+        console.log('complete', args)
       }
     })
   })

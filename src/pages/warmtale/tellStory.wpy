@@ -143,8 +143,7 @@ export default class TellStory extends wepy.page {
       }
     },
     clickEaseListen () {
-      console.log(!this.work)
-      if (!this.work.id) {
+      if (!this.work.id || this.work.playingType === 'sequence') {
         // work为空的时候去获取新的作品
         this.methods.getAFreeRandomWork().then(res => {
           wepy.navigateTo({

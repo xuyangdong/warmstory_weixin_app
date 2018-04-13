@@ -110,7 +110,13 @@
       wepy.getBackgroundAudioPlayerState({
         success: (res) => {
           if (res.status === 1) {
-            // 播放中
+            // 播放中，
+            if (res.dataUrl !== this.work.url) {
+              // 播放曲目不一样
+              wepy.playBackgroundAudio({
+                dataUrl: this.work.url
+              })
+            }
           } else if (res.state === 0) {
             // 暂停中
           }
@@ -127,45 +133,17 @@
           console.log('complete', res)
         }
       })
-      // if (this.$parent.globalData.innerAudioContext) {
-      //   if (!this.$parent.globalData.innerAudioContext.paused) {
-      //     // 处于播放状态状态
-      //   } else {
-      //     this.$parent.globalData.innerAudioContext.stop()
-      //     // this.$parent.globalData.innerAudioContext.destroy()
-      //     this.$parent.globalData.innerAudioContext = null
-      //   }
-      // } else {
-      //   // 没有播放器对象
-      //   // this.$parent.globalData.innerAudioContext = wx.getBackgroundAudioManager()
-      //   // console.log(this.$parent.globalData.innerAudioContext, wx.canIUse('getBackgroundAudioManager'))
-      //   // console.log('playingStory', _.isEmpty(wepy.getBackgroundAudioManager()))
-      //   // if (_.isEmpty(this.$parent.globalData.innerAudioContext)) {
-      //   //   wepy.playBackgroundAudio({
-      //   //     dataUrl: this.work.url,
-      //   //     success: (res) => {
-      //   //       console.log('success', res)
-      //   //     },
-      //   //     complete: (res) => {
-      //   //       console.log('complete', res)
-      //   //     }
-      //   //   })
-      //   // }
-      //   // this.$parent.globalData.innerAudioContext.onError((...args) => {
-      //   //   console.log('error', args)
-      //   // })
-      //   // this.$parent.globalData.innerAudioContext.onPlay((...args) => {
-      //   //   console.log('success', args)
-      //   // })
-      //   // this.$parent.globalData.innerAudioContext.onTimeUpdate(() => {
-      //   //   _.throttle(() => {
-      //   //     this.currentTime = this.$parent.globalData.innerAudioContext && this.$parent.globalData.innerAudioContext.currentTime
-      //   //     this.duration = this.$parent.globalData.innerAudioContext && this.$parent.globalData.innerAudioContext.duration
-      //   //     this.$apply()
-      //   //   }, 1000)()
-      //   // })
-      //   // this.$parent.globalData.innerAudioContext.src = this.work.url
-      // }
+    }
+
+    onShareAppMessage(options) {
+      return {
+        title: `绮语文化|读个小故事--${this.work.storyTitle}`,
+        path: '/pages/warmtale/playingStory',
+        imageUrl: this.work.coverUrl,
+        success: (res) => {
+          console.log(res)
+        }
+      }
     }
   }
 </script>
