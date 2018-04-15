@@ -230,7 +230,11 @@
                 this.uploading = false
                 this.$apply()
                 wepy.navigateTo({
-                  url: '../tellStory'
+                  url: '../tellStory',
+                  success: () => {
+                    this._innerObj.innerAudioContext.pause()
+                    this.isPlaying = false
+                  }
                 })
                 console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
               }
