@@ -51,7 +51,10 @@ export default class extends wepy.app {
     this.use('requestfix')
   }
 
-  onLaunch() {}
+  onLaunch(options) {
+    this.globalData.scene = options.scene
+    console.log('app launch', options)
+  }
 
   sleep(s) {
     return new Promise((resolve, reject) => {

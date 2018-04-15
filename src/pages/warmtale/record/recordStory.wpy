@@ -283,7 +283,7 @@
             content: '重新开始录制，将覆盖现有音频~',
             confirmText: '确认',
             cancelText: '取消',
-            success: function(res) {
+            success: (res) => {
               if (res.confirm) {
                 recorderManager.onStop(res => {
                   this.currentPage = 0

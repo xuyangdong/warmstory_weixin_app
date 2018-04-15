@@ -87,18 +87,23 @@
 <script>
   import wepy from 'wepy'
   import Player from '@/components/widget/playingStory/Player'
-  // import _ from 'lodash'
+  import {getWorkById} from '@/store/actions/work'
   import {
     connect
   } from 'wepy-redux'
   @connect({
     work: state => state.work
-  }, {})
+  }, {
+    getWorkById
+  })
   export default class PlayingStory extends wepy.page {
+    _innerObj = {}
     components = {
       player: Player
     }
-    onLoad() {
+    onLoad(options) {
+      this._innerObj.query = options
+      console.log('playingStory launch', options)
       wepy.showLoading({
         title: '渲染中'
       })
@@ -106,32 +111,41 @@
     onReady() {
       wepy.hideLoading()
     }
+    initWork() {
+      if (this._innerObj.query.workId) {
+        return this.methods.getWorkById(this._innerObj.query.workId)
+      } else {
+        return Promise.resolve()
+      }
+    }
     onShow() {
-      wepy.getBackgroundAudioPlayerState({
-        success: (res) => {
-          if (res.status === 1) {
-            // 播放中，
-            if (res.dataUrl !== this.work.url) {
-              // 播放曲目不一样
+      this.initWork().then(() => {
+        wepy.getBackgroundAudioPlayerState({
+          success: (res) => {
+            if (res.status === 1) {
+              // 播放中，
+              if (res.dataUrl !== this.work.url) {
+                // 播放曲目不一样
+                wepy.playBackgroundAudio({
+                  dataUrl: this.work.url
+                })
+              }
+            } else if (res.state === 0) {
+              // 暂停中
+            }
+          },
+          fail: (res) => {
+            if (res.errMsg === 'getBackgroundAudioPlayerState: fail not playing') {
+              // 没有播放
               wepy.playBackgroundAudio({
                 dataUrl: this.work.url
               })
             }
-          } else if (res.state === 0) {
-            // 暂停中
+          },
+          complete: (res) => {
+            console.log('complete', res)
           }
-        },
-        fail: (res) => {
-          if (res.errMsg === 'getBackgroundAudioPlayerState: fail not playing') {
-            // 没有播放
-            wepy.playBackgroundAudio({
-              dataUrl: this.work.url
-            })
-          }
-        },
-        complete: (res) => {
-          console.log('complete', res)
-        }
+        })
       })
     }
 

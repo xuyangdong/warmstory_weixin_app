@@ -1,6 +1,6 @@
 import wepy from 'wepy'
 import api from '@/api'
-import { GET_AFREERANDOMWORK, SET_WORK, PUBLISHWORK, DELETE_WORK} from '../types/work'
+import { GET_AFREERANDOMWORK, SET_WORK, PUBLISHWORK, DELETE_WORK, GET_WORKBYID} from '../types/work'
 import { createAction } from 'redux-actions'
 import { getStore } from 'wepy-redux'
 
@@ -94,7 +94,6 @@ export const deleteWork = createAction(DELETE_WORK, (sequence) => {
         worksId: work.id
       },
       success: (data, statusCode, header) => {
-        console.log(data)
         if (data.data.status === 1) {
           // 删除成功
           resolve({
@@ -108,6 +107,32 @@ export const deleteWork = createAction(DELETE_WORK, (sequence) => {
       },
       complete: (...args) => {
         console.log('complete', args)
+      }
+    })
+  })
+})
+
+export const getWorkById = createAction(GET_WORKBYID, (id) => {
+  console.log('GET_WORKBYID', id)
+  let user = getStore().getState().user
+  return new Promise(resolve => {
+    wepy.request({
+      url: api.work.query(id),
+      header: {
+        'Story-Access-Token': `${user.accessToken}`,
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      success: (data, statusCode, header) => {
+        console.log('invoke success', data)
+        if (data.data.status === 1) {
+          resolve({
+            data: {
+              ... data.data,
+              'playingType': 'random'
+            }
+          })
+        } else {
+        }
       }
     })
   })

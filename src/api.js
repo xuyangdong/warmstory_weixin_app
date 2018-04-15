@@ -24,7 +24,8 @@ export default {
   work: {
     get: `${baseUrl}/user/getAFreeRandomWorks`,
     post: `${baseUrl}/user/v3/publishWorks`,
-    delete: `${baseUrl}/user/deleteWorks`
+    delete: `${baseUrl}/user/deleteWorks`,
+    query: worksId => `${baseUrl}/user/getShareWorksById?id=${worksId}`
   },
   playList: {
     post: `${baseUrl}/user/playList/newPlayList`
