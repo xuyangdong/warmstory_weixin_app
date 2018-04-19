@@ -188,6 +188,14 @@ export default class ListenStory extends wepy.component {
     }
   }
 
-  onLoad() {}
+  onLoad() {
+    console.log('listen story onLoad')
+  }
+  onUnload() {
+    console.log('listen story onUnload')
+  }
+  onUnLoad() {
+    console.log('listen story onUnLoad')
+  }
 }
 </script>

@@ -44,6 +44,18 @@
         font-size: 24rpx;
         margin-top: 10px;
       }
+
+      .warmtale-playstory_appbutton {
+        width: 250rpx;
+        height: 60rpx;
+        background-color: green;
+        color: white;
+        font-size: 30rpx;
+        border-radius: 30rpx;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
     }
     .warmtale-playstory_middleCover {
       width: 432rpx;
@@ -60,6 +72,8 @@
     .warmtale-playstory_bottomPlayer {
       width: 100%;
     }
+
+
   }
 </style>
 
@@ -75,6 +89,9 @@
       <view class="warmtale-playstory_username">
         {{ work.username }}
       </view>
+      <button open-type="launchApp" binderror="launchAppError" class="warmtale-playstory_appbutton">
+        在APP中打开
+      </button>
     </view>
     <view class="warmtale-playstory_bottomPlayer">
       <player />
@@ -100,6 +117,14 @@
     _innerObj = {}
     components = {
       player: Player
+    }
+    methods = {
+      launchAppError: (e) => {
+        wepy.showToast({
+          icon: 'none',
+          title: '仅支持从app分享后，返回app'
+        })
+      }
     }
     onLoad(options) {
       this._innerObj.query = options
@@ -152,7 +177,7 @@
     onShareAppMessage(options) {
       return {
         title: `绮语文化|读个小故事--${this.work.storyTitle}`,
-        path: '/pages/warmtale/playingStory',
+        path: `/pages/warmtale/playingStory?workId=${this.work.id}`,
         imageUrl: this.work.coverUrl,
         success: (res) => {
           console.log(res)

@@ -18,7 +18,8 @@ export default handleActions({
   [GET_WORKBYID] (state, action) {
     return {
       ...state,
-      ...action.payload.data.obj
+      ...action.payload.data.obj,
+      playingType: action.payload.data.playingType
     }
   }
 }, {

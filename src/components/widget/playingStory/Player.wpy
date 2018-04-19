@@ -251,8 +251,10 @@ export default class Player extends wepy.component {
             this.currentTime = res.currentPosition
             this.duration = res.duration
             this.playing = true
-            this.$apply()
+          } else {
+            this.playing = false
           }
+          this.$apply()
         }
       })
     }, 1000)

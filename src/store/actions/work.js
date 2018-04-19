@@ -23,6 +23,9 @@ export const getAFreeRandomWork = createAction(GET_AFREERANDOMWORK, () => {
             playingType: 'random'
           }
         })
+      },
+      complete: (...args) => {
+        console.log('complete', args)
       }
     })
   })
@@ -73,6 +76,9 @@ export const publishWork = createAction(PUBLISHWORK, (storyId, url, duration = '
         resolve({
           data: data.data
         })
+      },
+      complete: (...args) => {
+        console.log('complete', args)
       }
     })
   })
@@ -133,6 +139,9 @@ export const getWorkById = createAction(GET_WORKBYID, (id) => {
           })
         } else {
         }
+      },
+      complete: (...args) => {
+        console.log('complete', args)
       }
     })
   })

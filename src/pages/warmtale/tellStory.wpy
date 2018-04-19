@@ -5,7 +5,7 @@
   }
   .warmtale-tellstory_header {
     background-color: #15A153;
-    height: 238rpx;
+    height: 200rpx;
     width: 100%;
     display: flex;
     align-items: center;
@@ -50,7 +50,7 @@
     padding: 0 56rpx;
     .warmtale-tellstory_tab {
       display: flex;
-      height: 130rpx;
+      height: 120rpx;
       justify-content: space-around;
       &>view {
         width: 50%;
@@ -106,10 +106,12 @@ import { getTodayStory } from '@/store/actions/todayStory'
 import { getStorySetList } from '@/store/actions/storySetList'
 import { getAFreeRandomWork } from '@/store/actions/work'
 import { connect } from 'wepy-redux'
+import _ from 'lodash'
 
 @connect({
   userInfo: state => state.user,
-  work: state => state.work
+  work: state => state.work,
+  storySetList: state => state.storySetList
 }, {
   getUserInfo,
   getTodayStory,
@@ -138,7 +140,7 @@ export default class TellStory extends wepy.page {
   methods = {
     switchTab (event) {
       this.tabName = event.target.dataset.tabname
-      if (event.target.dataset.tabname === 'listenstory') {
+      if (event.target.dataset.tabname === 'listenstory' && _.isEmpty(this.storySetList)) {
         this.methods.getStorySetList(0, 10)
       }
     },
