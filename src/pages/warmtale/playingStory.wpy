@@ -33,6 +33,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      margin-bottom: 10rpx;
 
       .warmtale-playstory_topTitle {
         color: #ffffff;
@@ -40,9 +41,9 @@
         margin-bottom: 10px;
       }
       .warmtale-playstory_username {
-        color: #999999;
+        color: #ffffff;
         font-size: 24rpx;
-        margin-top: 10px;
+        margin-bottom: 30px;
       }
 
       .warmtale-playstory_appbutton {
@@ -147,6 +148,7 @@
       this.initWork().then(() => {
         wepy.getBackgroundAudioPlayerState({
           success: (res) => {
+            console.log('state', res)
             if (res.status === 1) {
               // 播放中，
               if (res.dataUrl !== this.work.url) {
@@ -155,8 +157,18 @@
                   dataUrl: this.work.url
                 })
               }
-            } else if (res.state === 0) {
+            } else if (res.status === 0) {
               // 暂停中
+              if (res.dataUrl !== this.work.url) {
+                // 音频文件改变
+                console.log('音频文件改变')
+                wepy.playBackgroundAudio({
+                  dataUrl: this.work.url
+                })
+              } else {
+                // 音频没有改变
+                console.log('音频文件没有改变')
+              }
             }
           },
           fail: (res) => {
