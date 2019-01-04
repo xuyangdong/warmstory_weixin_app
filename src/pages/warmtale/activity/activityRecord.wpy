@@ -1,0 +1,248 @@
+<style lang="less">
+.warmtale-activityRecord_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+
+  .warmtale-activityRecord_header {
+    width: 100%;
+    background-color: #15A153;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .warmtale-activityRecord_countDown {
+      margin-top: 68px;
+      font-size: 50px;
+      color: white;
+      font-weight: bold;
+    }
+    .warmtale-activityRecord_state {
+      font-size: 14px;
+      color: white;
+      margin-bottom: 116px;
+    }
+    .warmtale-activityRecord_ribbon {
+      height: 70px;
+      width: 100%;
+      &>image {
+        width: 100%;
+        height: 60px;
+      }
+    }
+  }
+
+  .warmtale-activityRecord_body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex-grow: 2;
+    &>view:nth-child(1) {
+
+      &>image {
+        width: 45px;
+        height: 45px;
+      }
+    }
+    &>view:nth-child(2) {
+      margin-right: 50px;
+      margin-left: 50px;
+      &>image {
+        width: 81px;
+        height: 81px;
+      }
+    }
+    &>view:nth-child(3) {
+      &>image {
+        width: 45px;
+        height: 45px;
+      }
+    }
+
+  }
+}
+</style>
+
+<template>
+  <view class="weui-flex container warmtale-activityRecord_container">
+    <view class="warmtale-activityRecord_header">
+      <view class="warmtale-activityRecord_countDown">{{countDown.h}}:{{countDown.m}}:{{countDown.s}}</view>
+      <view class="warmtale-activityRecord_state">录制</view>
+      <view class="warmtale-activityRecord_ribbon">
+        <image src="../../../resource/img/音频线.png"/>
+      </view>
+    </view>
+    <view class="warmtale-activityRecord_body">
+      <view hidden="{{neverRecord}}" bindtap="clickDelete" ><image src='../../../resource/img/deleteActivityRecord.jpg'/></view>
+      <view bindtap="clickRecord"><image src="{{isRecording?'../../../resource/img/activitystop.jpg':'../../../resource/img/recorder.png'}}"/></view>
+      <view hidden="{{neverRecord}}" bindtap="clickUpload" ><image src='../../../resource/img/uploadActivityRecord.jpg'/></view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import api from '@/api'
+import moment from 'moment'
+import {
+  publishWork
+} from '@/store/actions/work'
+import {
+  connect
+} from 'wepy-redux'
+
+@connect({}, {
+  publishWork
+})
+export default class ActivityRecord extends wepy.page {
+  _intervalId = -1
+  _duration = moment.duration(1, 'h')
+  config = {
+    navigationBarTitleText: '录制晚安语'
+  }
+  data = {
+    neverRecord: true, // 第一次录音
+    isPause: false, // 暂停录音
+    isRecording: false, // 开始录音
+
+    countDown: {
+      h: 1,
+      m: 0,
+      s: 0
+    }
+  }
+  computed = {}
+  components = {
+  }
+  methods = {
+    clickDelete: () => {
+      wepy.showModal({
+        title: '叮咚~',
+        content: '确定删除当前录音吗？',
+        success: ({errMsg, cancel, confirm}) => {
+          let recorderManager = wepy.getRecorderManager()
+          if (confirm) {
+            recorderManager.onStop(res => {
+              this.isRecording = false
+              this.countDown = {
+                h: 1,
+                m: 0,
+                s: 0
+              }
+              this._duration = moment.duration(1, 'h')
+              this.neverRecord = true
+              this.$apply()
+            })
+            clearInterval(this._intervalId)
+            recorderManager.stop()
+          }
+        }
+      })
+    },
+    clickUpload: () => {
+      wepy.showLoading({
+        title: '上传中'
+      })
+      let recorderManager = wepy.getRecorderManager()
+      recorderManager.onStop(record => {
+        wepy.request({
+          url: api.ossToken.get,
+          success: (data, statusCode, headers) => {
+            let token = data.data.obj
+            let fileName = Date.now() + '.mp3'
+            let host = 'https://oss.warmtale.com'
+            wepy.uploadFile({
+              url: host,
+              filePath: record.tempFilePath,
+              name: 'file',
+              formData: {
+                key: token.dir + '/' + fileName,
+                policy: token.policy,
+                OSSAccessKeyId: token.accessid,
+                success_action_status: '200',
+                signature: token.signature
+              },
+              success: (res) => {
+                wepy.hideLoading()
+                if (res.statusCode === 200) {
+                  wepy.showToast({
+                    title: '上传成功',
+                    icon: 'success',
+                    duration: 2000
+                  })
+                  this.methods.publishWork(-2, `${host}/${token.dir}/${fileName}`, moment(moment.duration(1, 'h').get('milliseconds') - this._duration.get('milliseconds')).format('mm:ss'), JSON.stringify([185]))
+                  console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
+                } else {
+                  wepy.showToast({
+                    title: '上传失败',
+                    icon: 'success',
+                    duration: 2000
+                  })
+                }
+                this.isRecording = false
+                this.countDown = {
+                  h: 1,
+                  m: 0,
+                  s: 0
+                }
+                this._duration = moment.duration(1, 'h')
+                this.neverRecord = true
+                clearInterval(this._intervalId)
+                this.$apply()
+              },
+              fail: () => {
+                wepy.showToast({
+                  title: '上传失败',
+                  icon: 'success',
+                  duration: 2000
+                })
+              },
+              complete: (res) => {
+                console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
+              }
+            })
+          }
+        })
+      })
+      recorderManager.stop()
+    },
+    clickRecord: () => {
+      let recorderManager = wepy.getRecorderManager()
+      if (this.neverRecord) {
+        recorderManager.start()
+        this.neverRecord = false
+        this.isRecording = true
+        this._intervalId = setInterval(() => {
+          this.countDown = {
+            h: this._duration.hours(),
+            m: this._duration.minutes(),
+            s: this._duration.seconds()
+          }
+          this._duration = this._duration.subtract(1, 's')
+          this.$apply()
+        }, 1000)
+      } else {
+        if (this.isRecording) {
+          clearInterval(this._intervalId)
+          recorderManager.pause()
+          this.isRecording = false
+        } else {
+          this._intervalId = setInterval(() => {
+            this.countDown = {
+              h: this._duration.hours(),
+              m: this._duration.minutes(),
+              s: this._duration.seconds()
+            }
+            this._duration = this._duration.subtract(1, 's')
+            this.$apply()
+          }, 1000)
+          recorderManager.resume()
+          this.isRecording = true
+        }
+      }
+    }
+  }
+}
+</script>

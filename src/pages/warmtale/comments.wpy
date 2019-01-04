@@ -1,0 +1,311 @@
+<style lang="less">
+.warmtale-comments_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  box-shadow: 0rpx 20rpx 20rpx -20rpx #EDEDF4 inset;
+
+  .warmtale-comments_comment {
+    margin-top: 10rpx;
+    width: 100%;
+
+    .warmtale-comments_header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 160rpx;
+      margin: 0 80rpx;
+
+      .warmtale-comments_userInfo {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        & > image {
+          width: 80rpx;
+          height: 80rpx;
+          border-radius: 40rpx;
+        }
+        .warmtale-comments_namesex {
+          display: flex;
+          align-items: center;
+          font-size: 30rpx;
+          margin-left: 30rpx;
+
+          & > image {
+            width: 30rpx;
+            height: 30rpx;
+          }
+        }
+      }
+
+      .warmtale-comments_dateInfo {
+        font-size: 20rpx;
+        color: #B4B4B4;
+      }
+    }
+
+    .warmtale-comments_body {
+      margin: 0 80rpx 0 180rpx;
+      font-size: 35rpx;
+
+      .warmtale-comments_content {
+        padding-bottom: 10rpx;
+      }
+
+      .warmtale-comments_reply {
+        padding: 30rpx;
+        background-color: #F4F4F4;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+
+        .warmtale-comments_replyItem {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          width: 100%;
+
+          .warmtale-comments_replyUser {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            // word-break: keep-all;
+            flex-wrap: wrap;
+            width: 100%;
+            font-size: 24rpx;
+
+            .warmtale-comments_replyUserName {
+              word-break: keep-all;
+              color: #7B7B7B;
+            }
+          }
+        }
+      }
+      .warmtale-comments_delete {
+        color: #2CAD65;
+        font-size: 25rpx;
+        padding: 25rpx 0;
+      }
+    }
+
+    .warmtale-comments_footer {
+      border-top: 2rpx solid #EDEDF4;
+      border-bottom: 10rpx solid #EDEDF4;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 80rpx;
+      height: 40px;
+
+      .warmtale-comments_count {
+        font-size: 25rpx;
+        color: #B4B4B4;
+
+        & > image {
+          width: 30rpx;
+          height: 30rpx;
+        }
+      }
+    }
+  }
+
+  .warmtale-comments_input {
+    position: fixed;
+    bottom: 0rpx;
+    left: 0rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background-color: white;
+
+
+    & > input {
+      background-color: #F0F0F0;
+      border-radius: 10rpx;
+      width: 100%;
+      margin: 30rpx 60rpx;
+      padding: 0 20rpx;
+      height: 40px;
+    }
+  }
+
+  .warmtale-comments_inputPlaceholder {
+    font-size: 30rpx;
+    color: #7B7B7B;
+  }
+}
+</style>
+
+<template>
+<view class="warmtale-comments_container">
+  <view style="{{cIdx == (commentList.length - 1) ? 'margin-bottom:180rpx' : ''}}" class="warmtale-comments_comment" wx:for="{{commentList}}" wx:for-index="cIdx" wx:for-item="comment">
+    <view class="warmtale-comments_header">
+      <view class="warmtale-comments_userInfo">
+        <image src="{{comment.fromUser.headImgUrl}}"/>
+        <view class="warmtale-comments_namesex">
+          {{comment.fromUser.nickname}}
+          <image src="{{comment.fromUser.sex=='男' ? '../../resource/img/userboy.png' : '../../resource/img/usergirl.png'}}"/>
+        </view>
+      </view>
+      <view class="warmtale-comments_dateInfo">
+        {{comment.workReview.createTime}}
+      </view>
+    </view>
+    <view class="warmtale-comments_body">
+      <view class="warmtale-comments_content" bindtap="handleReply" data-touser="{{comment.fromUser}}" data-comment="{{comment}}">
+        {{comment.workReview.content}}
+      </view>
+      <view wx:if="{{comment.subReviews.length>0}}" class="warmtale-comments_reply">
+        <view class="warmtale-comments_replyItem" wx:for="{{comment.subReviews}}" wx:for-index="rIdx" wx:for-item="review">
+          <view class="warmtale-comments_replyUser">
+            <view bindtap="handleReply" data-touser="{{review.fromUser}}" data-comment="{{comment}}" class="warmtale-comments_replyUserName">
+              {{review.fromUser.nickname}}
+            </view>
+            <block wx:if="{{review.toUser != null}}"> <view style="word-break:keep-all">回复</view> <view class="warmtale-comments_replyUserName" bindtap="handleReply" data-touser="{{review.toUser}}" data-comment="{{comment}}">
+              {{review.toUser.nickname}}
+            </view></block>
+            <view>：{{review.workReview.content}}</view>
+          </view>
+          <!-- <view class="warmtale-comments_replyContent">{{review.workReview.content}}</view> -->
+        </view>
+      </view>
+      <view class="warmtale-comments_delete" bindtap="handleDelete" data-comment="{{comment}}">
+        {{comment.fromUser.id == userInfo.id ? '删除' : ' '}}
+      </view>
+    </view>
+    <view class="warmtale-comments_footer">
+      <view class="warmtale-comments_count" bindtap="handleAppreciate" data-comment="{{comment}}">
+        <image src="{{comment.likeStatus ? '../../resource/img/已赞.png' : '../../resource/img/点赞(1).png'}}"/>
+        {{comment.workReview.likeCount}}
+      </view>
+      <view class="warmtale-comments_count" bindtap="handleReply" data-touser="{{comment.fromUser}}" data-comment="{{comment}}">
+        <image src="../../resource/img/评论.png"/>
+        {{comment.subReviews.length}}
+      </view>
+    </view>
+  </view>
+  <view class="warmtale-comments_input">
+    <input focus="{{inputFocus}}" value="{{content}}" placeholder="{{placeholder}}" placeholder-class="warmtale-comments_inputPlaceholder" bindconfirm="handleSubmitComment" bindinput="handleInput" bindblur="handleBlur"/>
+  </view>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import { getCommentList, addComment, deleteComment, appreciateComment, deAppreciateComment } from '@/store/actions/comment'
+import { addAComment, deleteAComment } from '@/store/actions/work'
+import {
+  connect
+} from 'wepy-redux'
+
+const PAGE_SIZE = 10
+@connect({
+  userInfo: state => state.user
+}, {
+  addAComment,
+  deleteAComment
+})
+export default class Comments extends wepy.page {
+  _innerObj = {}
+  config = {
+    navigationBarBackgroundColor: '#ffffff',
+    navigationBarTextStyle: 'black',
+    navigationBarTitleText: '作品评论'
+  }
+  data = {
+    commentList: [],
+    current: 0,
+    content: '',
+    placeholder: '我也来说两句......',
+    inputFocus: false
+  }
+  methods = {
+    handleBlur: (event) => {
+      console.log('blur')
+      this.placeholder = `我也来说两句`
+      this.content = ''
+      this._innerObj.currentComment = null
+      this._innerObj.currentToUser = null
+      this.inputFocus = false
+      this.$apply()
+    },
+    handleInput: (event) => {
+      this.content = event.detail.value
+    },
+    handleSubmitComment: (event) => {
+      addComment(this._innerObj.workId,
+        this._innerObj.currentComment
+          ? this._innerObj.currentComment.workReview.id : 0,
+        this._innerObj.currentToUser
+          ? this._innerObj.currentToUser.id : 0,
+        event.detail.value).then(res => {
+          this._getCommentList()
+        }).then(res => {
+          this.methods.addAComment()
+        }).catch(error => console.log(error))
+    },
+    handleAppreciate: (event) => {
+      if (event.currentTarget.dataset.comment.likeStatus) {
+        deAppreciateComment(event.currentTarget.dataset.comment.workReview.id).then(res => {
+          this._getCommentList()
+        })
+      } else {
+        appreciateComment(event.currentTarget.dataset.comment.workReview.id).then(res => {
+          this._getCommentList()
+        })
+      }
+    },
+    handleOpenComments: (event) => {
+      console.log(event)
+    },
+    handleReply: (event) => {
+      this.placeholder = `回复：${event.currentTarget.dataset.touser.nickname}`
+      this._innerObj.currentComment = event.currentTarget.dataset.comment || null
+      this._innerObj.currentToUser = event.currentTarget.dataset.touser || null
+      this.inputFocus = true
+    },
+    handleDelete: (event) => {
+      if (event.currentTarget.dataset.comment.fromUser.id === this.userInfo.id) {
+        deleteComment(event.currentTarget.dataset.comment.workReview.id).then(res => {
+          this._getCommentList().then(res => {
+            this.methods.deleteAComment(res.data.count)
+          })
+
+        })
+      }
+    }
+  }
+  _getCommentList = () => {
+    function clear() {
+      return ''
+    }
+    return getCommentList(this.current, PAGE_SIZE, this._innerObj.workId).then(res => {
+      this.commentList = res.data.obj.map(v => {
+        return {
+          ...v,
+          workReview: {
+            ...v.workReview,
+            createTime: v.workReview.createTime.slice(0, 10)
+          }
+        }
+      })
+      this._innerObj.currentComment = null
+      this._innerObj.currentToUser = null
+      this.content = clear()
+      this.placeholder = '我也说两句......'
+      this.inputFocus = false
+      this.$apply()
+      return res
+    })
+  }
+  onLoad(obj) {
+    this._innerObj.workId = obj.workId
+    this._getCommentList()
+  }
+}
+</script>

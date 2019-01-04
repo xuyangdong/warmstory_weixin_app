@@ -61,6 +61,7 @@ import { createPlayList } from '@/store/actions/storySetList'
 @connect({}, {
   createPlayList
 })
+// 该页已弃用
 export default class Index extends wepy.page {
   components = {
     commonbutton: CommonButton

@@ -1,0 +1,3 @@
+export const GET_DONATEDWORK = 'GET_DONATEDWORK'
+export const GET_STAR = 'GET_STAR'
+export const CHANGE_STARORDER = 'CHANGE_STARORDER'

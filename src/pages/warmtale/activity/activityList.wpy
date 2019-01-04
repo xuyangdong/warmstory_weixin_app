@@ -1,0 +1,344 @@
+<style lang="less">
+.warmtale-activityList_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+
+  .warmtale-activityList_header {
+    width: 100%;
+    background-color: #15A153;
+
+    .warmtale-activityList_headImgList {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+
+      .warmtale-activityList_headImg-big-wrapper{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        .warmtale-activityList_headImg-big {
+          height: 73px;
+          width: 73px;
+          border-radius: 40px;
+          background-color: rgba(255, 255, 255, 0.3);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &>image {
+            width: 64px;
+            height: 64px;
+            border-radius: 40px;
+            opacity: 1;
+          }
+        }
+
+        &>view {
+          font-size: 16px;
+          color: white;
+        }
+      }
+
+      .warmtale-activityList_headImg-small-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        opacity: 0.8;
+
+        .warmtale-activityList_headImg-small {
+          width: 50px;
+          height: 50px;
+          border-radius: 25px;
+
+          &>image {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+          }
+        }
+
+        &>view {
+          font-size: 14px;
+          color: white;
+        }
+      }
+
+    }
+
+    .warmtale-activityList_storyInfo {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      font-size: 12px;
+      color: white;
+      line-height: 22px;
+
+      &>view:nth-child(1) {
+
+      }
+      &>view:nth-child(2) {
+
+      }
+    }
+    .warmtale-activityList_ribbon {
+      height: 70px;
+      &>image {
+        height: 60px;
+        width: 100%;
+      }
+    }
+  }
+
+  .warmtale-activityList_body {
+    width: 100%;
+    padding: 24px;
+    padding-top: 0px;
+    box-sizing: border-box;
+    .warmtale-activityList_storyItem {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      width: 100%;
+      padding-bottom: 8px;
+      padding-top: 23px;
+      border-bottom: 1px solid rgba(21,161,83,0.3);
+      .warmtale-activityList_iconProfileWrapper {
+        display: flex;
+        align-items: flex-start;
+      }
+      .warmtale-activityList_storyIcon {
+         width: 34px;
+         height: 34px;
+         border-radius: 20px;
+
+         &>image {
+           width: 34px;
+           height: 34px;
+           border-radius: 20px;
+         }
+      }
+      .warmtale-activityList_storyProfile {
+        margin-left: 8px;
+        &>view:nth-child(1) {
+          font-size: 14px;
+          color: black;
+        }
+        &>view:nth-child(2) {
+          font-size: 12px;
+          color: #9e9d9d;
+        }
+      }
+      .warmtale-activityList_recordCtrl {
+        width: 42px;
+        height: 42px;
+        &>image {
+          width: 42px;
+          height: 42px;
+        }
+      }
+    }
+  }
+  .warmtale-activityList_footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 24px;
+    border-top: 1px solid #9e9d9d;
+
+    .warmtale-activityList_btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #15A153;
+      font-size: 16px;
+      color: white;
+      width: 151px;
+      height: 38px;
+      border-radius: 19px;
+    }
+
+    .warmtale-activityList_ghost_btn {
+      background-color: white;
+      border: 1px solid #15A153;
+      color: #15A153;
+    }
+  }
+}
+</style>
+
+<template>
+  <view class="weui-flex container warmtale-activityList_container">
+    <view class="warmtale-activityList_header">
+      <view class="warmtale-activityList_headImgList">
+        <repeat for="{{activity.star}}" key="index" index="index" item="item">
+          <view data-recordIndex="{{ index }}" data-record="{{ item }}" bindtap="clickPlay" class="{{ index==0||index==2 ? 'warmtale-activityList_headImg-small-wrapper' : 'warmtale-activityList_headImg-big-wrapper'}}">
+            <view class="{{ index==0||index==2 ? 'warmtale-activityList_headImg-small' : 'warmtale-activityList_headImg-big'}}">
+              <image src="{{ item.profilePhoto }}"/>
+            </view>
+            <view>{{ item.name }}</view>
+          </view>
+        </repeat>
+      </view>
+      <view class="warmtale-activityList_storyInfo">
+        <view>{{activity.star[1].title}}</view>
+      </view>
+      <view class="warmtale-activityList_ribbon">
+        <image src="../../../resource/img/音频线.png"/>
+      </view>
+    </view>
+    <scroll-view scroll-y style="height: 330px" class="warmtale-activityList_body">
+      <repeat for="{{activity.storyList}}" key="index" index="index" item="item">
+        <view class="warmtale-activityList_storyItem">
+          <view class="warmtale-activityList_iconProfileWrapper">
+            <view class="warmtale-activityList_storyIcon">
+              <image src="{{item.headImgUrl}}" />
+            </view>
+            <view class="warmtale-activityList_storyProfile">
+              <view>{{item.storyTitle}}</view>
+              <view>{{item.username}}</view>
+            </view>
+          </view>
+          <view class="warmtale-activityList_recordCtrl" data-record="{{ item }}" bindtap="clickPlay">
+            <image src="{{ player.state&&(player.recorder.id==item.id) ?'../../../resource/img/activityPause.png' : '../../../resource/img/activityPlay.png'}}"/>
+          </view>
+        </view>
+      </repeat>
+    </scroll-view>
+    <view class="warmtale-activityList_footer">
+      <view class="warmtale-activityList_btn warmtale-activityList_ghost_btn" bindtap="clickRecordBtn">
+        我要录音
+      </view>
+      <view class="warmtale-activityList_btn" bindtap="clickDonationBtn">
+        我要捐款
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import { connect } from 'wepy-redux'
+import {
+  getDonatedWork,
+  getStar,
+  changeStarOrder
+} from '@/store/actions/activity'
+
+@connect({
+  activity: state => state.activity
+}, {
+  getDonatedWork,
+  getStar,
+  changeStarOrder
+})
+export default class ActivityList extends wepy.page {
+  config = {
+    navigationBarTitleText: '读个小故事'
+  }
+  data = {
+    player: {
+      state: false,
+      recorder: {}
+    }
+  }
+  computed = {}
+  components = {}
+  methods = {
+    clickPlay: (event) => {
+      // console.log(typeof event.currentTarget.dataset.recordindex)
+      ((typeof event.currentTarget.dataset.recordindex) !== 'undefined') ? this.methods.changeStarOrder(event.currentTarget.dataset.recordindex) : null
+      let recorder = {
+        ...event.currentTarget.dataset.record,
+        url: event.currentTarget.dataset.record.url || event.currentTarget.dataset.record.audio
+      }
+
+      if (this.data.player.state) {
+        this.player = {
+          state: false,
+          recorder: this.player.recorder
+        }
+      } else {
+        this.player = {
+          state: true,
+          recorder: recorder
+        }
+      }
+      wepy.getBackgroundAudioPlayerState({
+        success: () => {
+
+        },
+        fail: (res) => {
+          console.log('error', res)
+          if (res.errMsg === 'getBackgroundAudioPlayerState: fail not playing') {
+            // 没有播放
+            wepy.showLoading({
+              title: '加载中，请稍等'
+            })
+            wepy.playBackgroundAudio({
+              dataUrl: this.player.recorder.url,
+              complete: () => {
+                wepy.hideLoading()
+              }
+            })
+          }
+        },
+        complete: (res) => {
+          if (res.status === 1) {
+            // 播放中，
+            wepy.pauseBackgroundAudio()
+          } else if (res.status === 0) {
+            // 暂停中
+            console.log('暂停中')
+            if (res.dataUrl !== this.player.recorder.url) {
+              // 音频文件改变
+              console.log('音频文件改变', res.dataUrl, this.player.recorder.url)
+              wepy.playBackgroundAudio()
+              wepy.playBackgroundAudio({
+                dataUrl: this.player.recorder.url,
+                success: (...args) => {
+                  console.log('success', args)
+                },
+                complete: (...args) => {
+                  console.log('complete', args)
+                }
+              })
+            } else {
+              // 音频没有改变
+              wepy.playBackgroundAudio()
+              console.log('音频文件没有改变')
+            }
+          }
+        }
+      })
+    },
+    clickRecordBtn: () => {
+      wepy.navigateTo({
+        url: 'activityRecord'
+      })
+    },
+    clickDonationBtn: () => {
+      wepy.setClipboardData({
+        data: 'https://ssl.gongyi.qq.com/m/weixin/detail_yqj.htm?did=1209880301201808310600002072&id=41577&et=fx',
+        success: () => {
+          wepy.showModal({
+            title: '捐赠网址已经复制',
+            content: '捐款网址已复制，请打开浏览器编辑地址栏并粘贴进行捐款',
+            duration: 2000
+          })
+        }
+      })
+    }
+  }
+  onLoad() {
+    this.methods.getDonatedWork()
+    this.methods.getStar()
+  }
+}
+</script>

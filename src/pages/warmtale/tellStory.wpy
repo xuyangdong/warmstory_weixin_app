@@ -5,7 +5,7 @@
   }
   .warmtale-tellstory_header {
     background-color: #15A153;
-    height: 200rpx;
+    height: 110rpx;
     width: 100%;
     display: flex;
     align-items: center;
@@ -35,7 +35,7 @@
       width: 190rpx;
       height: 60rpx;
       text-align: center;
-      color: #BEC2C9;
+      color: #00AF66;
       font-size: 28rpx;
       line-height: 60rpx;
       border-top-left-radius: 44rpx;
@@ -48,6 +48,13 @@
     width: 100%;
     box-sizing: border-box;
     padding: 0 56rpx;
+    .warmtale-tellstory_activity{
+      height: 45px;
+      margin-top: 20px;
+      &>image {
+        height: 45px;
+      }
+    }
     .warmtale-tellstory_tab {
       display: flex;
       height: 120rpx;
@@ -81,6 +88,9 @@
         </view>
     </view>
     <scroll-view scroll-y={{true}} class='warmtale-tellstory_body'>
+        <view class='warmtale-tellstory_activity' bindtap="clickActivityEntrance">
+            <image src='../../resource/img/activity-entrance.jpg'/>
+        </view>
         <view class='warmtale-tellstory_tab'>
             <view bindtap='switchTab' data-tabName='todaystory' style="{{ todayStoryStyle }}">今日故事</view>
             <view bindtap='switchTab' data-tabName='listenstory' style="{{ listenStoryStyle }}">听故事</view>
@@ -145,6 +155,9 @@ export default class TellStory extends wepy.page {
       }
     },
     clickEaseListen () {
+      // wepy.navigateTo({
+      //   url: 'playingStory?workId=9999'
+      // })
       if (!this.work.id || this.work.playingType === 'sequence') {
         // work为空的时候去获取新的作品
         this.methods.getAFreeRandomWork().then(res => {
@@ -157,6 +170,11 @@ export default class TellStory extends wepy.page {
           url: 'playingStory'
         })
       }
+    },
+    clickActivityEntrance () {
+      wepy.navigateTo({
+        url: 'activity/activityList'
+      })
     }
   }
   onReady() {

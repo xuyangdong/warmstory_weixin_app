@@ -211,13 +211,21 @@
                 signature: token.signature
               },
               success: (res) => {
-                wepy.showToast({
-                  title: '上传成功',
-                  icon: 'success',
-                  duration: 2000
-                })
-                this.methods.publishWork(this.todayStory.id, `${host}/${token.dir}/${fileName}`, moment(parseFloat(this.duration.toFixed(3)) * 1000).format('mm:ss'))
-                console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
+                if (res.statusCode === 200) {
+                  wepy.showToast({
+                    title: '上传成功',
+                    icon: 'success',
+                    duration: 2000
+                  })
+                  this.methods.publishWork(this.todayStory.id, `${host}/${token.dir}/${fileName}`, moment(parseFloat(this.duration.toFixed(3)) * 1000).format('mm:ss'))
+                  console.log(`file: ${host}/${token.dir}/${fileName} upload success`)
+                } else {
+                  wepy.showToast({
+                    title: '上传失败',
+                    icon: 'success',
+                    duration: 2000
+                  })
+                }
               },
               fail: () => {
                 wepy.showToast({

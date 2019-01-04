@@ -5,6 +5,7 @@ import record from './record'
 import todayStory from './todayStory'
 import storySetList from './storySetList'
 import work from './work'
+import activity from './activity'
 
 export default combineReducers({
   counter,
@@ -12,5 +13,6 @@ export default combineReducers({
   record,
   todayStory,
   storySetList,
-  work
+  work,
+  activity
 })

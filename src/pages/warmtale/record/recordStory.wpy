@@ -164,10 +164,24 @@
         return `${Math.round(percent * 100)}%`
       },
       currentPageContent: () => {
-        return this.todayStory ? this.todayStory.content[this.currentPage].content.replace(/\*/g, '\n') : ''
+        let currentPageContent = ''
+        try {
+          currentPageContent = this.todayStory ? this.todayStory.content[this.currentPage].content.replace(/\*/g, '\n') : ''
+        } catch (e) {
+          currentPageContent = ''
+        }
+        return currentPageContent
+        // return this.todayStory ? this.todayStory.content[this.currentPage].content.replace(/\*/g, '\n') : ''
       },
       currentPageBackgroundImg: () => {
-        return this.todayStory ? this.todayStory.content[this.currentPage].coverUrl || this.todayStory.backgroundUrl || '' : ''
+        let currentPageBackgroundImg = 'https://picsum.photos/500/600'
+        try {
+          currentPageBackgroundImg = this.todayStory ? this.todayStory.content[this.currentPage].coverUrl || this.todayStory.backgroundUrl || '' : ''
+        } catch (e) {
+          currentPageBackgroundImg = 'https://picsum.photos/500/600'
+        }
+        return currentPageBackgroundImg
+        // return this.todayStory ? this.todayStory.content[this.currentPage].coverUrl || this.todayStory.backgroundUrl || '' : ''
         // return 'https://picsum.photos/500/600'
       }
     }
@@ -231,6 +245,14 @@
             })
           })
           // }
+        })
+        wepy.getBackgroundAudioPlayerState({
+          success: (res) => {
+            if (res.status === 1) {
+              // 播放中
+              wepy.pauseBackgroundAudio()
+            }
+          }
         })
         //  重新加载暂停的回调方法
         recorderManager.onPause(res => {

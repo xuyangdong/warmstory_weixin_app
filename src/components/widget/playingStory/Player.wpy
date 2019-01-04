@@ -143,6 +143,12 @@ export default class Player extends wepy.component {
             // 暂停中
             wepy.playBackgroundAudio()
             this.playing = true
+          } else if (res.status === 2) {
+            // 播放结束
+            wepy.playBackgroundAudio({
+              dataUrl: this.work.url
+            })
+            this.playing = true
           }
         },
         fail: (res) => {

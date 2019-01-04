@@ -31,13 +31,20 @@ export default class extends wepy.app {
       'pages/warmtale/addStorySet',
       'pages/warmtale/record/recordStory',
       'pages/warmtale/record/recordStoryFinish',
-      'pages/index'
+      'pages/warmtale/activity/activityRecord',
+      'pages/warmtale/activity/activityDonation',
+      'pages/warmtale/comments',
+      'pages/index',
+      'pages/warmtale/activity/activityList'
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#15A153',
       navigationBarTitleText: '读个小故事',
       navigationBarTextStyle: 'white'
+    },
+    networkTimeout: {
+      request: 10000
     }
   }
 

@@ -1,0 +1,21 @@
+<style lang="less">
+
+</style>
+
+<template>
+<view>
+  <web-view src="https://baidu.com"></web-view>
+</view>
+</template>
+
+<script>
+import wepy from 'wepy'
+
+export default class ActivityDonation extends wepy.page {
+  config = {}
+  data = {}
+  computed = {}
+  components = {}
+  methods = {}
+}
+</script>

@@ -172,8 +172,9 @@ export default class ListenStory extends wepy.component {
       wepy.showModal({
         title: 'o(╥﹏╥)o',
         content: '确定要删除该作品吗？',
-        showCancel: false,
+        showCancel: true,
         confirmText: '好的',
+        cancelText: '取消',
         success: (res) => {
           if (res.confirm) {
             console.log('用户点击确定')

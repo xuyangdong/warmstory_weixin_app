@@ -9,13 +9,22 @@
     height: 100vh;
     padding: 60rpx;
     box-sizing: border-box;
-    &>image {
+    .warmtale-playstory_blurImage {
       position: absolute;
       left: 0;
       top: 0;
       width: 100%;
       height: 100vh;
       filter: blur(10rpx);
+      z-index: -2;
+    }
+    .warmtale-playstory_clearImage {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      filter: blur(0rpx);
       z-index: -2;
     }
     .warmtale-playstory_mask {
@@ -46,16 +55,43 @@
         margin-bottom: 30px;
       }
 
-      .warmtale-playstory_appbutton {
-        width: 250rpx;
-        height: 60rpx;
-        background-color: green;
-        color: white;
-        font-size: 30rpx;
-        border-radius: 30rpx;
+      .warmtale-playstory_appreciate {
+        width: 100vw;
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
+
+        .warmtale-playstory_appreciateCount {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-left: 90rpx;
+          &>image {
+            width: 44rpx;
+            height: 44rpx;
+          }
+          &>view {
+            color: white;
+            margin-left: 10rpx;
+          }
+        }
+
+        .warmtale-playstory_appbutton {
+          width: 250rpx;
+          height: 60rpx;
+          background-color: green;
+          color: white;
+          font-size: 30rpx;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin: 0;
+          border-top-left-radius:30rpx;
+          border-bottom-left-radius:30rpx;
+          border-top-right-radius:0;
+          border-bottom-right-radius:0;
+
+        }
       }
     }
     .warmtale-playstory_middleCover {
@@ -80,44 +116,65 @@
 
 <template>
   <view class="warmtale-playstory_container">
-    <view class="warmtale-playstory_middleCover">
+    <view class="warmtale-playstory_middleCover" wx-if="{{ !!hasWork }}">
       <image src="{{ work.coverUrl }}" />
     </view>
-    <view class="warmtale-playstory_userInfo">
+    <view class="warmtale-playstory_userInfo" wx-if="{{ !!hasWork }}">
       <view class="warmtale-playstory_topTitle">
         {{ work.storyTitle }}
       </view>
       <view class="warmtale-playstory_username">
         {{ work.username }}
       </view>
-      <button open-type="launchApp" binderror="launchAppError" class="warmtale-playstory_appbutton">
-        在APP中打开
-      </button>
+      <view class="warmtale-playstory_appreciate" wx-if="{{ !!hasWork }}">
+        <view class="warmtale-playstory_appreciateCount">
+          <image bindtap="handleAppreciate" src="{{ work.like ? '../../resource/img/appreciated.png' : '../../resource/img/appreciate.png' }}"/>
+          <view>{{ work.likeCount }}</view>
+        </view>
+        <view class="warmtale-playstory_appreciateCount" bindtap="handleJumpComment">
+          <image src="../../resource/img/评论白色.png"/>
+          <view>{{ work.reviewCount }}</view>
+        </view>
+        <button open-type="launchApp" binderror="launchAppError" class="warmtale-playstory_appbutton">
+          在APP中打开
+        </button>
+      </view>
     </view>
-    <view class="warmtale-playstory_bottomPlayer">
+    <view class="warmtale-playstory_bottomPlayer" wx-if="{{ !!hasWork }}">
       <player />
     </view>
-    <view class="warmtale-playstory_mask"></view>
-    <image src="{{ work.coverUrl }}" />
+    <view class="warmtale-playstory_mask" wx-if="{{ !!hasWork }}"></view>
+    <image src="{{ hasWork ? work.coverUrl : '../../resource/img/作品被删.jpg' }}" class="{{ !!hasWork ? 'warmtale-playstory_blurImage' : 'warmtale-playstory_clearImage'}}" />
   </view>
 </template>
 
 <script>
   import wepy from 'wepy'
   import Player from '@/components/widget/playingStory/Player'
-  import {getWorkById} from '@/store/actions/work'
+  import {getWorkById, likeWork, unLikeWork} from '@/store/actions/work'
+  import { getUserInfo } from '@/store/actions/user'
   import {
     connect
   } from 'wepy-redux'
   @connect({
-    work: state => state.work
+    work: state => state.work,
+    userInfo: state => state.user
   }, {
-    getWorkById
+    getUserInfo,
+    getWorkById,
+    likeWork,
+    unLikeWork
   })
   export default class PlayingStory extends wepy.page {
     _innerObj = {}
     components = {
       player: Player
+    }
+    data = {
+      appreciate: false,
+      appreciateCount: 0,
+      hasWork: true,
+      workId:null
     }
     methods = {
       launchAppError: (e) => {
@@ -125,9 +182,29 @@
           icon: 'none',
           title: '仅支持从app分享后，返回app'
         })
+      },
+      handleAppreciate: () => {
+        console.log('appreciate')
+        if (!this.work.like) {
+          this.methods.likeWork(this.work.id)
+        } else {
+          this.methods.unLikeWork(this.work.id)
+        }
+      },
+      handleJumpComment: () => {
+        console.log('comment')
+        wepy.navigateTo({
+          url: `comments?workId=${this.work.id}`
+        })
       }
     }
     onLoad(options) {
+      if (options.scene) {
+      const scene = decodeURIComponent(options.scene);
+      this.workId = scene
+      console.info(scene)
+      console.info(options)
+    }
       this._innerObj.query = options
       console.log('playingStory launch', options)
       wepy.showLoading({
@@ -137,52 +214,97 @@
     onReady() {
       wepy.hideLoading()
     }
-    initWork() {
-      if (this._innerObj.query.workId) {
-        return this.methods.getWorkById(this._innerObj.query.workId)
+    initUser() {
+      if (!this.userInfo.accessToken) {
+        return new Promise(resolve => {
+          wepy.login({
+            success: (...argsLogin) => {
+              wepy.getUserInfo({
+                withCredentials: true,
+                complete: (...args) => {
+                  let jsonData = {
+                    code: argsLogin[0].code,
+                    encryptedData: args[0].encryptedData,
+                    iv: args[0].iv
+                  }
+                  this.methods.getUserInfo(jsonData).then(res => {
+                    resolve(res.payload.data.obj)
+                  })
+                }
+              })
+            }
+          })
+        })
+      } else {
+        return Promise.resolve(this.userInfo)
+      }
+    }
+    initWork(userInfo) {
+      if (this.workId != null) {
+        return this.methods.getWorkById(this.workId, userInfo)
+      } else if (this._innerObj.query.workId) {
+        return this.methods.getWorkById(this._innerObj.query.workId, userInfo)
       } else {
         return Promise.resolve()
       }
     }
     onShow() {
-      this.initWork().then(() => {
-        wepy.getBackgroundAudioPlayerState({
-          success: (res) => {
-            console.log('state', res)
-            if (res.status === 1) {
-              // 播放中，
-              if (res.dataUrl !== this.work.url) {
-                // 播放曲目不一样
+      this.initUser().then(res => this.initWork(res)).then((workInfo) => {
+        console.log(2444444444444, this.work, workInfo)
+        if (!this.work.id) {
+          this.hasWork = false
+          this.$apply()
+        } else {
+          this.appreciate = this.work.like
+          this.appreciateCount = this.work.likeCount
+          this.$apply()
+          wepy.getBackgroundAudioPlayerState({
+            success: (res) => {
+
+            },
+            fail: (res) => {
+              console.log('getBackgroundAudioPlayerState fail', res)
+              if (res.errMsg === 'getBackgroundAudioPlayerState: fail not playing') {
+                // 没有播放
                 wepy.playBackgroundAudio({
                   dataUrl: this.work.url
                 })
               }
-            } else if (res.status === 0) {
-              // 暂停中
-              if (res.dataUrl !== this.work.url) {
-                // 音频文件改变
-                console.log('音频文件改变')
-                wepy.playBackgroundAudio({
-                  dataUrl: this.work.url
-                })
-              } else {
-                // 音频没有改变
-                console.log('音频文件没有改变')
+            },
+            complete: (res) => {
+              console.log('complete', res)
+              if (res.status === 1) {
+                // 播放中，
+                if (res.dataUrl !== this.work.url) {
+                  // 播放曲目不一样
+                  wepy.playBackgroundAudio({
+                    dataUrl: this.work.url
+                  })
+                }
+              } else if (res.status === 0) {
+                // 暂停中
+                console.log('暂停中')
+                if (res.dataUrl !== this.work.url) {
+                  // 音频文件改变
+                  console.log('音频文件改变', res.dataUrl, this.work.url)
+                  wepy.playBackgroundAudio()
+                  wepy.playBackgroundAudio({
+                    dataUrl: this.work.url,
+                    success: (...args) => {
+                      console.log('248 success', args)
+                    },
+                    complete: (...args) => {
+                      console.log('251 complete', args)
+                    }
+                  })
+                } else {
+                  // 音频没有改变
+                  console.log('音频文件没有改变')
+                }
               }
             }
-          },
-          fail: (res) => {
-            if (res.errMsg === 'getBackgroundAudioPlayerState: fail not playing') {
-              // 没有播放
-              wepy.playBackgroundAudio({
-                dataUrl: this.work.url
-              })
-            }
-          },
-          complete: (res) => {
-            console.log('complete', res)
-          }
-        })
+          })
+        }
       })
     }
 

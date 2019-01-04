@@ -1,6 +1,6 @@
 import wepy from 'wepy'
 import api from '@/api'
-import { GET_AFREERANDOMWORK, SET_WORK, PUBLISHWORK, DELETE_WORK, GET_WORKBYID} from '../types/work'
+import { GET_AFREERANDOMWORK, SET_WORK, PUBLISHWORK, DELETE_WORK, GET_WORKBYID, LIKE_WORK, UNLIKE_WORK, ADD_A_COMMENT, DELETE_A_COMMENT} from '../types/work'
 import { createAction } from 'redux-actions'
 import { getStore } from 'wepy-redux'
 
@@ -118,9 +118,8 @@ export const deleteWork = createAction(DELETE_WORK, (sequence) => {
   })
 })
 
-export const getWorkById = createAction(GET_WORKBYID, (id) => {
-  console.log('GET_WORKBYID', id)
-  let user = getStore().getState().user
+export const getWorkById = createAction(GET_WORKBYID, (id, userInfo) => {
+  let user = userInfo || getStore().getState().user
   return new Promise(resolve => {
     wepy.request({
       url: api.work.query(id),
@@ -138,6 +137,12 @@ export const getWorkById = createAction(GET_WORKBYID, (id) => {
             }
           })
         } else {
+          resolve({
+            data: {
+              ... data.data,
+              'playingType': 'random'
+            }
+          })
         }
       },
       complete: (...args) => {
@@ -146,3 +151,71 @@ export const getWorkById = createAction(GET_WORKBYID, (id) => {
     })
   })
 })
+
+export const likeWork = createAction(LIKE_WORK, (worksId) => {
+  let user = getStore().getState().user
+  return new Promise(resolve => {
+    wepy.request({
+      method: 'POST',
+      url: api.work.like,
+      header: {
+        'Story-Access-Token': `${user.accessToken}`,
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      data: {
+        worksId
+      },
+      success: (data, statusCode, header) => {
+        console.log('invoke success', data)
+        if (data.data.status === 1) {
+          resolve()
+          wepy.showToast({
+            icon: 'none',
+            title: '点赞成功'
+          })
+        } else {
+        }
+      },
+      complete: (...args) => {
+        console.log('complete', args)
+      }
+    })
+  })
+})
+
+export const unLikeWork = createAction(UNLIKE_WORK, (worksId) => {
+  let user = getStore().getState().user
+  return new Promise(resolve => {
+    wepy.request({
+      method: 'POST',
+      url: api.work.unlike,
+      header: {
+        'Story-Access-Token': `${user.accessToken}`,
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      data: {
+        worksId
+      },
+      success: (data, statusCode, header) => {
+        console.log('invoke success', data)
+        if (data.data.status === 1) {
+          resolve()
+          wepy.showToast({
+            icon: 'none',
+            title: '取消点赞'
+          })
+        } else {
+        }
+      },
+      complete: (...args) => {
+        console.log('complete', args)
+      }
+    })
+  })
+})
+
+export const addAComment = createAction(ADD_A_COMMENT, res => {
+  console.log('addAComment')
+  return Promise.resolve(res)
+})
+export const deleteAComment = createAction(DELETE_A_COMMENT, (count) => Promise.resolve(count))

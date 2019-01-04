@@ -27,6 +27,12 @@ export const getUserInfo = createAction(GET_USERINFO, (jsonData) => {
             resolve({
               data: args[0].data
             })
+          },
+          fail: () => {
+            wepy.hideLoading()
+            wepy.showToast({
+              title: '登录失败'
+            })
           }
         })
       }
